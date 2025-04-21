@@ -1,0 +1,172 @@
+body
+{
+    font-family: "Poppins", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: bolder;
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.btn-qhub
+{
+    background-color: #00B7D6;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.btn-qhub:hover
+{
+    background-color: #008bb5;
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.5);
+}
+
+.card
+{
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
+    background-color: #fff;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    border: 1px solid #000000;
+    cursor: pointer;
+    position: relative;
+}
+
+.icon-xsm
+{
+    font-size: 1.5rem;
+}
+
+.icon-sm
+{
+    font-size: 2rem;
+}
+
+.avatar-sm
+{
+    width: 2rem;
+    height: 2rem;
+    object-fit: cover;
+}
+
+.image-sm
+{
+    width: 2rem;
+    height: 2rem;
+    object-fit: cover;
+}
+
+.icon-md
+{
+    font-size: 3.5rem;
+}
+
+.avatar-md
+{
+    width: 3.5rem;
+    height: 3.5rem;
+    object-fit: cover;
+}
+
+.image-md
+{
+    width: 3.5rem;
+    height: 3.5rem;
+    object-fit: cover;
+}
+
+.image-lg
+{
+    width: 9rem;
+    height: 9rem;
+    object-fit: cover;
+}
+
+.icon-lg
+{
+    font-size: 9rem;
+}
+
+.avatar-lg
+{
+    width: 9rem;
+    height: 9rem;
+    object-fit: cover;
+}
+
+.fa-heart
+{
+    font-size: 1.5rem;
+}
+
+.fa-comment
+{
+    font-size: 1.5rem;
+}
+
+.xsmall
+{
+    font-size: 0.65rem;
+}
+
+.grid-img
+{
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: #ffffff;
+    height: 100vh;
+    width: 100%;
+    max-width: 300px;
+    z-index: 1055;
+    display: none;
+    flex-direction: column;
+    padding: 1.5rem;
+  }
+
+  .sidebar.show {
+    display: flex;
+  }
+
+  .sidebar .divider {
+    border-bottom: 1px solid #ccc;
+    margin: 1rem 0;
+  }
+
+  .hamburger-menu {
+    margin-left: 500px;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #000000;
+    transition: all 0.3s ease;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  .close-btn:hover {
+        color: #000000;
+        transition: all 0.3s ease;
+    }
