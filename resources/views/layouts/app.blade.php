@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,74 +8,143 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name') }} | @yield('title')</title>
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
+
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    <img src="{{ asset('images/Zinnbei1.png') }}" alt="icon"
+                        style="width: auto; height: 100px;">
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
 
-                    </ul>
+                <!-- Right Side Of Navbar -->
+                <ul class="navbar-nav ms-auto mt-3 d-flex flex-row">
+                    <!-- Authentication Links -->
+                    @guest
+                        @if (Route::has('login'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            </li>
+                        @endif
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
+                        @if (Route::has('register'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                            </li>
+                        @endif
+                    @else
 
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
+                        <!-- Search -->
+                        <li class="nav-item">
+                            <form class="search-box mb-3 d-flex bg-white rounded-pill px-3 py-2">
+                                <input type="text" placeholder="Search ..." class="form-control border-2 me-2">
+                                <button class="btn btn-info text-white rounded-circle">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </form>
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+
+                        <!-- Create Post -->
+                        <li class="nav-item me-2" title="Create Post">
+                            <a href="#" class="nav-link"> <!-- Add your post creation route here -->
+                                <i class="fa-solid fa-circle-plus text-info icon-sm"></i>
+                            </a>
+                        </li>
+
+                        <!-- Account -->
+                        <li class="nav-item dropdown">
+                            <button class="btn btn-shadow-none nav-link dropdown-toggle" id="account-dropdown"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                @if (Auth::user()->avatar)
+                                    <img src="#" alt="#" class="rounded-circle avatar-sm">
+                                    <!-- Add your avatar URL here -->
+                                @else
+                                    <i class="fa-solid fa-circle-user text-info icon-sm"></i>
+                                @endif
+                            </button>
+
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="account-dropdown">
+                                <!-- SOON Admin Controls -->
+                                @can('admin')
+                                    <a href="#" class="dropdown-item"> <!-- Add your admin route here -->
+                                        <i class="fa-solid fa-user-gear"></i> Admin
                                     </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
+                                    <hr class="dropdown-divider">
+                                @endcan
+                                <!-- Profile -->
+                                <a href="#" class="dropdown-item"> <!-- Add your profile route here -->
+                                    <i class="fa-solid fa-circle-user"></i> Profile
+                                </a>
+
+                                <!-- Logout -->
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault();
+                                    document.getElementById('logout-form').submit();">
+                                    <i class="fa-solid fa-right-form-bracket"></i> {{ __('Logout') }}
+                                </a>
+
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </div>
+                        </li>
+                    @endguest
+                </ul>
+            </div>
+    </div>
+    </nav>
+
+    <main class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <!-- SOON Admin Menu col-3 -->
+                @if (request()->is('admin/*'))
+                    <div class="col-3">
+                        <div class="list-group">
+                            <a href="#"
+                                class="list-group-item  {{ request()->is('admin/users') ? 'active' : '' }}">
+                                <i class="fa-solid fa-users"></i> Users
+                            </a>
+                            <a href="#"
+                                class="list-group-item {{ request()->is('admin/posts') ? 'active' : '' }}">
+                                <i class="fa-solid fa-newspaper"></i> Posts
+                            </a>
+                            <a href="#"
+                                class="list-group-item {{ request()->is('admin/categories') ? 'active' : '' }}">
+                                <i class="fa-solid fa-tags"></i> Categories
+                            </a>
+                        </div>
+                    </div>
+                @endif
+
+                <div class="col-9">
+                    @yield('content')
                 </div>
             </div>
-        </nav>
-
-        <main class="py-4">
-            @yield('content')
-        </main>
+        </div>
+    </main>
     </div>
 </body>
+
 </html>
