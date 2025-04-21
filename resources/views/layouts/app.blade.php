@@ -32,7 +32,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <img src="{{ asset('storage/images/Zinnbei1.png') }}" alt="icon"
+                    <img src="{{ asset('images/Zinnbei1.png') }}" alt="icon"
                         style="width: auto; height: 100px;">
                 </a>
 
