@@ -15,3 +15,6 @@ Route::group(["middlware"=>"auth"],function(){
 
 
 });
+
+Route::get('/profile', function () {return view('profile.show');}); //江上views/profile/show.blade.phpのため仮作成
+
