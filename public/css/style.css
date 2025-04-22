@@ -1,3 +1,4 @@
+/* all */
 body
 {
     font-family: "Poppins", sans-serif;
@@ -7,6 +8,7 @@ body
     color: #333;
 }
 
+/* btn for register and login */
 .btn-qhub
 {
     background-color: #00B7D6;
@@ -31,6 +33,7 @@ body
     box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.5);
 }
 
+/* card */
 .card
 {
     border-radius: 0.5rem;
@@ -43,6 +46,7 @@ body
     position: relative;
 }
 
+/* icon */
 .icon-xsm
 {
     font-size: 1.5rem;
@@ -127,7 +131,9 @@ body
     object-fit: cover;
 }
 
-.sidebar {
+/* sidebar */
+.sidebar
+{
     position: fixed;
     top: 0;
     right: 0;
@@ -141,32 +147,64 @@ body
     padding: 1.5rem;
   }
 
-  .sidebar.show {
+.sidebar.show
+{
     display: flex;
-  }
+}
 
-  .sidebar .divider {
+.sidebar .divider
+{
     border-bottom: 1px solid #ccc;
     margin: 1rem 0;
-  }
+}
 
-  .hamburger-menu {
+.hamburger-menu
+{
     margin-left: 500px;
     font-size: 2rem;
     cursor: pointer;
     color: #000000;
     transition: all 0.3s ease;
-  }
+}
 
-  .close-btn {
+.close-btn
+{
     position: absolute;
     top: 1rem;
     right: 1rem;
     font-size: 1.5rem;
     cursor: pointer;
-  }
+}
 
-  .close-btn:hover {
-        color: #000000;
-        transition: all 0.3s ease;
-    }
+.close-btn:hover
+{
+    color: #000000;
+    transition: all 0.3s ease;
+}
+
+/* modal for post */
+.modal-content
+{
+  border-radius: 1rem;
+  text-align: center;
+}
+
+.modal .btn-info
+{
+  background-color: #00B7D6;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+.modal .btn-outline-info
+{
+  border: 2px solid #00B7D6;
+  color: #00B7D6;
+  background-color: #fff;
+  font-weight: bold;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
