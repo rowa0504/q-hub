@@ -37,14 +37,15 @@
                 </a>
 
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto mt-3 d-flex flex-row">
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
+                <!-- Right Side Of Navbar -->
+                <ul class="navbar-nav ms-auto mt-3 d-flex flex-row">
+                    <!-- Authentication Links -->
+                    @guest
+                        @if (Route::has('login'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            </li>
+                        @endif
 
                         @if (Route::has('register'))
                             <li class="nav-item">
@@ -70,44 +71,49 @@
                             </a>
                         </li>
 
-                            <!-- Account -->
-                            <li class="nav-item dropdown">
-                                <button class="btn btn-shadow-none nav-link dropdown-toggle" id="account-dropdown"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    @if (Auth::user()->avatar)
-                                        <img src="#" alt="#" class="rounded-circle avatar-sm">
-                                    @else
-                                        <i class="fa-solid fa-circle-user text-info icon-sm"></i>
-                                    @endif
-                                </button>
+                        <!-- Account -->
+                        <li class="nav-item dropdown">
+                            <button class="btn btn-shadow-none nav-link dropdown-toggle" id="account-dropdown"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                @if (Auth::user()->avatar)
+                                    <img src="#" alt="#" class="rounded-circle avatar-sm">
+                                    <!-- Add your avatar URL here -->
+                                @else
+                                    <i class="fa-solid fa-circle-user text-info icon-sm"></i>
+                                @endif
+                            </button>
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="account-dropdown">
-                                    @can('admin')
-                                        <a href="#" class="dropdown-item">
-                                            <i class="fa-solid fa-user-gear"></i> Admin
-                                        </a>
-                                        <hr class="dropdown-divider">
-                                    @endcan
-
-                                    <a href="#" class="dropdown-item">
-                                        <i class="fa-solid fa-circle-user text-info"></i> Profile
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="account-dropdown">
+                                <!-- SOON Admin Controls -->
+                                @can('admin')
+                                    <a href="#" class="dropdown-item"> <!-- Add your admin route here -->
+                                        <i class="fa-solid fa-user-gear"></i> Admin
                                     </a>
 
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        <i class="fa-solid fa-right-form-bracket"></i> {{ __('Logout') }}
-                                    </a>
+                                    <hr class="dropdown-divider">
+                                @endcan
+                                <!-- Profile -->
+                                <a href="#" class="dropdown-item"> <!-- Add your profile route here -->
+                                    <i class="fa-solid fa-circle-user"></i> Profile
+                                </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </nav>
-        @endif
+                                <!-- Logout -->
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault();
+                                    document.getElementById('logout-form').submit();">
+                                    <i class="fa-solid fa-right-form-bracket"></i> {{ __('Logout') }}
+                                </a>
+
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </div>
+                        </li>
+                    @endguest
+                </ul>
+            </div>
+    </div>
+    </nav>
 
     <main class="py-5">
         <div class="container">
