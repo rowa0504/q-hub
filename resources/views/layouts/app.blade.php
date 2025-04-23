@@ -15,10 +15,12 @@
         integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
     <!-- poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
-
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
@@ -124,8 +126,8 @@
                                     <i class="fa-solid fa-newspaper"></i> Posts
                                 </a>
                                 <a href="#"
-                                    class="list-group-item {{ request()->is('admin/categories') ? 'active' : '' }}">
-                                    <i class="fa-solid fa-tags"></i> Categories
+                                    class="list-group-item {{ request()->is('admin/foods') ? 'active' : '' }}">
+                                    <i class="fa-solid fa-utensils"></i> foods
                                 </a>
                             </div>
                         </div>
