@@ -20,42 +20,38 @@ class PostController extends Controller
         $this->trans_category = $trans_category;
     }
 
-    public function create(Request $request){
-        $categoryId = $request->query('category_id');
-
-        return view('components.post-create', compact('categoryId'));
-    }
-
     public function store(Request $request){
-        // $request->validate([
-        //     'title' => 'required|min:1|max:50',
-        //     'description' => 'required|min:1|max:1000',
-        //     'image' => 'required|mimes:jpeg,jpg,png,gif|max:1048',
-        //     'location'  => 'required|min:1|max:50',
-        //     'departure' => 'required|min:1|max:50',
-        //     'destination' => 'required|min:1|max:50',
-        //     'fee' => 'required|numeric|min:1',
-        //     'max' => 'required|numeric|min:1',
-        //     'startdatetime' => 'required|date',
-        //     'enddatetime' => 'required|date|after:start_date',
-        //     'category' => 'required',
-        //     'trans_category' => 'required'
-        // ]);
+        $request->validate([
+            'title' => 'required|min:1|max:50',
+            'description' => 'required|min:1|max:1000',
+            'image' => 'nullable|mimes:jpeg,jpg,png,gif|max:1048',
+            'location'  => 'nullable|string|max:50',
+            'departure' => 'nullable|string|max:50',
+            'destination' => 'nullable|string|max:50',
+            'fee' => 'nullable|numeric|min:1',
+            'max' => 'nullable|numeric|min:1',
+            'startdate' => 'nullable|date',
+            'enddate' => 'nullable|date',
+            'category_id' => 'required',
+            'trans_category' => 'nullable',
+        ]);
 
         $this->post->user_id     = Auth::user()->id;
         $this->post->title = $request->title;
         $this->post->description = $request->description;
-        $this->post->image       = 'data:image/' . $request->image->extension() .
-                                   ';base64,'. base64_encode(file_get_contents($request->image));
-        // $this->post->location = $request->location;
-        // $this->post->departure = $request->departure;
-        // $this->post->destination = $request->destination;
-        // $this->post->fee = $request->fee;
-        // $this->post->max = $request->max;
-        // $this->post->startdatetime = $request->startdatetime;
-        // $this->post->enddatetime = $request->enddatetime;
+        if ($request->hasFile('image')) {
+            $post->image = 'data:image/' . $request->image->extension() .
+                           ';base64,'. base64_encode(file_get_contents($request->image));
+        }
+        $this->post->location = $request->location;
+        $this->post->departure = $request->departure;
+        $this->post->destination = $request->destination;
+        $this->post->fee = $request->fee;
+        $this->post->max = $request->max;
+        $this->post->startdatetime = $request->startdate;
+        $this->post->enddatetime = $request->enddate;
         $this->post->category_id = $request->category_id;
-        // $this->post->trans_category = $request->trans_category;
+        $this->post->trans_category_id = $request->trans_category;
         $this->post->save();
 
         return redirect()->back();

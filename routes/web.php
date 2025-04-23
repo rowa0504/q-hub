@@ -11,7 +11,6 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/', [HomeController::class, 'index'])->name('index');
 
     Route::group(['prefix' => 'posts', 'as' => 'posts.'], function(){
-        Route::get('/create', [PostController::class, 'create'])->name('create');
         Route::post('/store', [PostController::class, 'store'])->name('store');
     });
 

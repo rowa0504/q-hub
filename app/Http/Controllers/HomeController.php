@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\TransCategory;
 
 class HomeController extends Controller
 {
@@ -14,10 +15,12 @@ class HomeController extends Controller
      */
 
     private $category;
+    private $trans_category;
 
-    public function __construct(Category $category)
+    public function __construct(Category $category, TransCategory $trans_category)
     {
         $this->category = $category;
+        $this->trans_category = $trans_category;
     }
 
     /**
@@ -28,6 +31,10 @@ class HomeController extends Controller
     public function index()
     {
         $all_categories = $this->category->all();
-        return view('home')->with('all_categories',$all_categories);
+        $all_trans_categories = $this->trans_category->all();
+
+        return view('home')
+            ->with('all_categories',$all_categories)
+            ->with('all_trans_categories',$all_trans_categories);
     }
 }

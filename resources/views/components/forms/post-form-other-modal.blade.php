@@ -20,16 +20,25 @@ aria-hidden="true">
                 <!-- File input -->
                 <div class="mb-3">
                     <input class="form-control" type="file" name="image" id="imageInput" accept="image/*">
+                    @error('image')
+                        <p class="text-danger small">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- Title input -->
                 <div class="mb-3">
-                    <input type="text" class="form-control" name="title" placeholder="Enter your post title...">
+                    <input type="text" class="form-control" name="title" id="title" placeholder="Enter your post title...">
+                    @error('title')
+                        <p class="text-danger small">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- Description input -->
                 <div class="mb-3">
-                    <textarea class="form-control" name="description" placeholder="Enter your post description..." rows="3"></textarea>
+                    <textarea class="form-control" name="description" id="description" placeholder="Enter your post description..." rows="3"></textarea>
+                    @error('description')
+                        <p class="text-danger small">{{ $message }}</p>
+                    @enderror
                 </div>
             </div>
             <div class="modal-footer">
