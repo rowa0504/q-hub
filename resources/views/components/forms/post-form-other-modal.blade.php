@@ -36,7 +36,7 @@ aria-hidden="true">
                 <!-- Description input -->
                 <div class="mb-3">
                     <textarea class="form-control" name="description" id="description" placeholder="Enter your post description..." rows="3"></textarea>
-                    @error('title')
+                    @error('description')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
                 </div>
