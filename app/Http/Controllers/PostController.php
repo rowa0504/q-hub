@@ -20,12 +20,6 @@ class PostController extends Controller
         $this->trans_category = $trans_category;
     }
 
-    public function create(Request $request){
-        $categoryId = $request->query('category_id');
-
-        return view('components.post-create', compact('categoryId'));
-    }
-
     public function store(Request $request){
         // $request->validate([
         //     'title' => 'required|min:1|max:50',
