@@ -71,7 +71,6 @@ aria-hidden="true">
                 <button type="submit" class="btn btn-info text-white">Post</button>
 
                 <input type="hidden" name="category_id" value="4">
-                <input type="hidden" name="modal_id" value="post-form-4">
             </div>
         </form>
     </div>
@@ -90,13 +89,3 @@ document.getElementById('imageInput4').addEventListener('change', function(e) {
     }
 });
 </script>
-
-@if ($errors->any() && old('modal_id'))
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const targetModal = document.getElementById("{{ old('modal_id') }}");
-        const modalInstance = new bootstrap.Modal(targetModal);
-        modalInstance.show();
-    });
-</script>
-@endif
