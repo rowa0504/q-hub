@@ -13,13 +13,13 @@ aria-hidden="true">
             <div class="modal-body">
                 <!-- Image preview -->
                 <div class="mb-3 text-center">
-                    <img id="imagePreview" src="https://via.placeholder.com/300x200" alt="Image Preview"
+                    <img id="imagePreview6" src="https://via.placeholder.com/300x200" alt="Image Preview"
                         class="img-fluid rounded">
                 </div>
 
                 <!-- File input -->
                 <div class="mb-3">
-                    <input class="form-control" type="file" name="image" id="imageInput" accept="image/*">
+                    <input class="form-control" type="file" name="image" id="imageInput6" accept="image/*">
                     @error('image')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
@@ -60,7 +60,7 @@ aria-hidden="true">
                 <!-- Description input -->
                 <div class="mb-3">
                     <textarea class="form-control" name="description" id="description" placeholder="Enter your post description..." rows="3"></textarea>
-                    @error('title')
+                    @error('description')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
                 </div>
@@ -78,12 +78,12 @@ aria-hidden="true">
 </div>
 
 <script>
-document.getElementById('imageInput').addEventListener('change', function(e) {
+document.getElementById('imageInput6').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (file) {
         const reader = new FileReader();
         reader.onload = function(event) {
-            document.getElementById('imagePreview').src = event.target.result;
+            document.getElementById('imagePreview6').src = event.target.result;
         };
         reader.readAsDataURL(file);
     }
