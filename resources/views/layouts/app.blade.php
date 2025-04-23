@@ -140,7 +140,13 @@
     </div>
 
     @include('components.post-category-modal')
-    @include('components.post-form-other-modal')
+    @include('components.forms.post-form-other-modal')
+    @include('components.forms.post-form-event-modal')
+    @include('components.forms.post-form-food-modal')
+    @include('components.forms.post-form-item-modal')
+    @include('components.forms.post-form-question-modal')
+    @include('components.forms.post-form-transportation-modal')
+    @include('components.forms.post-form-travel-modal')
     </div>
 </body>
 
