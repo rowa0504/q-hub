@@ -39,8 +39,10 @@ class PostController extends Controller
         $this->post->user_id     = Auth::user()->id;
         $this->post->title = $request->title;
         $this->post->description = $request->description;
-        $this->post->image       = 'data:image/' . $request->image->extension() .
-                                   ';base64,'. base64_encode(file_get_contents($request->image));
+        if ($request->hasFile('image')) {
+            $post->image = 'data:image/' . $request->image->extension() .
+                           ';base64,'. base64_encode(file_get_contents($request->image));
+        }
         $this->post->location = $request->location;
         $this->post->departure = $request->departure;
         $this->post->destination = $request->destination;
@@ -52,6 +54,6 @@ class PostController extends Controller
         $this->post->trans_category_id = $request->trans_category;
         $this->post->save();
 
-        return redirect()->back()->withErrors($validator)->withInput();
+        return redirect()->back();
     }
 }
