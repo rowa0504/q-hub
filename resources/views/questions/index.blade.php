@@ -81,6 +81,16 @@ $questions = [
 
 
 <div class="container py-3">
+    <div class="container py-3">
+        {{-- 質問追加ボタン --}}
+        <div class="mb-4 text-end">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addQuestionModal">
+                Add Question
+            </button>
+        </div>
+        {{-- モーダルファイルを読み込み --}}
+        @include('questions.modal.add_questions')
+    </div>
     @foreach ($questions as $question)
     <div class="card mb-3 shadow-sm border border-dark">
         <div class="card-body d-flex">
@@ -93,7 +103,9 @@ $questions = [
             <div class="flex-grow-1">
                 <strong>{{ $question->user->name }}</strong>
                 <h5 class="mt-1">
-                    <a href="#" class="text-decoration-none text-dark">{{ $question->title }}</a>
+                    <a href="/questions/{{ $question->id }}" class="text-decoration-none text-dark">
+                      {{ $question->title }}
+                    </a>
                 </h5>
 
                 {{-- 本文の長さをスマホ/PCで切り替え --}}
