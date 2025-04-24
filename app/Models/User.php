@@ -13,6 +13,9 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+    const ADMIN_ROLE_ID = 1;//administrator
+    const USER_ROLE_ID = 2;//the ragular user
+
     public function posts(){
         return $this->hasMany(Post::class);
     }
