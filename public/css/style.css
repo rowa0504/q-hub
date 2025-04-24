@@ -44,6 +44,7 @@ body
     border: 1px solid #000000;
     cursor: pointer;
     position: relative;
+    margin-bottom: 1rem;
 }
 
 /* icon */
