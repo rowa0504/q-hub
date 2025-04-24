@@ -56,4 +56,53 @@ class PostController extends Controller
 
         return redirect()->back();
     }
+
+    public function edit($id){
+        $request->validate([
+            'title' => 'required|min:1|max:50',
+            'description' => 'required|min:1|max:1000',
+            'image' => 'nullable|mimes:jpeg,jpg,png,gif|max:1048',
+            'location'  => 'nullable|string|max:50',
+            'departure' => 'nullable|string|max:50',
+            'destination' => 'nullable|string|max:50',
+            'fee' => 'nullable|numeric|min:1',
+            'max' => 'nullable|numeric|min:1',
+            'startdate' => 'nullable|date',
+            'enddate' => 'nullable|date',
+            'category_id' => 'required',
+            'trans_category' => 'nullable',
+        ]);
+
+        $post = $this->post->findOrFail($id);
+        $post->user_id     = Auth::user()->id;
+        $post->title = $request->title;
+        $post->description = $request->description;
+        if ($request->hasFile('image')) {
+            $post->image = 'data:image/' . $request->image->extension() .
+                           ';base64,'. base64_encode(file_get_contents($request->image));
+        }
+        $post->location = $request->location;
+        $post->departure = $request->departure;
+        $post->destination = $request->destination;
+        $post->fee = $request->fee;
+        $post->max = $request->max;
+        $post->startdatetime = $request->startdate;
+        $post->enddatetime = $request->enddate;
+        $post->category_id = $request->category_id;
+        $post->trans_category_id = $request->trans_category;
+        $post->save();
+
+        return redirect()->back();
+    }
+
+    public function update($id, Request $request){
+
+    }
+
+    public function deldte($id){
+        $post = $this->post->findOrFail($id);
+
+        $post->delete();
+        return redirect()->back();
+    }
 }
