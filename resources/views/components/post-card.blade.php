@@ -26,7 +26,6 @@
         @include('components.modals.edit-modal', ['post' => $post])
         @include('components.modals.report-modal', ['post' => $post])
 
-
     </div>
 
     <div class="container p-0">
