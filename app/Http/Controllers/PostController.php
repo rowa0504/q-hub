@@ -58,6 +58,14 @@ class PostController extends Controller
     }
 
     public function edit($id){
+        $post = $this->post->findOrFail($id);
+        // Laravelが画像URLなども返せるようにする場合
+        $post->image = $post->image ? asset('storage/' . $post->image) : null;
+
+        return response()->json($post);
+    }
+
+    public function update($id, Request $request){
         $request->validate([
             'title' => 'required|min:1|max:50',
             'description' => 'required|min:1|max:1000',
@@ -93,10 +101,6 @@ class PostController extends Controller
         $post->save();
 
         return redirect()->back();
-    }
-
-    public function update($id, Request $request){
-
     }
 
     public function deldte($id){
