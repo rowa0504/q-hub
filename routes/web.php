@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\ProfileController;
 
 Auth::routes();
 
@@ -31,6 +32,11 @@ Route::group(['middleware' => 'auth'], function(){
         Route::delete('/{id}/destroy', [CommentController::class, 'destroy'])->name('destroy');
     });
 
+    // Profile route
+    Route::group(['prefix'=> 'profile','as' => 'profile.'], function(){
+        Route::get('/{id}/show', [ProfileController::class, 'show'])->name('show');
+    });
+
 //////////////////江上専用テストルートは下です////////////////////////////////////////////////////////////////////////
 Route::get('/admin/users', function () {return view('admin.users.index');});
 Route::get('/admin/foods', function () {return view('admin.foods.index');});
@@ -38,7 +44,6 @@ Route::get('/questions', function () {return view('questions.index');});
 Route::get('/questions/{id}', function ($id) {return view('questions.show', ['id' => $id]);});
 
 //Profile//
-Route::get('/profile', function () {return view('profile.index');});
 Route::get('/profile/edit/{id}', function ($id) {return view('profile.edit', ['id' => $id]);});
 //////////////////////////////江上専用テストデータはここまでです///////////////////////////////////////////
 
