@@ -41,28 +41,28 @@
         <div class="row align-items-center flex-wrap">
             <div class="col-auto d-flex align-items-center gap-2">
                 <!-- Likeボタン -->
-                <form action="#" method="post">
+                <form action="#" method="POST" class="d-inline">
                     @csrf
                     <button class="btn btn-sm shadow-none p-0">
                         {{-- @if ($post->likedBy(Auth::user())) --}}
                         <i class="fa-solid fa-heart fa-lg text-danger"></i>
                         {{-- @else --}}
-                        {{-- <i class="fa-regular fa-heart fa-lg"></i>
-              @endif --}}
+                        {{-- <i class="fa-regular fa-heart fa-lg"></i> --}}
+              {{-- @endif --}}
                     </button>
                 </form>
 
                 <!-- Like数 -->
                 <span data-bs-toggle="modal" data-bs-target="#likedUsersModal-{{ $post->id }}"
                     class="text-danger me-2" style="cursor:pointer;">
-                    {{-- {{ $post->likes_count }} --}}
+                    {{ $post->likes_count }}
                 </span>
 
                 <!-- コメントアイコン＋数 -->
                 <span data-bs-toggle="modal" data-bs-target="#commentsModal-{{ $post->id }}"
                     style="cursor:pointer;">
                     <i class="fa-regular fa-comment fa-lg"></i>
-                    {{-- {{ $post->comments_count }} --}}
+                    {{ $post->comments_count }}
                 </span>
             </div>
 
