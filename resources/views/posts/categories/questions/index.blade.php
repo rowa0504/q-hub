@@ -136,7 +136,7 @@
 
             {{-- サイドバー（右） --}}
             <div class="col-md-3 d-none d-md-block">
-                @include('components.sidebar-menu')
+                @include('posts.components.sidebar-menu')
             </div>
         </div>
     </div>

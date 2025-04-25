@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 
 Auth::routes();
@@ -36,7 +37,6 @@ Route::group(['middleware' => 'auth'], function(){
     Route::group(['prefix'=> 'profile','as' => 'profile.'], function(){
         Route::get('/{id}/show', [ProfileController::class, 'show'])->name('show');
     });
-
 
 //////////////////江上専用テストルートは下です////////////////////////////////////////////////////////////////////////
 Route::get('/admin/users', function () {return view('admin.users.index');});
