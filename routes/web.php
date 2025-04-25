@@ -31,7 +31,12 @@ Route::group(['middleware' => 'auth'], function(){
     });
 
 
-
+ 
+    // User route
+    Route::group(['prefix'=> 'profile','as' => 'profile.'],function(){
+        Route::get('/{id}/store', [ProfileController::class, 'store'])->name('store');
+        Route::delete('/{id}/destroy', [ProfileController::class, 'destroy'])->name('destroy');
+    })
 });
 
 
