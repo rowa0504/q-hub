@@ -30,6 +30,8 @@ Route::group(['middleware' => 'auth'], function(){
         Route::delete('/{id}/destroy', [CommentController::class, 'destroy'])->name('destroy');
     });
 
+
+
 });
 
 
