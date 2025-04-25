@@ -70,7 +70,7 @@ aria-hidden="true">
                     data-bs-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-info text-white">Post</button>
 
-                <input type="hidden" name="category_id" value="4">
+                <input type="hidden" name="category_id" value="1">
             </div>
         </form>
     </div>
