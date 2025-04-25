@@ -1,5 +1,5 @@
 <!--  postFormModal を追加 -->
-<div class="modal fade" id="post-form-2" tabindex="-1" aria-labelledby="otherPostModalLabel"
+<div class="modal fade" id="post-form-4" tabindex="-1" aria-labelledby="otherPostModalLabel"
 aria-hidden="true">
 <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content p-4">
@@ -13,13 +13,13 @@ aria-hidden="true">
             <div class="modal-body">
                 <!-- Image preview -->
                 <div class="mb-3 text-center">
-                    <img id="imagePreview2" src="https://via.placeholder.com/300x200" alt="Image Preview"
+                    <img id="imagePreview4" src="https://via.placeholder.com/300x200" alt="Image Preview"
                         class="img-fluid rounded">
                 </div>
 
                 <!-- File input -->
                 <div class="mb-3">
-                    <input class="form-control" type="file" name="image" id="imageInput2" accept="image/*">
+                    <input class="form-control" type="file" name="image" id="imageInput4" accept="image/*">
                     @error('image')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
@@ -54,7 +54,7 @@ aria-hidden="true">
                     data-bs-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-info text-white">Post</button>
 
-                <input type="hidden" name="category_id" value="2">
+                <input type="hidden" name="category_id" value="4">
             </div>
         </form>
     </div>
@@ -62,12 +62,12 @@ aria-hidden="true">
 </div>
 
 <script>
-document.getElementById('imageInput2').addEventListener('change', function(e) {
+document.getElementById('imageInput4').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (file) {
         const reader = new FileReader();
         reader.onload = function(event) {
-            document.getElementById('imagePreview2').src = event.target.result;
+            document.getElementById('imagePreview4').src = event.target.result;
         };
         reader.readAsDataURL(file);
     }
