@@ -15,51 +15,9 @@
                 @endforelse
             </div>
             <div class="col-md-3 d-none d-md-block ps-md-4">
-                @include('posts.components.sidebar-menu')
+                @include("posts.components.sidebar-menu")
             </div>
         </div>
     </div>
-
-    {{-- スマホ用ハンバーガー --}}
-    <button class="btn d-md-none position-fixed hamburger-menu" onclick="toggleSidebar()">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    {{-- スマホ用オーバーレイ（背景を暗くする） --}}
-    <div id="sidebarOverlay" class="sidebar-overlay d-md-none" onclick="toggleSidebar()"></div>
-
-    {{-- スマホ用サイドバー --}}
-    <div class="sidebar-mobile d-md-none" id="mobileSidebar">
-        <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
-            <a class="navbar-brand" href="{{ url('/') }}">
-                <img src="{{ asset('images/Zinnbei1.png') }}" alt="icon" style="height: 60px;">
-            </a>
-            <button class="btn btn-outline-secondary btn-sm" onclick="toggleSidebar()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="p-3">
-            @include('posts.components.sidebar-menu')
-        </div>
-    </div>
-
-    {{-- スマホ用サイドバーのスタイル --}}
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('mobileSidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            const hamburger = document.querySelector('.hamburger-menu');
-
-            sidebar.classList.toggle('show');
-            overlay.classList.toggle('show');
-
-            // サイドバーが表示されたらハンバーガーを非表示に、非表示なら表示に
-            if (sidebar.classList.contains('show')) {
-                hamburger.style.display = 'none';
-            } else {
-                hamburger.style.display = 'block';
-            }
-        }
-    </script>
 
 @endsection
