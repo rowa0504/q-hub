@@ -34,7 +34,7 @@
 
     <div class="container p-0">
         <a href="#">
-            <img src="{{ $post->image_url }}" class="w-100" alt="Post Image">
+            <img src="{{ $post->image}}" class="w-100" alt="Post Image">
         </a>
     </div>
 

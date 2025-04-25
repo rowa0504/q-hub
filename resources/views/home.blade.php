@@ -4,60 +4,11 @@
 
 @section('content')
 
-{{-- ダミーデータ --}}
-@php
-$posts = collect([
-    (object)[
-        'id' => 1,
-        'user_id' => 1,
-        'user' => (object)[
-            'id' => 1,
-            'name' => 'John Doe',
-            'avatar' => 'https://t4.ftcdn.net/jpg/11/12/74/55/240_F_1112745523_f8Sd72Uxjlmh1FBUFYyOGrLCOoU0y4Dj.jpg',
-        ],
-        'image_url' => 'https://t4.ftcdn.net/jpg/01/33/06/89/240_F_133068958_OyHjztJTfc6i0Vzw0GTibNVWJUt77dhL.jpg',
-        'description' => 'This is a beautiful sunflower blooming in summer.',
-        'likes' => collect([1, 2, 3]),
-        'comments' => collect([
-            (object)['id' => 1, 'body' => 'Nice photo!'],
-            (object)['id' => 2, 'body' => 'Amazing!'],
-        ]),
-        'categoryPost' => collect([
-            (object)['category' => (object)['name' => 'Travel']],
-            (object)['category' => (object)['name' => 'Nature']],
-        ]),
-        'created_at' => now(),
-    ],
-
-    (object)[
-        'id' => 2,
-        'user_id' =>2,
-        'user' => (object)[
-            'id' => 2,
-            'name' => 'Jhoe Black',
-            'avatar' => 'https://t4.ftcdn.net/jpg/11/12/74/55/240_F_1112745523_f8Sd72Uxjlmh1FBUFYyOGrLCOoU0y4Dj.jpg',
-        ],
-        'image_url' => 'https://t4.ftcdn.net/jpg/01/33/06/89/240_F_133068958_OyHjztJTfc6i0Vzw0GTibNVWJUt77dhL.jpg',
-        'description' => 'This is a beautiful sunflower blooming in summer.',
-        'likes' => collect([1, 2, 3]),
-        'comments' => collect([
-            (object)['id' => 1, 'body' => 'Nice photo!'],
-            (object)['id' => 2, 'body' => 'Amazing!'],
-        ]),
-        'categoryPost' => collect([
-            (object)['category' => (object)['name' => 'Travel']],
-            (object)['category' => (object)['name' => 'Nature']],
-        ]),
-        'created_at' => now(),
-    ],
-]);
-@endphp
-
 {{-- 投稿表示 + PCメニュー --}}
 <div class="container-fluid">
     <div class="row justify-content-center align-items-start mt-3">
         <div class="col-12 col-md-9">
-            @foreach($posts as $post)
+            @foreach($all_posts as $post)
                 @include('components.post-card', ['post' => $post])
             @endforeach
         </div>
