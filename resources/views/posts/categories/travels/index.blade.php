@@ -9,11 +9,11 @@
     <div class="row justify-content-center align-items-start mt-3">
         <div class="col-12 col-md-9">
             @foreach($posts as $post)
-                @include('components.post-card', ['post' => $post])
+                @include('posts.components.post-card', ['post' => $post])
             @endforeach
         </div>
         <div class="col-md-3 d-none d-md-block ps-md-4">
-            @include('components.sidebar-menu')
+            @include('posts.components.sidebar-menu')
         </div>
     </div>
 </div>

@@ -25,9 +25,9 @@
         </div>
 
         {{-- modal --}}
-        @include('components.modals.delete-modal', ['post' => $post])
-        @include('components.edit-forms.edit-form-event-modal', ['post' => $post])
-        @include('components.modals.report-modal', ['post' => $post])
+        @include('posts.components.modals.delete-modal', ['post' => $post])
+        @include('posts.components.edit-forms.edit-form-event-modal', ['post' => $post])
+        @include('posts.components.modals.report-modal', ['post' => $post])
 
     </div>
 
