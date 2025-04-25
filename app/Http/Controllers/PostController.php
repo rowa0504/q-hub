@@ -40,7 +40,7 @@ class PostController extends Controller
         $this->post->title = $request->title;
         $this->post->description = $request->description;
         if ($request->hasFile('image')) {
-            $post->image = 'data:image/' . $request->image->extension() .
+             $post->image = 'data:image/' . $request->image->extension() .
                            ';base64,'. base64_encode(file_get_contents($request->image));
         }
         $this->post->location = $request->location;
