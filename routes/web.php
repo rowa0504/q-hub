@@ -38,7 +38,6 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/{id}/show', [ProfileController::class, 'show'])->name('show');
     });
 
-
 //////////////////江上専用テストルートは下です////////////////////////////////////////////////////////////////////////
 Route::get('/admin/users', function () {return view('admin.users.index');});
 Route::get('/admin/foods', function () {return view('admin.foods.index');});
