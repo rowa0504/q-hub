@@ -17,4 +17,16 @@ class Post extends Model
     public function transCategory(){
         return $this->belongsTo(TransCategory::class);
     }
+
+    public function comments(){
+        return $this->hasMany(Comment::class);
+    }
+
+    public function likes(){
+        return $this->hasMany(Like::class);
+    }
+
+    public function isLiked(){
+        return $this->likes()->where('user_id',Auth::user()->id)->exists();
+    }
 }
