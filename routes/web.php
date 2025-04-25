@@ -12,6 +12,9 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::group(['prefix' => 'posts', 'as' => 'posts.'], function(){
         Route::post('/store', [PostController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [PostController::class, 'edit'])->name('edit');
+        Route::patch('/{id}/update', [PostController::class, 'update'])->name('update');
+        Route::delete('/{id}/delete', [PostController::class, 'delete'])->name('delete');
     });
 
 
