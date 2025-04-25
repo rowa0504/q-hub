@@ -12,8 +12,11 @@
                 @if (Auth::id() === $post->user_id)
                     <li><a class="dropdown-item text-danger" data-bs-toggle="modal"
                             data-bs-target="#deleteModal-{{ $post->id }}"><i class="fa-solid fa-trash"></i> Delete</a></li>
-                    <li><a class="dropdown-item text-warning" data-bs-toggle="modal"
-                            data-bs-target="#editModal-{{ $post->id }}" ><i class="fa-solid fa-pen-to-square"></i> Edit</a></li>
+                    <li>
+                        <button class="dropdown-item text-warning btn-edit" data-id="{{ $post->id }}" data-bs-toggle="modal" data-bs-target="#edit-form-4">
+                            <i class="fa-solid fa-pen-to-square"></i> Edit
+                        </button>
+                    </li>
                 @else
                     <li><a class="dropdown-item text-danger" data-bs-toggle="modal"
                             data-bs-target="#reportModal-{{ $post->id }}"><i class="fa-solid fa-flag"></i> Report</a></li>
@@ -23,7 +26,7 @@
 
         {{-- modal --}}
         @include('components.modals.delete-modal', ['post' => $post])
-        @include('components.modals.edit-modal', ['post' => $post])
+        @include('components.edit-forms.edit-form-event-modal', ['post' => $post])
         @include('components.modals.report-modal', ['post' => $post])
 
 
@@ -31,7 +34,7 @@
 
     <div class="container p-0">
         <a href="#">
-            <img src="{{ $post->image_url }}" class="w-100" alt="Post Image">
+            <img src="{{ $post->image}}" class="w-100" alt="Post Image">
         </a>
     </div>
 
