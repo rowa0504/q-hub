@@ -97,7 +97,7 @@
 
     {{-- サイドバー：右側（col-md-3） --}}
     <div class="col-md-3 d-none d-md-block">
-      @include('components.sidebar-menu') {{-- サイドバーのBladeファイルをここに指定 --}}
+      @include('posts.components.sidebar-menu') {{-- サイドバーのBladeファイルをここに指定 --}}
     </div>
   </div> {{-- .row --}}
 </div> {{-- .container --}}
