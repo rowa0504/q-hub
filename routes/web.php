@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\ProfileController;
 
 Auth::routes();
 
@@ -17,6 +18,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/{id}/edit', [PostController::class, 'edit'])->name('edit');
         Route::patch('/{id}/update', [PostController::class, 'update'])->name('update');
         Route::delete('/{id}/delete', [PostController::class, 'delete'])->name('delete');
+    });
 
     // Like route
     Route::group(['prefix' => 'like','as' => 'like.'], function(){
@@ -30,7 +32,10 @@ Route::group(['middleware' => 'auth'], function(){
         Route::delete('/{id}/destroy', [CommentController::class, 'destroy'])->name('destroy');
     });
 
-});
+    // Profile route
+    Route::group(['prefix'=> 'profile','as' => 'profile.'], function(){
+        Route::get('/{id}/show', [ProfileController::class, 'show'])->name('show');
+    });
 
 
 //////////////////江上専用テストルートは下です////////////////////////////////////////////////////////////////////////
@@ -40,13 +45,7 @@ Route::get('/questions', function () {return view('questions.index');});
 Route::get('/questions/{id}', function ($id) {return view('questions.show', ['id' => $id]);});
 
 //Profile//
-Route::get('/profile', function () {return view('profile.index');});
 Route::get('/profile/edit/{id}', function ($id) {return view('profile.edit', ['id' => $id]);});
 //////////////////////////////江上専用テストデータはここまでです///////////////////////////////////////////
-
-
-
-
-
 
 });
