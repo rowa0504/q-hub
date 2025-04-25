@@ -123,10 +123,6 @@
                                         <i class="bi bi-heart ms-3 me-2"></i>0
                                     </div>
                                     <i class="bi bi-three-dots"></i>
-                                    {{-- modal --}}
-                                    @include('components.modals.delete-modal', ['post' => $post])
-                                    @include('components.modals.edit-modal', ['post' => $post])
-                                    @include('components.modals.report-modal', ['post' => $post])
                                 </div>
                             </div>
                         </div>
