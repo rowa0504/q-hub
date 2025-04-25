@@ -58,8 +58,8 @@ aria-hidden="true">
 
                 {{-- Deporture input --}}
                 <div class="mb-3">
-                    <input type="text" class="form-control" name="deporture" id="deporture" placeholder="deporture">
-                    @error('deporture')
+                    <input type="text" class="form-control" name="departure" id="departure" placeholder="departure">
+                    @error('departure')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
                 </div>

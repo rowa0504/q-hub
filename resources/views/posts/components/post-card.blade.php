@@ -13,7 +13,7 @@
                     <li><a class="dropdown-item text-danger" data-bs-toggle="modal"
                             data-bs-target="#deleteModal-{{ $post->id }}"><i class="fa-solid fa-trash"></i> Delete</a></li>
                     <li>
-                        <button class="dropdown-item text-warning btn-edit" data-id="{{ $post->id }}" data-bs-toggle="modal" data-bs-target="#edit-form-4">
+                        <button class="dropdown-item text-warning btn-edit" data-id="{{ $post->id }}" data-bs-toggle="modal" data-bs-target="#edit-form-{{ $post->id }}">
                             <i class="fa-solid fa-pen-to-square"></i> Edit
                         </button>
                     </li>
@@ -26,7 +26,7 @@
 
         {{-- modal --}}
         @include('posts.components.modals.delete-modal', ['post' => $post])
-        @include('posts.components.edit-forms.edit-form-event-modal', ['post' => $post])
+        @include('posts.components.edit-forms.edit-form-modal', ['post' => $post])
         @include('posts.components.modals.report-modal', ['post' => $post])
 
     </div>
