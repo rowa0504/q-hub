@@ -40,8 +40,8 @@ class PostController extends Controller
         $this->post->title = $request->title;
         $this->post->description = $request->description;
         if ($request->hasFile('image')) {
-            $post->image = 'data:image/' . $request->image->extension() .
-                           ';base64,'. base64_encode(file_get_contents($request->image));
+            $this->post->image = 'data:image/' . $request->image->extension() .
+                                 ';base64,' . base64_encode(file_get_contents($request->image));
         }
         $this->post->location = $request->location;
         $this->post->departure = $request->departure;
@@ -86,8 +86,8 @@ class PostController extends Controller
         $post->title = $request->title;
         $post->description = $request->description;
         if ($request->hasFile('image')) {
-            $post->image = 'data:image/' . $request->image->extension() .
-                           ';base64,'. base64_encode(file_get_contents($request->image));
+            $this->post->image = 'data:image/' . $request->image->extension() .
+                                 ';base64,' . base64_encode(file_get_contents($request->image));
         }
         $post->location = $request->location;
         $post->departure = $request->departure;
