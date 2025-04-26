@@ -36,14 +36,8 @@
             {{-- モーダル --}}
             @include('posts.categories.questions.modal.add_questions')
 
-            {{-- 質問リスト --}}
-            @foreach ($questions as $question)
-                <div class="card mb-3 shadow-sm border border-dark">
-                    <div class="card-body d-flex">
-                        {{-- ユーザーアイコン --}}
-                        <div class="me-3">
-                            <div class="rounded-circle" style="width: 40px; height: 40px; background-color: {{ $question->user->icon }}"></div>
-                        </div>
+                {{-- モーダル --}}
+                @include('posts.categories.questions.modal.add_questions')
 
                         {{-- 本文 --}}
                         <div class="flex-grow-1">
@@ -54,10 +48,29 @@
                                 </a>
                             </h5>
 
-                            {{-- 画像がある場合 --}}
-                            @if ($question->image_url)
-                                <div class="my-2">
-                                    <img src="{{ $question->image_url }}" alt="Post Image" class="img-fluid rounded">
+                            <div class="flex-grow-1">
+                                <strong>{{ $question->user->name }}</strong>
+                                <h5 class="mt-1">
+                                    <a href="/questions/{{ $question->id }}" class="text-decoration-none text-dark">
+                                        {{ $question->title }}
+                                    </a>
+                                </h5>
+                                <p class="text-muted small d-block d-sm-none">
+                                    {{ \Illuminate\Support\Str::limit($question->body, 100) }}
+                                </p>
+                                <p class="text-muted small d-none d-sm-block">
+                                    {{ $question->body }}
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center mt-2 text-muted">
+                                    <div>
+                                        <i class="bi bi-chat-left-text me-2"></i>{{ $question->comments_count }}
+                                        <i class="bi bi-heart ms-3 me-2"></i>0
+                                    </div>
+                                    <i class="bi bi-three-dots"></i>
+                                    {{-- modal --}}
+                                    @include('posts.components.modals.delete-modal', ['post' => $post])
+                                    @include('posts.components.modals.edit-modal', ['post' => $post])
+                                    @include('posts.components.modals.report-modal', ['post' => $post])
                                 </div>
                             @endif
 

@@ -9,13 +9,19 @@
 
 <!-- メニューリンク -->
 <div class="d-flex flex-column gap-3">
-    <a href="#" class="text-dark text-decoration-none"><i class="fa-solid fa-calendar-days"></i> Event</a>
-    <a href="#" class="text-dark text-decoration-none"><i class="fa-solid fa-burger"></i> Food</a>
-    <a href="#" class="text-dark text-decoration-none"><i class="fa-solid fa-gift"></i> Item</a>
-    <a href="#" class="text-dark text-decoration-none"><i class="fa-solid fa-location-dot"></i> Travel</a>
-    <a href="#" class="text-dark text-decoration-none"><i class="fa-solid fa-car"></i> Transportation</a>
-    <a href="#" class="text-dark text-decoration-none"><i class="fa-solid fa-circle-question"></i> Question</a>
+    <a href="{{ route('event.index') }}" class="text-dark text-decoration-none"><i class="fa-solid fa-calendar-days"></i>
+        Event</a>
+    <a href="{{ route('food.index') }}" class="text-dark text-decoration-none"><i class="fa-solid fa-burger"></i>
+        Food</a>
+    <a href="{{ route('item.index') }}" class="text-dark text-decoration-none"><i class="fa-solid fa-gift"></i> Item</a>
+    <a href="{{ route('travel.index') }}" class="text-dark text-decoration-none"><i
+            class="fa-solid fa-location-dot"></i> Travel</a>
+    <a href="{{ route('transportation.index') }}" class="text-dark text-decoration-none"><i class="fa-solid fa-car"></i>
+        Transportation</a>
+    <a href="{{ route('questions.index') }}" class="text-dark text-decoration-none"><i
+            class="fa-solid fa-circle-question"></i> Question</a>
 </div>
+
 
 <hr class="text-dark">
 
