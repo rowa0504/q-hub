@@ -11,7 +11,7 @@ class TravelController extends Controller
     {
         $all_posts = Post::where('category_id', 4)->get();
 
-        return view('posts.categories.events.index', compact('all_posts'));
+        return view('posts.categories.travels.index', compact('all_posts'));
     }
 
     public function show($id)
