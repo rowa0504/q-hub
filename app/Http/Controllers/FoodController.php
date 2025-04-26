@@ -11,7 +11,7 @@ class FoodController extends Controller
     {
         $all_posts = Post::where('category_id', 2)->get();
 
-        return view('posts.categories.events.index', compact('all_posts'));
+        return view('posts.categories.foods.index', compact('all_posts'));
     }
 
     public function show($id)
