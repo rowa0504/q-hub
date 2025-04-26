@@ -11,7 +11,7 @@ class QuestionController extends Controller
     {
         $all_posts = Post::where('category_id', 6)->get();
 
-        return view('posts.categories.events.index', compact('all_posts'));
+        return view('posts.categories.questions.index', compact('all_posts'));
     }
 
     public function show($id)

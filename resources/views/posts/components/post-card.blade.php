@@ -82,8 +82,11 @@
     </div>
 </div>
 
-{{-- 投稿削除モーダル --}}
-@include('posts.components.modals.comment-modal', ['post' => $post])
-
 {{-- 投稿編集モーダル --}}
-
+@include('posts.components.modals.edit-modal', ['post' => $post])
+{{-- 投稿報告モーダル --}}
+@include('posts.components.modals.report-modal', ['post' => $post])
+{{-- 投稿削除確認モーダル --}}
+@include('posts.components.modals.delete-modal', ['post' => $post])
+{{-- 投稿コメントモーダル --}}
+@include('posts.components.modals.comment-modal', ['post' => $post])
