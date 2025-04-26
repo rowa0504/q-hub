@@ -93,7 +93,7 @@
                 </div>
 
                 {{-- モーダル --}}
-                @include('questions.modal.add_questions')
+                @include('posts.categories.questions.modal.add_questions')
 
                 {{-- 質問リスト --}}
                 @foreach ($questions as $question)
@@ -124,9 +124,9 @@
                                     </div>
                                     <i class="bi bi-three-dots"></i>
                                     {{-- modal --}}
-                                    @include('components.modals.delete-modal', ['post' => $post])
-                                    @include('components.modals.edit-modal', ['post' => $post])
-                                    @include('components.modals.report-modal', ['post' => $post])
+                                    @include('posts.components.modals.delete-modal', ['post' => $post])
+                                    @include('posts.components.modals.edit-modal', ['post' => $post])
+                                    @include('posts.components.modals.report-modal', ['post' => $post])
                                 </div>
                             </div>
                         </div>
