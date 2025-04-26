@@ -11,7 +11,7 @@ class TransportationController extends Controller
     {
         $all_posts = Post::where('category_id', 5)->get();
 
-        return view('posts.categories.transpotations.index', compact('all_posts'));
+        return view('posts.categories.transportations.index', compact('all_posts'));
     }
 
     public function show($id)
