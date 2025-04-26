@@ -14,13 +14,15 @@ class PostController extends Controller
     private $category;
     private $trans_category;
 
-    public function __construct(Post $post, Category $category, TransCategory $trans_category){
+    public function __construct(Post $post, Category $category, TransCategory $trans_category)
+    {
         $this->post = $post;
         $this->category = $category;
         $this->trans_category = $trans_category;
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
             'title' => 'required|min:1|max:50',
             'description' => 'required|min:1|max:1000',
@@ -41,7 +43,7 @@ class PostController extends Controller
         $this->post->description = $request->description;
         if ($request->hasFile('image')) {
             $this->post->image = 'data:image/' . $request->image->extension() .
-                                 ';base64,' . base64_encode(file_get_contents($request->image));
+                ';base64,' . base64_encode(file_get_contents($request->image));
         }
         $this->post->location = $request->location;
         $this->post->departure = $request->departure;
@@ -57,7 +59,8 @@ class PostController extends Controller
         return redirect()->back();
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         $post = $this->post->findOrFail($id);
         // Laravelが画像URLなども返せるようにする場合
         $post->image = $post->image ? asset('storage/' . $post->image) : null;
@@ -65,7 +68,8 @@ class PostController extends Controller
         return response()->json($post);
     }
 
-    public function update($id, Request $request){
+    public function update($id, Request $request)
+    {
         $request->validate([
             'title' => 'required|min:1|max:50',
             'description' => 'required|min:1|max:1000',
@@ -87,7 +91,7 @@ class PostController extends Controller
         $post->description = $request->description;
         if ($request->hasFile('image')) {
             $this->post->image = 'data:image/' . $request->image->extension() .
-                                 ';base64,' . base64_encode(file_get_contents($request->image));
+                ';base64,' . base64_encode(file_get_contents($request->image));
         }
         $post->location = $request->location;
         $post->departure = $request->departure;
@@ -103,10 +107,12 @@ class PostController extends Controller
         return redirect()->back();
     }
 
-    public function deldte($id){
+    public function delete($id)
+    {
         $post = $this->post->findOrFail($id);
 
         $post->delete();
         return redirect()->back();
     }
+
 }
