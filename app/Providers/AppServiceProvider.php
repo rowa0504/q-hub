@@ -26,7 +26,6 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $view->with('all_categories', Category::all());
             $view->with('all_trans_categories', TransCategory::all());
-            $view->with('all_posts', Post::latest()->get());
         });
     }
 }

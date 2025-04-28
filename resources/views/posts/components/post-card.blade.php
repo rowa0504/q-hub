@@ -102,55 +102,61 @@
         @switch($post->category_id)
             @case(1)
                 {{-- event --}}
-                <div class="mt-2">
-                    <p class="text-primary mb-1">
+                <div class="mt-2 fw-bold">
+                    <p class="mb-1">Event: {{ $post->title ?? 'TBD' }}</p>
+                    <p class="mb-1">
                         Start Date:
                         {{ $post->startdatetime ? \Carbon\Carbon::parse($post->startdatetime)->format('M d, Y H:i') : 'TBD' }}
                     </p>
-                    <p class="text-primary mb-1">
+                    <p class="mb-1">
                         End Date:
                         {{ $post->enddatetime ? \Carbon\Carbon::parse($post->enddatetime)->format('M d, Y H:i') : 'TBD' }}
                     </p>
-                    <p class="text-primary mb-1">Max participants: {{ $post->max ?? 'TBD' }}</p>
+                    <p class="mb-1">Max participants: {{ $post->max ?? 'TBD' }}</p>
                 </div>
             @break
 
             @case(2)
                 {{-- food --}}
-                <div class="mt-2">
+                <div class="mt-2 fw-bold">
+                    <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
+                    <p class="mb-1">Location: {{ $post->location ?? 'TBD' }}
                     <i class="fa-solid fa-location-dot icon-sm"></i>
+                    </p>
                 </div>
             @break
 
             @case(3)
                 {{-- item --}}
-                <div class="mt-2">
-                    <p class="text-info mb-1">Stock: {{ $post->max ?? 'TBD' }}</p>
+                <div class="mt-2 fw-bold">
+                    <p class="mb-1">Item name: {{ $post->title ?? 'TBD' }}</p>
+                    <p class="mb-1">Max participants: {{ $post->max ?? 'TBD' }}</p>
                 </div>
             @break
 
             @case(4)
                 {{-- travel --}}
-                <div class="mt-2">
-                    <i class="fa-solid fa-location-dot"></i>
+                <div class="mt-2 fw-bold">
+                    <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
+                    <p class="mb-1">Location: {{ $post->location ?? 'TBD' }}
+                        <i class="fa-solid fa-location-dot icon-sm"></i>
+                    </p>
                 </div>
             @break
 
             @case(5)
                 {{-- transportation --}}
-                <div class="mt-2">
-                    <p class="text-muted mb-1">Fee: {{ $post->fee ?? 'TBD' }} USD</p>
-                    <p class="text-muted mb-1">Departure: {{ $post->departure ?? 'TBD' }}</p>
-                    <p class="text-muted mb-1">Destination: {{ $post->destination ?? 'TBD' }}</p>
+                <div class="mt-2 fw-bold">
+                    <p class="mb-1">Fee: {{ $post->fee ?? 'TBD' }}₱</p>
+                    <p class="mb-1">Departure: {{ $post->departure ?? 'TBD' }}</p>
+                    <p class="mb-1">Destination: {{ $post->destination ?? 'TBD' }}</p>
                 </div>
             @break
 
             @case(6)
                 {{-- question --}}
-                <div class="mt-2">
-                    <p class="text-muted mb-1">Question: {{ $post->title ?? 'TBD' }}</p>
-
-
+                <div class="mt-2 fw-bold">
+                    <p class="mb-1">Question: {{ $post->title ?? 'TBD' }}</p>
                 </div>
             @break
 
@@ -160,10 +166,7 @@
 
         {{-- 投稿本文 --}}
         <p class="mb-0">
-            <a href="{{ route('profile.show', $post->user->id) }}"
-                class="text-decoration-none text-dark fw-bold">{{ $post->user->name }}</a>
-            &nbsp;
-            <span class="fw-light">{{ $post->description }}</span>
+            <span class="fw-bold">{{ $post->description }}</span>
         </p>
         <p class="text-uppercase text-muted small mb-0">{{ $post->created_at->format('M d, Y') }}</p>
     </div>
