@@ -115,4 +115,12 @@ class PostController extends Controller
         return redirect()->back();
     }
 
+
+    public function profile()
+    {
+        $all_posts = $this->post->where('user_id', Auth::id())->with('user')->latest()->get();
+
+
+        return view('users.profile.index', compact('all_posts'));
+    }
 }

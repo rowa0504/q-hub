@@ -112,7 +112,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Profile//
     Route::get('/profile/edit/{id}', function ($id) {
-        return view('profile.edit', ['id' => $id]);
+        return view('users.profile.edit', ['id' => $id]);
     });
     //////////////////////////////江上専用テストデータはここまでです///////////////////////////////////////////
 

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth; 
 
 class ProfileController extends Controller
 {
@@ -13,9 +15,17 @@ class ProfileController extends Controller
         $this->user = $user;
     }
 
+    public function index()
+    {
+        $all_posts = Post::where('user_id', Auth::id())->with('user')->latest()->get();
+
+        return view('users.profile.index', compact('all_posts'));
+    }
+
     public function show($id){
         $user = $this->user->findOrFail($id);
         return view('users.profile.index')->with('user', $user);
+
     }
 
     // public function edit() {
