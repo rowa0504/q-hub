@@ -14,9 +14,13 @@ use App\Http\Controllers\TravelController;
 use App\Http\Controllers\TransportationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\SocialLoginController;
 
 
 Auth::routes();
+
+Route::get('/login/{provider}', [SocialLoginController::class, 'redirectToProvider'])->name('social.login');
+Route::get('/login/{provider}/callback', [SocialLoginController::class, 'handleProviderCallback']);
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/', [HomeController::class, 'index'])->name('index');
