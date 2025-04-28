@@ -4,22 +4,21 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Post;
+
 
 class PostSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        private $trans_category;
+        private $post;
 
-        public function __construct(TransCategory $trans_category){
-            $this->trans_category = $trans_category;
+        public function __construct(Post $post){
+            $this->post = $post;
         }
         /**
-         * Run the database seeds.
-         */
+        * Run the database seeds.
+        */
         public function run(): void
         {
             $trans_categories = [

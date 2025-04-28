@@ -15,7 +15,7 @@ class ProfileController extends Controller
  
     public function show($id){
         $user = $this->user->findOrFail($id);
-        return view('profile.index')->with('user', $user);
+        return view('users.profile.index')->with('user', $user);
     }
 
     // public function edit() {
