@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
+use App\Models\Category;
+use App\Models\Post;
+use App\Models\TransCategory;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('*', function ($view) {
+            $view->with('all_categories', Category::all());
+            $view->with('all_trans_categories', TransCategory::all());
+            $view->with('all_posts', Post::latest()->get());
+        });
     }
 }
