@@ -15,11 +15,13 @@
             <ul class="dropdown-menu dropdown-menu-end">
                 @if (Auth::id() === $post->user_id)
                     <li><a class="dropdown-item text-danger" data-bs-toggle="modal"
-                            data-bs-target="#deleteModal-{{ $post->id }}"><i class="fa-solid fa-trash"></i>
-                            Delete</a></li>
-                    <li><button class="dropdown-item text-warning btn-edit" data-id="{{ $post->id }}"
-                            data-bs-toggle="modal" data-bs-target="#edit-form-{{ $post->id }}"><i
-                                class="fa-solid fa-pen-to-square"></i> Edit</button></li>
+                            data-bs-target="#deleteModal-{{ $post->id }}"><i class="fa-solid fa-trash"></i> Delete</a></li>
+                    <li>
+                        <button class="dropdown-item text-warning btn-edit" data-id="{{ $post->id }}" data-bs-toggle="modal" data-bs-target="#edit-form-{{ $post->id }}">
+                            <i class="fa-solid fa-pen-to-square"></i> Edit
+                        </button>
+                    </li>
+
                 @else
                     <li><a class="dropdown-item text-danger" data-bs-toggle="modal"
                             data-bs-target="#reportModal-{{ $post->id }}"><i class="fa-solid fa-flag"></i>
@@ -27,6 +29,12 @@
                 @endif
             </ul>
         </div>
+
+        {{-- modal --}}
+        @include('posts.components.modals.delete-modal', ['post' => $post])
+        @include('posts.components.edit-forms.edit-form-modal', ['post' => $post])
+        @include('posts.components.modals.report-modal', ['post' => $post])
+
     </div>
 
     {{-- 投稿画像 --}}
