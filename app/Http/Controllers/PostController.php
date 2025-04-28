@@ -14,13 +14,15 @@ class PostController extends Controller
     private $category;
     private $trans_category;
 
-    public function __construct(Post $post, Category $category, TransCategory $trans_category){
+    public function __construct(Post $post, Category $category, TransCategory $trans_category)
+    {
         $this->post = $post;
         $this->category = $category;
         $this->trans_category = $trans_category;
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
             'title' => 'required|min:1|max:50',
             'description' => 'required|min:1|max:1000',
@@ -41,7 +43,7 @@ class PostController extends Controller
         $this->post->description = $request->description;
         if ($request->hasFile('image')) {
             $this->post->image = 'data:image/' . $request->image->extension() .
-                                 ';base64,' . base64_encode(file_get_contents($request->image));
+                ';base64,' . base64_encode(file_get_contents($request->image));
         }
         $this->post->location = $request->location;
         $this->post->departure = $request->departure;
@@ -57,7 +59,8 @@ class PostController extends Controller
         return redirect()->back();
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         $post = $this->post->findOrFail($id);
 
         // 画像データがBase64形式で保存されている場合、そのまま返す
@@ -78,7 +81,6 @@ class PostController extends Controller
 
         return response()->json($post);
     }
-
 
     public function update($id, Request $request){
         $request->validate([
@@ -101,11 +103,13 @@ class PostController extends Controller
         $post->title = $request->title;
         $post->description = $request->description;
         if ($request->hasFile('image')) {
+
             $post->image = 'data:image/' . $request->image->extension() .
                                  ';base64,' . base64_encode(file_get_contents($request->image));
         } else {
             $post->image = null;
         }
+
         $post->location = $request->location;
         $post->departure = $request->departure;
         $post->destination = $request->destination;
@@ -126,4 +130,5 @@ class PostController extends Controller
         $post->delete();
         return redirect()->back();
     }
+
 }

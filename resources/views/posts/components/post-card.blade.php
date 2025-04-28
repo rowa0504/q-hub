@@ -1,13 +1,17 @@
 <div class="card w-100">
-    {{-- 投稿の詳細モーダル --}}
-    <div class="d-flex align-items-center border-bottom mb-2">
-        <img src="{{ $post->user->avatar ?? '' }}" class="rounded-circle me-2 avatar-sm" alt="Profile">
-        <strong>{{ $post->user->name }}</strong>
+    {{-- 投稿ヘッダー --}}
+    <div class="d-flex align-items-center border-bottom mb-2 p-2">
+        <a href="{{ route('profile.show', $post->user->id) }}">
+            @if ($post->user->avatar)
+                <img src="{{ $post->user->avatar }}" alt="{{ $post->user->name }}" class="rounded-circle avatar-sm">
+            @else
+                <i class="fa-solid fa-circle-user text-secondary icon-sm"></i>
+            @endif
+        </a>
+        <strong class="mx-2">{{ $post->user->name }}</strong>
 
-        {{-- 投稿編集＆削除＆報告 --}}
         <div class="ms-auto position-relative">
-            <i class="fas fa-ellipsis-h" style="cursor: pointer;" data-bs-toggle="dropdown" aria-expanded="false"></i>
-
+            <i class="fas fa-ellipsis-h" style="cursor:pointer;" data-bs-toggle="dropdown"></i>
             <ul class="dropdown-menu dropdown-menu-end">
                 @if (Auth::id() === $post->user_id)
                     <li><a class="dropdown-item text-danger" data-bs-toggle="modal"
@@ -17,9 +21,11 @@
                             <i class="fa-solid fa-pen-to-square"></i> Edit
                         </button>
                     </li>
+
                 @else
                     <li><a class="dropdown-item text-danger" data-bs-toggle="modal"
-                            data-bs-target="#reportModal-{{ $post->id }}"><i class="fa-solid fa-flag"></i> Report</a></li>
+                            data-bs-target="#reportModal-{{ $post->id }}"><i class="fa-solid fa-flag"></i>
+                            Report</a></li>
                 @endif
             </ul>
         </div>
@@ -31,50 +37,64 @@
 
     </div>
 
-    <div class="container p-0">
-        <a href="#">
-            <img src="{{ $post->image }}" class="img-fluid img-thumbnail" alt="Post Image">
-        </a>
-    </div>
+    {{-- 投稿画像 --}}
+    <a href="{{ $post->getCategoryRoute() }}">
+        <img src="{{ $post->image }}" class="img-fluid img-thumbnail" alt="Post Image">
+    </a>
 
     <div class="card-body">
-        <div class="row align-items-center flex-wrap">
-            <div class="col-auto d-flex align-items-center gap-2">
-                <!-- Likeボタン -->
-                <form action="#" method="POST" class="d-inline">
-                    @csrf
-                    <button class="btn btn-sm shadow-none p-0">
-                        {{-- @if ($post->likedBy(Auth::user())) --}}
-                        <i class="fa-solid fa-heart fa-lg text-danger"></i>
-                        {{-- @else --}}
-                        {{-- <i class="fa-regular fa-heart fa-lg"></i> --}}
-              {{-- @endif --}}
-                    </button>
-                </form>
-
-                <!-- Like数 -->
-                <span data-bs-toggle="modal" data-bs-target="#likedUsersModal-{{ $post->id }}"
-                    class="text-danger me-2" style="cursor:pointer;">
-                    {{ $post->likes_count }}
-                </span>
-
-                <!-- コメントアイコン＋数 -->
-                <span data-bs-toggle="modal" data-bs-target="#commentsModal-{{ $post->id }}"
-                    style="cursor:pointer;">
-                    <i class="fa-regular fa-comment fa-lg"></i>
-                    {{ $post->comments_count }}
-                </span>
+        {{-- いいね・コメントアクション --}}
+        <div class="d-flex align-items-center mb-2">
+            {{-- いいね --}}
+            <div class="me-3 d-flex align-items-center">
+                @if ($post->isLiked())
+                    <form action="{{ route('like.delete', $post->id) }}" method="post"
+                        class="d-flex align-items-center">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-sm p-0 border-0 bg-transparent d-flex align-items-center">
+                            <i class="fa-solid fa-heart text-danger"></i>
+                        </button>
+                        <span class="ms-1">{{ $post->likes->count() }}</span>
+                    </form>
+                @else
+                    <form action="{{ route('like.store', $post->id) }}" method="post"
+                        class="d-flex align-items-center">
+                        @csrf
+                        <button class="btn btn-sm p-0 border-0 bg-transparent d-flex align-items-center">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <span class="ms-1">{{ $post->likes->count() }}</span>
+                    </form>
+                @endif
             </div>
 
-            <div class="col text-end">
-                <span class="badge bg-secondary bg-opacity-50">{{ $post->category->name ?? 'Uncategorized' }}</span>
+            {{-- コメントボタン --}}
+            <div class="me-3">
+                <span data-bs-toggle="modal" data-bs-target="#commentsModal-{{ $post->id }}"
+                    style="cursor:pointer;">
+                    <i class="fa-regular fa-comment"></i>
+                </span>
+                <span>{{ $post->comments->count() }}</span>
             </div>
         </div>
 
-        <a href="#" class="text-decoration-none text-dark fw-bold">{{ $post->user->name }}</a>
-        &nbsp;
-        <p class="d-inline fw-light">
-            {{-- {{ $post->caption }}</p> --}}
-        <p class="text-uppercase text-muted small">{{ $post->created_at->format('M d, Y') }}</p>
+        {{-- 投稿本文 --}}
+        <p class="mb-0">
+            <a href="{{ route('profile.show', $post->user->id) }}"
+                class="text-decoration-none text-dark fw-bold">{{ $post->user->name }}</a>
+            &nbsp;
+            <span class="fw-light">{{ $post->description }}</span>
+        </p>
+        <p class="text-uppercase text-muted small mb-0">{{ $post->created_at->format('M d, Y') }}</p>
     </div>
 </div>
+
+{{-- 投稿編集モーダル --}}
+@include('posts.components.modals.edit-modal', ['post' => $post])
+{{-- 投稿報告モーダル --}}
+@include('posts.components.modals.report-modal', ['post' => $post])
+{{-- 投稿削除確認モーダル --}}
+@include('posts.components.modals.delete-modal', ['post' => $post])
+{{-- 投稿コメントモーダル --}}
+@include('posts.components.modals.comment-modal', ['post' => $post])
