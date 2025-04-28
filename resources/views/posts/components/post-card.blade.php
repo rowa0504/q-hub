@@ -11,6 +11,11 @@
         <strong class="mx-2">{{ $post->user->name }}</strong>
 
         <div class="ms-auto position-relative">
+            {{-- カテゴリ --}}
+            <div class="mb-3">
+                <i class="fa-solid fa-tag"></i>
+                <span class="ms-1 text-muted">{{ $post->category->name }}</span>
+            </div>
             <i class="fas fa-ellipsis-h" style="cursor:pointer;" data-bs-toggle="dropdown"></i>
             <ul class="dropdown-menu dropdown-menu-end">
                 @if (Auth::id() === $post->user_id)
@@ -45,6 +50,7 @@
     <div class="card-body">
         {{-- いいね・コメントアクション --}}
         <div class="d-flex align-items-center mb-2">
+
             {{-- いいね --}}
             <div class="me-3 d-flex align-items-center">
                 @if ($post->isLiked())
@@ -71,13 +77,26 @@
 
             {{-- コメントボタン --}}
             <div class="me-3">
-                <span data-bs-toggle="modal" data-bs-target="#commentsModal-{{ $post->id }}"
-                    style="cursor:pointer;">
-                    <i class="fa-regular fa-comment"></i>
-                </span>
+                @if ($post->category_id == 6)
+                    <!-- category_id が 6 のとき -->
+                    <!-- アンサーアイコン -->
+                    <span data-bs-toggle="modal" data-bs-target="#answerModal-{{ $post->id }}"
+                        style="cursor:pointer;">
+                        <i class="fa-solid fa-reply"></i> <!-- アンサーアイコン -->
+                    </span>
+                @else
+                    <!-- コメントアイコン -->
+                    <span data-bs-toggle="modal" data-bs-target="#commentsModal-{{ $post->id }}"
+                        style="cursor:pointer;">
+                        <i class="fa-regular fa-comment"></i> <!-- コメントアイコン -->
+                    </span>
+                @endif
                 <span>{{ $post->comments->count() }}</span>
             </div>
+
         </div>
+
+
 
         {{-- Category-Specific Additional Information --}}
         @switch($post->category_id)
@@ -99,7 +118,7 @@
             @case(2)
                 {{-- food --}}
                 <div class="mt-2">
-                    <i class="fa-solid fa-location-dot"></i>
+                    <i class="fa-solid fa-location-dot icon-sm"></i>
                 </div>
             @break
 
@@ -129,8 +148,9 @@
             @case(6)
                 {{-- question --}}
                 <div class="mt-2">
-                    <p class="text-danger mb-1">Category: {{ $post->trans_category_id ? $post->transCategory->name : 'TBD' }}
-                    </p>
+                    <p class="text-muted mb-1">Question: {{ $post->title ?? 'TBD' }}</p>
+
+
                 </div>
             @break
 
