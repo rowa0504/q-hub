@@ -55,7 +55,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Event route
     Route::group(['prefix' => 'event', 'as' => 'event.'], function () {
         Route::get('/', [EventController::class, 'index'])->name('index');
-        Route::get('/{id}', [EventController::class, 'show'])->name('show');
+        // Route::get('/{id}', [EventController::class, 'show'])->name('show');
     });
 
     // Food route
