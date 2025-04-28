@@ -13,6 +13,8 @@ aria-hidden="true">
                 @include('posts.components.edit-forms.modal-bodys.travel', ['post' => $post])
             @elseif ($post->category_id == 5)
                 @include('posts.components.edit-forms.modal-bodys.transportation', ['post' => $post])
+            @elseif ($post->category_id == 6)
+                @include('posts.components.edit-forms.modal-bodys.question', ['post' => $post])
             @elseif ($post->category_id == 7)
                 @include('posts.components.edit-forms.modal-bodys.other', ['post' => $post])
             @endif
