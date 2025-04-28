@@ -59,16 +59,8 @@ class Post extends Model
         }
     }
 
-<<<<<<< HEAD
-    public function reports()
-{
-    return $this->belongsToMany(User::class, 'post_user_reports')->withTimestamps();
-}
-
-=======
     protected $casts = [
         'startdatetime' => 'datetime',
         'enddatetime' => 'datetime',
     ];
->>>>>>> master
 }
