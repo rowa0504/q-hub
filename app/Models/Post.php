@@ -56,4 +56,10 @@ class Post extends Model
                 return '#';
         }
     }
+
+    public function reports()
+{
+    return $this->belongsToMany(User::class, 'post_user_reports')->withTimestamps();
+}
+
 }

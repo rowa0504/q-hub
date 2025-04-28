@@ -55,4 +55,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+        public function reportedPosts()
+    {
+        return $this->belongsToMany(Post::class, 'post_user_reports')->withTimestamps();
+    }
+
 }
