@@ -49,9 +49,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
         Route::get('/', [ProfileController::class, 'index'])->name('index');
         Route::get('/edit', [ProfileController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [ProfileController::class, 'update'])->name('update'); 
+        Route::put('/{id}', [ProfileController::class, 'update'])->name('update');
         Route::get('/{id}', [ProfileController::class, 'show'])->name('show');
-
     });
 
     // カテゴリー別のroute

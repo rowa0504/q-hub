@@ -11,7 +11,8 @@ class ProfileController extends Controller
 {
     private $user;
 
-    public function __construct(User $user){
+    public function __construct(User $user)
+    {
         $this->user = $user;
     }
 
@@ -20,23 +21,24 @@ class ProfileController extends Controller
         $user = Auth::user();
         $all_posts = Post::where('user_id', Auth::id())->with('user')->latest()->get();
 
-        return view('users.profile.index', compact('user','all_posts'));
+        return view('users.profile.index', compact('user', 'all_posts'));
     }
 
-    public function show($id){
+    public function show($id)
+    {
         $user = $this->user->findOrFail($id);
         $all_posts = Post::where('user_id', $user->id)->with('user')->latest()->get();
-        return view('users.profile.index')->with('user', $user);
-
-
+        return view('users.profile.index', compact('user', 'all_posts'));
     }
 
-    public function edit() {
+    public function edit()
+    {
         $user = $this->user->findOrFail(Auth::user()->id);
-        return view('users.profile.edit')->with('user',$user);
+        return view('users.profile.edit')->with('user', $user);
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         $request->validate([
             'name'         => 'required|max:20',
             'email'        => 'required|max:50',
@@ -49,15 +51,12 @@ class ProfileController extends Controller
         $user->email = $request->email;
         $user->introduction = $request->introduction;
 
-        if ($request->avatar){
+        if ($request->avatar) {
             $user->avatar = 'data:image/' . $request->avatar->extension() .
-            ';base64,'. base64_encode(file_get_contents($request->avatar));
+                ';base64,' . base64_encode(file_get_contents($request->avatar));
         }
 
         $user->save();
-        return redirect()->route('profile.index')->with('success', 'Profile updated successfully!');
+        return redirect('/profile')->with('success', 'Profile updated successfully!');
     }
-
-
-
 }
