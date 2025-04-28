@@ -19,5 +19,4 @@ class EventController extends Controller
     {
         return view('posts.categories.events.show');
     }
-
 }
