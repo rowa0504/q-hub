@@ -116,8 +116,13 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Profile//
     Route::get('/profile/edit/{id}', function ($id) {
-        return view('profile.edit', ['id' => $id]);
+        return view('users.profile.edit', ['id' => $id]);
     });
+
+    Route::post('/answers/{answer}/best', function () {
+        return back();
+    })->name('answers.best');
+
     //////////////////////////////江上専用テストデータはここまでです///////////////////////////////////////////
 
 });
