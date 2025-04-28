@@ -108,8 +108,11 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::get('/questions/{id}', function ($id) {
-        return view('questions.index', ['id' => $id]);
+        return view('posts.categories.questions.index', ['id' => $id]);
     });
+
+    Route::get('/questions/show/{id}', [QuestionController::class, 'show'])->name('posts.categories.questions.show');
+
 
     //Profile//
     Route::get('/profile/edit/{id}', function ($id) {
