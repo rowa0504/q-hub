@@ -16,11 +16,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 calendar.destroy();
             }
 
+            // FullCalendarの設定
             calendar = new Calendar(calendarEl, {
                 plugins: [dayGridPlugin, interactionPlugin],
                 initialView: 'dayGridMonth',
                 selectable: true,
                 editable: true,
+                timezone: 'UTC', // タイムゾーン設定（必要に応じて調整）
                 eventClick: function(info) {
                     let eventId = info.event.id;
                     if (eventId) {
@@ -32,21 +34,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     let selectedDate = info.dateStr;
                     window.location.href = `event/create?date=${selectedDate}`;
                 },
-                // eventsをeventSourcesに変更して、非同期でデータを取得
                 eventSources: [{
                     events: function(fetchInfo, successCallback, failureCallback) {
                         fetch('/api/events')
                             .then(response => response.json())
                             .then(events => {
+                                console.log(events); // データが正しく取得できているか確認
                                 successCallback(events); // イベントデータをカレンダーに渡す
                             })
                             .catch(error => failureCallback(error)); // エラー処理
                     }
                 }]
             });
-            calendar.render();
+            calendar.render(); // カレンダーを描画
         });
     }
 });
+
 
 

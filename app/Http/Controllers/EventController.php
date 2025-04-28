@@ -21,6 +21,7 @@ class EventController extends Controller
     }
 
     public function indexCalendar(){
+        // イベントデータを取得（適宜変更）
         $events = Post::where('category_id', 1)->get();
 
         // FullCalendarが期待する形式に変換して返す
@@ -28,8 +29,8 @@ class EventController extends Controller
             return [
                 'id' => $event->id,
                 'title' => $event->title,
-                'start' => $event->startdatetime->toIso8601String(),
-                'end' => $event->enddatetime ? $event->enddatetime->toIso8601String() : null,
+                'start' => $event->startdatetime->toIso8601String(), // 開始日時をISO 8601形式に変換
+                'end' => $event->enddatetime ? $event->enddatetime->toIso8601String() : null, // 終了日時もISO 8601形式に変換
             ];
         });
 
