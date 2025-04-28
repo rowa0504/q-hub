@@ -66,7 +66,7 @@
       </button>
 
       {{-- モーダル読み込み --}}
-      @include('questions.modal.answer')
+      @include('posts.categories.questions.modal.answer')
 
       {{-- 回答一覧 --}}
       @foreach ($question->answers as $answer)

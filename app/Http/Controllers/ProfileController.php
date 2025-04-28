@@ -12,7 +12,7 @@ class ProfileController extends Controller
     public function __construct(User $user){
         $this->user = $user;
     }
- 
+
     public function show($id){
         $user = $this->user->findOrFail($id);
         return view('users.profile.index')->with('user', $user);
@@ -35,15 +35,15 @@ class ProfileController extends Controller
     //     $user->name = $request->name;
     //     $user->email = $request->email;
     //     $user->introduction = $request->introduction;
-    
+
     //     if ($request->avatar){
     //         $user->avatar = 'data:image/' . $request->avatar->extension() .
     //         ';base64,'. base64_encode(file_get_contents($request->avatar));
     //     }
-    
+
     //     $user->save();
     //     return redirect()->back();
     // }
-    
-    
+
+
 }

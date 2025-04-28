@@ -30,7 +30,7 @@ class CommentController extends Controller
         $this->comment->post_id = $post_id;
         $this->comment->save();
 
-        return redirect()->route('post.show', $post_id);
+        return redirect()->route('index', $post_id);
     }
 
     public function destroy($id){
