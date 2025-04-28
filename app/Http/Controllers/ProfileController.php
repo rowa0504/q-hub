@@ -56,4 +56,15 @@ class ProfileController extends Controller
     // }
 
 
+    public function index()
+    {
+        $all_categories = $this->category->all();
+        $all_trans_categories = $this->trans_category->all();
+        $all_posts = $this->post->latest()->get();
+
+        return view('users.profile.index')
+            ->with('all_categories', $all_categories)
+            ->with('all_trans_categories', $all_trans_categories)
+            ->with('all_posts', $all_posts);
+    }
 }

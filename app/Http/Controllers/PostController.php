@@ -62,14 +62,27 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = $this->post->findOrFail($id);
-        // Laravelが画像URLなども返せるようにする場合
-        $post->image = $post->image ? asset('storage/' . $post->image) : null;
+
+        // 画像データがBase64形式で保存されている場合、そのまま返す
+        if ($post->image && strpos($post->image, 'data:image') === false) {
+            // 画像ファイルのパスが保存されている場合
+            $imagePath = storage_path('app/public/' . $post->image);
+
+            // 画像が存在する場合、Base64に変換して返す
+            if (file_exists($imagePath)) {
+                $imageData = base64_encode(file_get_contents($imagePath));
+                $mimeType = mime_content_type($imagePath); // MIMEタイプを取得
+                $post->image = 'data:' . $mimeType . ';base64,' . $imageData;
+            } else {
+                // 画像が存在しない場合、nullを設定
+                $post->image = null;
+            }
+        }
 
         return response()->json($post);
     }
 
-    public function update($id, Request $request)
-    {
+    public function update($id, Request $request){
         $request->validate([
             'title' => 'required|min:1|max:50',
             'description' => 'required|min:1|max:1000',
@@ -90,9 +103,13 @@ class PostController extends Controller
         $post->title = $request->title;
         $post->description = $request->description;
         if ($request->hasFile('image')) {
-            $this->post->image = 'data:image/' . $request->image->extension() .
-                ';base64,' . base64_encode(file_get_contents($request->image));
+
+            $post->image = 'data:image/' . $request->image->extension() .
+                                 ';base64,' . base64_encode(file_get_contents($request->image));
+        } else {
+            $post->image = null;
         }
+
         $post->location = $request->location;
         $post->departure = $request->departure;
         $post->destination = $request->destination;
@@ -107,20 +124,22 @@ class PostController extends Controller
         return redirect()->back();
     }
 
-    public function delete($id)
-    {
+    public function delete($id){
         $post = $this->post->findOrFail($id);
 
         $post->delete();
         return redirect()->back();
     }
 
-
-    public function profile()
+    public function index()
     {
-        $all_posts = $this->post->where('user_id', Auth::id())->with('user')->latest()->get();
-
+        // 自分（ログインしてる人）の投稿だけ取得する
+        $all_posts = $this->post->where('user_id', Auth::id())
+                                ->latest()
+                                ->get();
 
         return view('users.profile.index', compact('all_posts'));
     }
+
+
 }
