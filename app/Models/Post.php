@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+
 
 class Post extends Model
 {
@@ -57,9 +59,16 @@ class Post extends Model
         }
     }
 
+<<<<<<< HEAD
     public function reports()
 {
     return $this->belongsToMany(User::class, 'post_user_reports')->withTimestamps();
 }
 
+=======
+    protected $casts = [
+        'startdatetime' => 'datetime',
+        'enddatetime' => 'datetime',
+    ];
+>>>>>>> master
 }
