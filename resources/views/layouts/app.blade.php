@@ -236,6 +236,7 @@
     @include('posts.components.forms.post-form-transportation-modal')
     @include('posts.components.forms.post-form-travel-modal')
     </div>
+    @stack('scripts')
 </body>
 
 </html>

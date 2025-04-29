@@ -36,7 +36,7 @@
 
     {{-- 投稿画像 --}}
     <a href="{{ $post->getCategoryRoute() }}">
-        <img src="{{ $post->image }}" class="img-fluid img-thumbnail" alt="Post Image">
+        <img src="{{ $post->image }}" class="img-fluid" alt="Post Image">
     </a>
 
     <div class="card-body">
@@ -83,46 +83,110 @@
         @switch($post->category_id)
             @case(1)
                 <div class="mt-2 fw-bold">
-                    <p>Event: {{ $post->title ?? 'TBD' }}</p>
-                    <p>Start: {{ optional($post->startdatetime)->format('M d, Y H:i') ?? 'TBD' }}</p>
-                    <p>End: {{ optional($post->enddatetime)->format('M d, Y H:i') ?? 'TBD' }}</p>
-                    <p>Max participants: {{ $post->max ?? 'TBD' }}</p>
+                    <p class="mb-1">Event: {{ $post->title ?? 'TBD' }}</p>
+                    <p class="mb-1 text-muted small">
+                        Start Date:
+                        {{ $post->startdatetime ? \Carbon\Carbon::parse($post->startdatetime)->format('M d, Y H:i') : 'TBD' }}
+                    </p>
+                    <p class="mb-1 text-muted small">
+                        End Date:
+                        {{ $post->enddatetime ? \Carbon\Carbon::parse($post->enddatetime)->format('M d, Y H:i') : 'TBD' }}
+                    </p>
+
+                    {{-- 参加者数と参加ボタン --}}
+                    <div class="d-flex align-items-center gap-3 my-2">
+                        {{-- 参加ボタン --}}
+                        @if ($post->participations->count() >= $post->max)
+                            @if ($post->isParticipanted())
+                                <form action="{{ route('participation.delete', $post->id) }}" method="post"
+                                    class="d-flex align-items-center">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm shadow-none p-0">
+                                        <i class="fa-solid fa-hand text-primary fa-lg"></i>
+                                    </button>
+                                </form>
+                            @else
+                                <button class="btn btn-sm shadow-none p-0" disabled>
+                                    <i class="fa-solid fa-hand text-danger fa-lg"></i>
+                                </button>
+                            @endif
+                        @else
+                            @if ($post->isParticipanted())
+                                <form action="{{ route('participation.delete', $post->id) }}" method="post"
+                                    class="d-flex align-items-center">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm shadow-none p-0">
+                                        <i class="fa-solid fa-hand text-primary fa-lg"></i>
+                                    </button>
+                                </form>
+                            @else
+                                <form action="{{ route('participation.store', $post->id) }}" method="post"
+                                    class="d-flex align-items-center">
+                                    @csrf
+                                    <button class="btn btn-sm shadow-none p-0">
+                                        <i class="fa-regular fa-hand fa-lg"></i>
+                                    </button>
+                                </form>
+                            @endif
+                        @endif
+
+                        {{-- 現在の参加者数 --}}
+                        <div class="d-flex align-items-center">
+                            <i class="fa-solid fa-users text-muted me-1"></i>
+                            <button class="btn btn-link text-decoration-none p-0 m-0" data-bs-toggle="modal"
+                                data-bs-target="#participant-user-{{ $post->id }}">
+                                <span class="fw-bold fs-5 text-dark">{{ $post->participations->count() }}</span>
+                            </button>
+                            <span class="mx-2 text-muted">/</span>
+                            <span class="text-muted small">Max: {{ $post->max ?? 'TBD' }}</span>
+                        </div>
+                    </div>
+                    @include('posts.components.modals.participation-modal')
                 </div>
                 @break
             @case(2)
                 <div class="mt-2 fw-bold">
-                    <p>Title: {{ $post->title ?? 'TBD' }}</p>
-                    <p>Location: {{ $post->location ?? 'TBD' }}</p>
+                    <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
+                    <p class="mb-1 text-muted small">Location: {{ $post->location ?? 'TBD' }}
+                        <i class="fa-solid fa-location-dot"></i>
+                    </p>
                 </div>
                 @break
             @case(3)
                 <div class="mt-2 fw-bold">
-                    <p>Item name: {{ $post->title ?? 'TBD' }}</p>
-                    <p>Max participants: {{ $post->max ?? 'TBD' }}</p>
+                    <p class="mb-1">Item name: {{ $post->title ?? 'TBD' }}</p>
+                    <p class="mb-1 text-muted small">Max participants: {{ $post->max ?? 'TBD' }}</p>
                 </div>
                 @break
             @case(4)
                 <div class="mt-2 fw-bold">
-                    <p>Title: {{ $post->title ?? 'TBD' }}</p>
-                    <p>Location: {{ $post->location ?? 'TBD' }}</p>
+                    <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
+                    <p class="mb-1 text-muted small">Location: {{ $post->location ?? 'TBD' }}
+                        <i class="fa-solid fa-location-dot"></i>
+                    </p>
                 </div>
                 @break
             @case(5)
                 <div class="mt-2 fw-bold">
-                    <p>Fee: {{ $post->fee ?? 'TBD' }}₱</p>
-                    <p>Departure: {{ $post->departure ?? 'TBD' }}</p>
-                    <p>Destination: {{ $post->destination ?? 'TBD' }}</p>
+                    <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
+                    <p class="mb-1 text-muted small">Fee: {{ $post->fee ?? 'TBD' }}₱</p>
+                    <p class="mb-1 text-muted small">Departure: {{ $post->departure ?? 'TBD' }}</p>
+                    <p class="mb-1 text-muted small">Destination: {{ $post->destination ?? 'TBD' }}</p>
                 </div>
                 @break
             @case(6)
                 <div class="mt-2 fw-bold">
                     <p>Question: {{ $post->title ?? 'TBD' }}</p>
                 </div>
-                @break
+            @break
+
+            @default
         @endswitch
 
-        {{-- 本文 --}}
-        <p class="fw-bold">{{ $post->description }}</p>
+        {{-- 投稿本文 --}}
+        <p class="fs-5 fw-bold mb-2">{{ $post->description }}</p>
         <p class="text-uppercase text-muted small mb-0">{{ $post->created_at->format('M d, Y') }}</p>
 
         {{-- ▼▼ 質問カテゴリー専用：アンサー入力・一覧表示 ▼▼ --}}

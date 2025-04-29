@@ -59,7 +59,7 @@ class Post extends Model
             case 5:
                 return route('transportation.index', ['id' => $this->id]);
             case 6:
-                return route('questions.index', ['id' => $this->id]);
+                return route('question.index', ['id' => $this->id]);
             default:
                 return '#';
         }
@@ -69,4 +69,14 @@ class Post extends Model
         'startdatetime' => 'datetime',
         'enddatetime' => 'datetime',
     ];
+
+    public function participations(){
+        return $this->hasMany(Participation::class);
+    }
+
+    public function isParticipanted(){
+        // check if the user id exists on the likes table and returns boolean
+        // value true or false
+        return $this->participations()->where('user_id',Auth::user()->id)->exists();
+    }
 }

@@ -15,7 +15,10 @@ use App\Http\Controllers\TransportationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SocialLoginController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ParticipationController;
 use App\Http\Controllers\AnswerController;
+
 
 
 Auth::routes();
@@ -44,6 +47,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'comment', 'as' => 'comment.'], function () {
         Route::post('/{id}/store', [CommentController::class, 'store'])->name('store');
         Route::delete('/{id}/destroy', [CommentController::class, 'destroy'])->name('destroy');
+        Route::patch('/{post_id}/{id}', [CommentController::class, 'update'])->name('update');
     });
 
     // Answer route
@@ -66,7 +70,12 @@ Route::group(['middleware' => 'auth'], function () {
     // Event route
     Route::group(['prefix' => 'event', 'as' => 'event.'], function () {
         Route::get('/', [EventController::class, 'index'])->name('index');
-        Route::get('/{id}', [EventController::class, 'show'])->name('show');
+        // Route::get('/{id}', [EventController::class, 'show'])->name('show');
+    });
+
+    Route::group(['prefix' => 'participation','as' => 'participation.'], function(){
+        Route::post('/{id}/store', [ParticipationController::class, 'store'])->name('store');
+        Route::delete('/{id}/delete', [ParticipationController::class, 'delete'])->name('delete');
     });
 
     // Food route
@@ -94,10 +103,15 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     // Question route
-    Route::group(['prefix' => 'questions', 'as' => 'questions.'], function () {
+    Route::group(['prefix' => 'question', 'as' => 'question.'], function () {
         Route::get('/', [QuestionController::class, 'index'])->name('index');
         Route::get('/{id}', [QuestionController::class, 'show'])->name('show');
     });
+
+
+    // Report route
+    Route::post('/posts/{id}/report', [ReportController::class, 'store'])->name('posts.report');
+
 
     // Admin route
     // Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
@@ -117,12 +131,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/admin/foods', function () {
         return view('admin.foods.index');
     });
-
-    Route::get('/questions/{id}', function ($id) {
-        return view('posts.categories.questions.index', ['id' => $id]);
-    });
-
-    Route::get('/questions/show/{id}', [QuestionController::class, 'show'])->name('posts.categories.questions.show');
 
 
     //Profile//
