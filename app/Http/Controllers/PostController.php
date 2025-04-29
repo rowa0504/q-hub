@@ -131,4 +131,15 @@ class PostController extends Controller
         return redirect()->back();
     }
 
+    public function index()
+    {
+        // 自分（ログインしてる人）の投稿だけ取得する
+        $all_posts = $this->post->where('user_id', Auth::id())
+                                ->latest()
+                                ->get();
+
+        return view('users.profile.index', compact('all_posts'));
+    }
+
+
 }
