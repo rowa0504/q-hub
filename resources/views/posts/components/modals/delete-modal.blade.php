@@ -10,11 +10,7 @@
           You want to delete this post?
         </div>
         <div class="modal-footer">
-<<<<<<< HEAD
-          <form action="{{ route('posts.delete', $post->id) }}" method="POST">
-=======
             <form action="{{ route('posts.delete', $post->id) }}" method="POST">
->>>>>>> master
             @csrf
             @method('DELETE')
             <button type="submit" class="btn btn-danger">Yes, Delete</button>
