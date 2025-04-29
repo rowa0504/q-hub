@@ -109,7 +109,53 @@
                     <p class="mb-1 text-muted small">
                         End Date: {{ $post->enddatetime ? \Carbon\Carbon::parse($post->enddatetime)->format('M d, Y H:i') : 'TBD' }}
                     </p>
-                    <p class="mb-1 text-muted small">Max participants: {{ $post->max ?? 'TBD' }}</p>
+                    <p class="mb-1">
+                        End Date:
+                        {{ $post->enddatetime ? \Carbon\Carbon::parse($post->enddatetime)->format('M d, Y H:i') : 'TBD' }}
+                    </p>
+                    <div class="col-auto d-flex align-items-center">
+                        @if ($post->participations->count() >= $post->max)
+                            @if ($post->isParticipanted())
+                                <form action="{{ route('participation.delete',$post->id) }}" method="post" class="d-flex align-items-center">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-lg shadow-none p-0">
+                                        <i class="fa-solid fa-hand text-primary fa-xl"></i>
+                                    </button>
+                                </form>
+                            @else
+                                <button class="btn btn-lg shadow-none p-0">
+                                    <i class="fa-solid fa-hand text-danger fa-xl"></i>
+                                </button>
+                            @endif
+                        @elseif ($post->participations->count() < $post->max)
+                            @if ($post->isParticipanted())
+                                <form action="{{ route('participation.delete',$post->id) }}" method="post" class="d-flex align-items-center">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-lg shadow-none p-0">
+                                        <i class="fa-solid fa-hand text-primary fa-xl"></i>
+                                    </button>
+                                </form>
+                            @else
+                                <form action="{{ route('participation.store',$post->id) }}" method="post" class="d-flex align-items-center">
+                                    @csrf
+                                    <button class="btn btn-lg shadow-none p-0">
+                                        <i class="fa-regular fa-hand fa-xl"></i>
+                                    </button>
+                                </form>
+                            @endif
+                        @endif
+
+                        <i class="fa-solid fa-equals ms-2 me-0"></i>
+
+                        <button class="btn btn-link text-decoration-none text-dark" data-bs-toggle="modal" data-bs-target="#participant-user-{{ $post->id }}">
+                            <span class="h4 fw-bold">{{ $post->participations->count() }}</span>
+                        </button>
+
+                        @include('posts.components.modals.participation-modal')
+                    </div>
+                    <p class="mb-1">Max participants: {{ $post->max ?? 'TBD' }}</p>
                 </div>
             @break
 
