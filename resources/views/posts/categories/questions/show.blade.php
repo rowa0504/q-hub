@@ -3,102 +3,82 @@
 @section('content')
 <div class="container py-4">
   <div class="row">
-    {{-- メインコンテンツ：左側（col-md-9） --}}
+    {{-- メインコンテンツ --}}
     <div class="col-md-9">
 
-   {{-- ダミーデータ --}}
-  @php
-  $question = (object)[
-    'title' => 'LaravelでSeederってどう使うの？',
-    'body' => 'Seederの使い方がよく分かりません。どのタイミングで使えばいいですかLorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur veniam, voluptates architecto ut veritatis optio eligendi qui reiciendis quod numquam, delectus expedita dolores commodi quibusdam explicabo ipsam. Ipsum debitis, impedit, quos ut quisquam natus iure perferendis voluptatibus qui aut voluptate, molestiae tempore deleniti sint doloribus illum quaerat optio accusantium! Labore explicabo debitis laboriosam dolor numquam molestiae reiciendis perferendis fuga excepturi quia odio quaerat ullam quae soluta nisi et quos, quis assumenda placeat officia iusto voluptatem natus ex dolorem? Perferendis vel consequuntur exercitationem, debitis eveniet magnam cum mollitia quibusdam veniam repellendus ea provident et totam laboriosam, nobis fuga ex, sapiente quisquam tempora optio accusantium. Quia expedita suscipit tempore et vitae corrupti omnis nulla tenetur iure nihil voluptatibus corporis, totam perspiciatis quas! Non, distinctio consequatur quos nam ipsa cumque omnis doloremque corporis quam tempore eveniet veritatis fugit! Reiciendis assumenda expedita necessitatibus dignissimos est quibusdam dolores voluptatum animi, sunt porro dolorem fuga illum. Accusamus vitae nisi, et quae doloremque molestias? Dicta laudantium molestiae laborum dolor, libero, non autem eius inventore possimus magnam est vero accusamus sint officiis a sit ad repellat alias, quo odit? Culpa voluptatum a, maiores nihil laudantium eligendi? Quibusdam, error! Iure inventore voluptas vero, ex eum aut quaerat. Nostrum eius quia tempora. Quo molestiae nam mollitia? Quaerat dolor similique soluta ratione quasi quis natus tempora deserunt quidem reiciendis. Error, minus nemo et asperiores labore cumque atque veniam maxime unde, architecto cupiditate ab rerum, vitae dignissimos quasi non consequatur qui iure rem? Porro, ipsa velit? Laborum beatae tempore perspiciatis nostrum tenetur inventore expedita ratione vero. Facere assumenda vitae sed architecto. Nobis numquam corrupti aliquam, nihil, reprehenderit praesentium error esse, vel sed excepturi saepe inventore magni animi qui! Ipsum voluptas eos, atque ex nemo amet accusamus vero consectetur totam iste quidem eligendi repudiandae architecto veniam. Illum laborum explicabo velit saepe expedita doloremque.？',
-    'comments_count' => 2,
-    'likes' => 99,
-    'user' => (object)[
-      'name' => 'Test User',
-      'icon' => '#ff6347',
-    ],
-
-    'answers' => [
-      (object)[
-        'body' => 'Seederはテストデータを入れるために使うよ！',
-        'likes' => 5,
-        'is_best' => true,
-        'user' => (object)[
-          'name' => 'Answer Guy',
-          'icon' => '#4682b4',
-        ]
-      ],
-      (object)[
-        'body' => 'DatabaseSeeder.php にまとめると便利だよ！',
-        'likes' => 3,
-        'is_best' => false,
-        'user' => (object)[
-          'name' => 'Helper',
-          'icon' => '#32cd32',
-        ]
-      ],
-    ]
-  ];
-@endphp
-
-      {{-- 質問カード --}}
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
-          <div class="d-flex align-items-center mb-2">
-            <div class="rounded-circle me-2 flex-shrink-0" style="width: 40px; height: 40px; background-color: {{ $question->user->icon }}"></div>
-            <strong>{{ $question->user->name }}</strong>
-          </div>
-          <h5 class="fw-bold">{{ $question->title }}</h5>
-          <p class="text-muted">{{ $question->body }}</p>
-          <div class="d-flex justify-content-between text-muted small">
-            <div>
-              <i class="bi bi-chat-left-text me-2"></i>{{ $question->comments_count }}
-              <i class="bi bi-heart"></i> {{ $question->likes }}
-            </div>
-            <i class="bi bi-three-dots"></i>
-          </div>
+  
+    {{-- 質問カード --}}
+    <div class="card w-100 shadow-sm mb-4">
+      <div class="d-flex align-items-center border-bottom mb-2 p-2">
+        <div class="rounded-circle" style="width: 40px; height: 40px; background-color: {{ $question->user->icon }}"></div>
+        <strong class="mx-2">{{ $question->user->name }}</strong>
+        <div class="ms-auto position-relative">
+          <i class="fas fa-ellipsis-h" style="cursor:pointer;" data-bs-toggle="dropdown"></i>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item text-danger" href="#"><i class="fa-solid fa-flag"></i> Report</a></li>
+          </ul>
         </div>
       </div>
 
-      {{-- モーダルトリガーボタン --}}
-      <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#answerModal">
-        <i class="bi bi-pencil-square me-1"></i> Answer
-      </button>
+      <div class="card-body">
+        <h5 class="fw-bold">{{ $question->title }}</h5>
+        <p class="text-muted small">{{ $question->body }}</p>
 
-      {{-- モーダル読み込み --}}
-      @include('posts.categories.questions.modal.answer')
-
-      {{-- 回答一覧 --}}
-      @foreach ($question->answers as $answer)
-        <div class="card mb-3 shadow-sm position-relative">
-          <div class="card-body">
-            <div class="d-flex align-items-center mb-2">
-              <div class="rounded-circle me-2 flex-shrink-0" style="width: 30px; height: 30px; background-color: {{ $answer->user->icon }}"></div>
-              <strong>{{ $answer->user->name }}</strong>
-
-              @if ($answer->is_best)
-              <span class="badge bg-dark ms-auto d-flex align-items-center">
-                <i class="bi bi-check2-circle me-1"></i> Best answer
-              </span>
-              @endif
-            </div>
-            <p class="text-muted mb-1">{{ $answer->body }}</p>
-            <div class="d-flex justify-content-between text-muted small">
-              <div>
-                <i class="bi bi-heart"></i> {{ $answer->likes }}
-              </div>
-              <i class="bi bi-three-dots"></i>
-            </div>
+        <div class="d-flex align-items-center mb-2">
+          <div class="me-3 d-flex align-items-center">
+            <i class="fa-regular fa-heart"></i><span class="ms-1">{{ $question->likes }}</span>
+          </div>
+          <div class="me-3">
+            <i class="fa-regular fa-comment"></i><span class="ms-1">{{ $question->comments_count }}</span>
           </div>
         </div>
-      @endforeach
+
+        <p class="text-uppercase text-muted small mb-0">Apr 28, 2025</p>
+      </div>
+    </div>
+
+    {{-- 回答リスト --}}
+    @foreach ($question->answers as $answer)
+      <div class="card w-100 shadow-sm mb-3 position-relative">
+        {{-- 回答ヘッダー --}}
+        <div class="d-flex align-items-center border-bottom mb-2 p-2">
+          <div class="rounded-circle" style="width: 30px; height: 30px; background-color: {{ $answer->user->icon }}"></div>
+          <strong class="mx-2">{{ $answer->user->name }}</strong>
+
+          <div class="ms-auto">
+            @if ($answer->is_best)
+              <span class="badge bg-dark d-flex align-items-center">
+                <i class="bi bi-check2-circle me-1"></i> Best Answer
+              </span>
+            @else
+              {{-- Bestにするフォーム --}}
+              <form action="{{ route('answers.best', ['answer' => $answer->id]) }}" method="POST" class="d-inline">
+                @csrf
+                <button type="submit" class="btn btn-sm btn-outline-success">
+                  <i class="bi bi-check2-circle"></i> Best
+                </button>
+              </form>
+            @endif
+          </div>
+        </div>
+
+        {{-- 回答本文 --}}
+        <div class="card-body">
+          <p class="text-muted small">{{ $answer->body }}</p>
+
+          <div class="d-flex align-items-center text-muted small">
+            <i class="fa-regular fa-heart"></i><span class="ms-1">{{ $answer->likes }}</span>
+          </div>
+        </div>
+      </div>
+    @endforeach
 
     </div>
 
-    {{-- サイドバー：右側（col-md-3） --}}
+    {{-- サイドバー --}}
     <div class="col-md-3 d-none d-md-block">
-      @include('posts.components.sidebar-menu') {{-- サイドバーのBladeファイルをここに指定 --}}
+      @include('posts.components.sidebar-menu')
     </div>
-  </div> {{-- .row --}}
-</div> {{-- .container --}}
+  </div>
+</div>
 @endsection

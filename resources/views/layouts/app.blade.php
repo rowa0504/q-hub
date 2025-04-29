@@ -80,7 +80,7 @@
                                 <button class="btn btn-shadow-none nav-link dropdown-toggle" id="account-dropdown"
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                     @if (Auth::user()->avatar)
-                                        <img src="#" alt="#" class="rounded-circle avatar-sm">
+                                        <img src="{{ Auth::user()->avatar }}" alt="{{ Auth::user()->name }}" class="rounded-circle avatar-sm">
                                     @else
                                         <i class="fa-solid fa-circle-user text-info icon-sm"></i>
                                     @endif
