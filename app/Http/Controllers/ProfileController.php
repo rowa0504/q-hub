@@ -26,9 +26,10 @@ class ProfileController extends Controller
 
     public function show($id)
     {
+        $all_user = User::all();
         $user = $this->user->findOrFail($id);
         $all_posts = Post::where('user_id', $user->id)->with('user')->latest()->get();
-        return view('users.profile.index', compact('user', 'all_posts'));
+        return view('users.profile.index', compact('user', 'all_posts', 'all_user'));
     }
 
     public function edit()
