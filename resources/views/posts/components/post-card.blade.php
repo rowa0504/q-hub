@@ -104,58 +104,65 @@
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Event: {{ $post->title ?? 'TBD' }}</p>
                     <p class="mb-1 text-muted small">
-                        Start Date: {{ $post->startdatetime ? \Carbon\Carbon::parse($post->startdatetime)->format('M d, Y H:i') : 'TBD' }}
+                        Start Date:
+                        {{ $post->startdatetime ? \Carbon\Carbon::parse($post->startdatetime)->format('M d, Y H:i') : 'TBD' }}
                     </p>
                     <p class="mb-1 text-muted small">
-                        End Date: {{ $post->enddatetime ? \Carbon\Carbon::parse($post->enddatetime)->format('M d, Y H:i') : 'TBD' }}
-                    </p>
-                    <p class="mb-1">
                         End Date:
                         {{ $post->enddatetime ? \Carbon\Carbon::parse($post->enddatetime)->format('M d, Y H:i') : 'TBD' }}
                     </p>
-                    <div class="col-auto d-flex align-items-center">
+
+                    {{-- 参加者数と参加ボタン --}}
+                    <div class="d-flex align-items-center gap-3 my-2">
+                        {{-- 参加ボタン --}}
                         @if ($post->participations->count() >= $post->max)
                             @if ($post->isParticipanted())
-                                <form action="{{ route('participation.delete',$post->id) }}" method="post" class="d-flex align-items-center">
+                                <form action="{{ route('participation.delete', $post->id) }}" method="post"
+                                    class="d-flex align-items-center">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-lg shadow-none p-0">
-                                        <i class="fa-solid fa-hand text-primary fa-xl"></i>
+                                    <button class="btn btn-sm shadow-none p-0">
+                                        <i class="fa-solid fa-hand text-primary fa-lg"></i>
                                     </button>
                                 </form>
                             @else
-                                <button class="btn btn-lg shadow-none p-0">
-                                    <i class="fa-solid fa-hand text-danger fa-xl"></i>
+                                <button class="btn btn-sm shadow-none p-0" disabled>
+                                    <i class="fa-solid fa-hand text-danger fa-lg"></i>
                                 </button>
                             @endif
-                        @elseif ($post->participations->count() < $post->max)
+                        @else
                             @if ($post->isParticipanted())
-                                <form action="{{ route('participation.delete',$post->id) }}" method="post" class="d-flex align-items-center">
+                                <form action="{{ route('participation.delete', $post->id) }}" method="post"
+                                    class="d-flex align-items-center">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-lg shadow-none p-0">
-                                        <i class="fa-solid fa-hand text-primary fa-xl"></i>
+                                    <button class="btn btn-sm shadow-none p-0">
+                                        <i class="fa-solid fa-hand text-primary fa-lg"></i>
                                     </button>
                                 </form>
                             @else
-                                <form action="{{ route('participation.store',$post->id) }}" method="post" class="d-flex align-items-center">
+                                <form action="{{ route('participation.store', $post->id) }}" method="post"
+                                    class="d-flex align-items-center">
                                     @csrf
-                                    <button class="btn btn-lg shadow-none p-0">
-                                        <i class="fa-regular fa-hand fa-xl"></i>
+                                    <button class="btn btn-sm shadow-none p-0">
+                                        <i class="fa-regular fa-hand fa-lg"></i>
                                     </button>
                                 </form>
                             @endif
                         @endif
 
-                        <i class="fa-solid fa-equals ms-2 me-0"></i>
-
-                        <button class="btn btn-link text-decoration-none text-dark" data-bs-toggle="modal" data-bs-target="#participant-user-{{ $post->id }}">
-                            <span class="h4 fw-bold">{{ $post->participations->count() }}</span>
-                        </button>
-
-                        @include('posts.components.modals.participation-modal')
+                        {{-- 現在の参加者数 --}}
+                        <div class="d-flex align-items-center">
+                            <i class="fa-solid fa-users text-muted me-1"></i>
+                            <button class="btn btn-link text-decoration-none p-0 m-0" data-bs-toggle="modal"
+                                data-bs-target="#participant-user-{{ $post->id }}">
+                                <span class="fw-bold fs-5 text-dark">{{ $post->participations->count() }}</span>
+                            </button>
+                            <span class="mx-2 text-muted">/</span>
+                            <span class="text-muted small">Max: {{ $post->max ?? 'TBD' }}</span>
+                        </div>
                     </div>
-                    <p class="mb-1">Max participants: {{ $post->max ?? 'TBD' }}</p>
+                    @include('posts.components.modals.participation-modal')
                 </div>
             @break
 
@@ -163,7 +170,8 @@
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
                     <p class="mb-1 text-muted small">Location: {{ $post->location ?? 'TBD' }}
-                    <i class="fa-solid fa-location-dot"></i></p>
+                        <i class="fa-solid fa-location-dot"></i>
+                    </p>
                 </div>
             @break
 
@@ -178,7 +186,8 @@
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
                     <p class="mb-1 text-muted small">Location: {{ $post->location ?? 'TBD' }}
-                    <i class="fa-solid fa-location-dot"></i></p>
+                        <i class="fa-solid fa-location-dot"></i>
+                    </p>
                 </div>
             @break
 

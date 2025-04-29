@@ -59,9 +59,9 @@ class PostSeeder extends Seeder
                 ]
 
             ];
-    
+
             $this->trans_category->insert($trans_categories);//Insert the lists of category to the categories table
         }
-    
+
     }
 }
