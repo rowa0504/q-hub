@@ -44,7 +44,7 @@
 
     {{-- 投稿画像 --}}
     <a href="{{ $post->getCategoryRoute() }}">
-        <img src="{{ $post->image }}" class="img-fluid img-thumbnail" alt="Post Image">
+        <img src="{{ $post->image }}" class="img-fluid" alt="Post Image">
     </a>
 
     <div class="card-body">
@@ -147,6 +147,7 @@
             @case(5)
                 {{-- transportation --}}
                 <div class="mt-2 fw-bold">
+                    <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
                     <p class="mb-1">Fee: {{ $post->fee ?? 'TBD' }}₱</p>
                     <p class="mb-1">Departure: {{ $post->departure ?? 'TBD' }}</p>
                     <p class="mb-1">Destination: {{ $post->destination ?? 'TBD' }}</p>
