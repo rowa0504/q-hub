@@ -15,6 +15,7 @@ use App\Http\Controllers\TransportationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SocialLoginController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ParticipationController;
 
 
@@ -95,6 +96,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/', [QuestionController::class, 'index'])->name('index');
         Route::get('/{id}', [QuestionController::class, 'show'])->name('show');
     });
+
+
+    // Report route
+    Route::post('/posts/{id}/report', [ReportController::class, 'store'])->name('posts.report');
+    
 
     // Admin route
     // Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
