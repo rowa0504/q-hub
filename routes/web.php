@@ -15,6 +15,7 @@ use App\Http\Controllers\TransportationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SocialLoginController;
+use App\Http\Controllers\AnswerController;
 
 
 Auth::routes();
@@ -44,6 +45,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/{id}/store', [CommentController::class, 'store'])->name('store');
         Route::delete('/{id}/destroy', [CommentController::class, 'destroy'])->name('destroy');
     });
+
+    // Answer route
+    Route::group(['prefix' => 'answer', 'as' => 'answer.'], function () {
+        Route::post('/store', [AnswerController::class, 'store'])->name('store');
+        Route::post('/{answer}/best', [AnswerController::class, 'markBest'])->name('best');
+
+    });
+
 
     // Profile route
     Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {

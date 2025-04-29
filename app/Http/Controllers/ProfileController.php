@@ -40,16 +40,30 @@ class ProfileController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name'         => 'required|max:20',
-            'email'        => 'required|max:50',
-            'introduction' => 'required|min:1|max:1000',
-            'avatar'       => 'mimes:jpeg,jpg,png,gif|max:1048'
+            'name'               => 'required|max:20',
+            'email'              => 'required|max:50',
+            'introduction'       => 'required|min:1|max:1000',
+            'avatar'             => 'nullable|mimes:jpeg,jpg,png,gif|max:1048',
+            'enrollment_start'   => 'nullable|date',
+            'enrollment_end'     => 'nullable|date',
+            'graduation_status'  => 'nullable|string|max:20',
         ]);
+
+
+        if ($request->enrollment_start && $request->enrollment_end) {
+            if ($request->enrollment_end < $request->enrollment_start) {
+                return back()->withErrors(['enrollment_end' => 'Graduation date must be after enrollment date.'])
+                    ->withInput();
+            }
+        }
 
         $user = $this->user->findOrFail($id);
         $user->name = $request->name;
         $user->email = $request->email;
         $user->introduction = $request->introduction;
+        $user->enrollment_start  = $request->enrollment_start;
+        $user->enrollment_end    = $request->enrollment_end;
+        $user->graduation_status = $request->graduation_status;
 
         if ($request->avatar) {
             $user->avatar = 'data:image/' . $request->avatar->extension() .

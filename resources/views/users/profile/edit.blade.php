@@ -19,16 +19,14 @@
             @endif
 
             <div class="text-center mb-4">
-                <div class="position-relative d-inline-block">
+                <div class="position-relative d-inline-block" id="avatarContainer">
                     @if ($user->avatar)
                         <img src="{{ $user->avatar }}" alt="avatar"
-                            class="rounded-circle bg-light d-flex justify-content-center align-items-center" width="120"
-                            height="120" id="avatarPreview">
+                            class="rounded-circle bg-light d-flex justify-content-center align-items-center"
+                            width="120" height="120" id="avatarPreview">
                     @else
-                        <div class="rounded-circle bg-light d-flex justify-content-center align-items-center"
-                            style="width: 120px; height: 120px;">
-                            <i class="fa-solid fa-circle-user fa-5x text-secondary" id="avatarIcon"></i>
-                        </div>
+                        <i class="fa-solid fa-circle-user fa-9x text-secondary" id="avatarPreview"
+                           style="width: 120px; height: 120px;"></i>
                     @endif
 
                     <label for="avatarInput"
@@ -40,22 +38,39 @@
                 </div>
             </div>
 
-            {{-- JavaScriptでプレビュー --}}
+            <!-- JS：<i>を<img>に差し替える処理を含む -->
             <script>
-                document.getElementById('avatarInput').addEventListener('change', function(event) {
-                    const file = event.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            const img = document.getElementById('avatarPreview');
-                            if (img) {
-                                img.src = e.target.result;
-                            }
+                document.addEventListener('DOMContentLoaded', function () {
+                    document.getElementById('avatarInput').addEventListener('change', function (event) {
+                        const file = event.target.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function (e) {
+                                let preview = document.getElementById('avatarPreview');
+
+                                // <i>タグだった場合は <img> に置き換え
+                                if (preview.tagName.toLowerCase() === 'i') {
+                                    const img = document.createElement('img');
+                                    img.id = 'avatarPreview';
+                                    img.src = e.target.result;
+                                    img.className = 'rounded-circle';
+                                    img.width = 120;
+                                    img.height = 120;
+
+                                    const container = document.getElementById('avatarContainer');
+                                    container.replaceChild(img, preview);
+                                } else {
+                                    preview.src = e.target.result;
+                                }
+                            };
+                            reader.readAsDataURL(file);
                         }
-                        reader.readAsDataURL(file);
-                    }
+                    });
                 });
             </script>
+
+
+
 
             <!-- ユーザー名 -->
             <input type="text" name="name" class="form-control mt-3 text-center fw-bold" placeholder="Username"

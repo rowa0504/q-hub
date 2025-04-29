@@ -1,8 +1,18 @@
 <!-- ユーザー -->
 <div class="d-flex align-items-center mb-3 text-dark">
-    <img src="https://t3.ftcdn.net/jpg/10/95/73/04/240_F_1095730489_Y6aXUFzW3U60YbZvMJ7wVMwYTQ8o81c0.jpg"
-        class="rounded-circle me-2 avatar-sm" alt="Avatar">
-    <span>{{ Auth::user()->name ?? 'username' }}</span>
+    @if (Auth::check() && Auth::user()->avatar)
+        <img src="{{ Auth::user()->avatar }}" class="rounded-circle me-2 avatar-sm" alt="Avatar" style="width: 40px; height: 40px; object-fit: cover;">
+    @elseif (Auth::check())
+        <div class="rounded-circle bg-light d-flex justify-content-center align-items-center me-2" style="width: 40px; height: 40px;">
+            <i class="fa-solid fa-circle-user fa-3x text-secondary"></i>
+        </div>
+    @else
+        <!-- ログインしてないときのデフォルト（適当に変えてOK） -->
+        <div class="rounded-circle bg-light d-flex justify-content-center align-items-center me-2" style="width: 40px; height: 40px;">
+            <i class="fa-solid fa-circle-user fa-3x text-secondary"></i>
+        </div>
+    @endif
+    <span>{{ Auth::user()->name ?? 'Guest' }}</span>
 </div>
 
 <hr class="text-dark">
