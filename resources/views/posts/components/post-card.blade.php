@@ -101,74 +101,61 @@
         {{-- Category-Specific Additional Information --}}
         @switch($post->category_id)
             @case(1)
-                {{-- event --}}
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Event: {{ $post->title ?? 'TBD' }}</p>
-                    <p class="mb-1">
-                        Start Date:
-                        {{ $post->startdatetime ? \Carbon\Carbon::parse($post->startdatetime)->format('M d, Y H:i') : 'TBD' }}
+                    <p class="mb-1 text-muted small">
+                        Start Date: {{ $post->startdatetime ? \Carbon\Carbon::parse($post->startdatetime)->format('M d, Y H:i') : 'TBD' }}
                     </p>
-                    <p class="mb-1">
-                        End Date:
-                        {{ $post->enddatetime ? \Carbon\Carbon::parse($post->enddatetime)->format('M d, Y H:i') : 'TBD' }}
+                    <p class="mb-1 text-muted small">
+                        End Date: {{ $post->enddatetime ? \Carbon\Carbon::parse($post->enddatetime)->format('M d, Y H:i') : 'TBD' }}
                     </p>
-                    <p class="mb-1">Max participants: {{ $post->max ?? 'TBD' }}</p>
+                    <p class="mb-1 text-muted small">Max participants: {{ $post->max ?? 'TBD' }}</p>
                 </div>
             @break
 
             @case(2)
-                {{-- food --}}
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
-                    <p class="mb-1">Location: {{ $post->location ?? 'TBD' }}
-                    <i class="fa-solid fa-location-dot icon-sm"></i>
-                    </p>
+                    <p class="mb-1 text-muted small">Location: {{ $post->location ?? 'TBD' }}
+                    <i class="fa-solid fa-location-dot"></i></p>
                 </div>
             @break
 
             @case(3)
-                {{-- item --}}
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Item name: {{ $post->title ?? 'TBD' }}</p>
-                    <p class="mb-1">Max participants: {{ $post->max ?? 'TBD' }}</p>
+                    <p class="mb-1 text-muted small">Max participants: {{ $post->max ?? 'TBD' }}</p>
                 </div>
             @break
 
             @case(4)
-                {{-- travel --}}
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
-                    <p class="mb-1">Location: {{ $post->location ?? 'TBD' }}
-                        <i class="fa-solid fa-location-dot icon-sm"></i>
-                    </p>
+                    <p class="mb-1 text-muted small">Location: {{ $post->location ?? 'TBD' }}
+                    <i class="fa-solid fa-location-dot"></i></p>
                 </div>
             @break
 
             @case(5)
-                {{-- transportation --}}
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
-                    <p class="mb-1">Fee: {{ $post->fee ?? 'TBD' }}₱</p>
-                    <p class="mb-1">Departure: {{ $post->departure ?? 'TBD' }}</p>
-                    <p class="mb-1">Destination: {{ $post->destination ?? 'TBD' }}</p>
+                    <p class="mb-1 text-muted small">Fee: {{ $post->fee ?? 'TBD' }}₱</p>
+                    <p class="mb-1 text-muted small">Departure: {{ $post->departure ?? 'TBD' }}</p>
+                    <p class="mb-1 text-muted small">Destination: {{ $post->destination ?? 'TBD' }}</p>
                 </div>
             @break
 
             @case(6)
-                {{-- question --}}
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Question: {{ $post->title ?? 'TBD' }}</p>
                 </div>
             @break
 
             @default
-                {{-- Default: No additional information --}}
         @endswitch
 
         {{-- 投稿本文 --}}
-        <p class="mb-0">
-            <span class="fw-bold">{{ $post->description }}</span>
-        </p>
+        <p class="fs-5 fw-bold mb-2">{{ $post->description }}</p>
         <p class="text-uppercase text-muted small mb-0">{{ $post->created_at->format('M d, Y') }}</p>
     </div>
 </div>

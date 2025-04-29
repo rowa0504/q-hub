@@ -18,7 +18,7 @@
             class="fa-solid fa-location-dot"></i> Travel</a>
     <a href="{{ route('transportation.index') }}" class="text-dark text-decoration-none"><i class="fa-solid fa-car"></i>
         Transportation</a>
-    <a href="{{ route('questions.index') }}" class="text-dark text-decoration-none"><i
+    <a href="{{ route('question.index') }}" class="text-dark text-decoration-none"><i
             class="fa-solid fa-circle-question"></i> Question</a>
 </div>
 
