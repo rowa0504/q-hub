@@ -16,6 +16,8 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SocialLoginController;
 use App\Http\Controllers\ParticipationController;
+use App\Http\Controllers\ChatRoomController;
+use App\Http\Controllers\ChatMessageController;
 
 
 Auth::routes();
@@ -77,6 +79,19 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/', [ItemController::class, 'index'])->name('index');
         Route::get('/{id}', [ItemController::class, 'show'])->name('show');
     });
+
+    // Question route
+    Route::group(['prefix' => 'chatRoom', 'as' => 'chatRoom.'], function () {
+        Route::get('/{id}/start', [ChatRoomController::class, 'start'])->name('start');
+        Route::get('/{id}/show', [ChatRoomController::class, 'show'])->name('show');
+
+        // Route::post('rooms/{id}/join', [ChatRoomController::class, 'join'])->name('join');
+        // Route::post('rooms/{id}/leave', [ChatRoomController::class, 'leave'])->name('leave');
+
+        // Route::post('rooms/{id}/messages', [ChatMessageController::class, 'store'])->name('messages.store');
+        // Route::get('rooms/{id}/messages', [ChatMessageController::class, 'index'])->name('messages.index');
+    });
+
 
     // Travel route
     Route::group(['prefix' => 'travel', 'as' => 'travel.'], function () {

@@ -173,6 +173,9 @@
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Item name: {{ $post->title ?? 'TBD' }}</p>
                     <p class="mb-1">Max participants: {{ $post->max ?? 'TBD' }}</p>
+                    <a href="{{ route('chatRoom.start', $post->id) }}">
+                        <i class="fa-brands fa-rocketchat"></i>
+                    </a>
                 </div>
             @break
 

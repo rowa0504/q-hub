@@ -20,6 +20,18 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
+    // ユーザーが参加しているチャットルーム
+    public function chatRooms(){
+        return $this->belongsToMany(ChatRoom::class, 'chat_room_user')
+                    ->withPivot('joined_at', 'left_at')
+                    ->withTimestamps();
+    }
+
+    // ユーザーが送信したメッセージ
+    public function chatMessages(){
+        return $this->hasMany(ChatMessage::class);
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -31,7 +43,7 @@ class User extends Authenticatable
         'password',
     ];
 
-    
+
 
     /**
      * The attributes that should be hidden for serialization.
