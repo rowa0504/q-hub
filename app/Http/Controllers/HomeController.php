@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\TransCategory;
 use App\Models\Post;
+use App\Models\User;
 
 class HomeController extends Controller
 {
@@ -18,12 +19,14 @@ class HomeController extends Controller
     private $category;
     private $trans_category;
     private $post;
+    private $user;
 
-    public function __construct(Category $category, TransCategory $trans_category, Post $post)
+    public function __construct(Category $category, TransCategory $trans_category, Post $post, User $user)
     {
         $this->category = $category;
         $this->trans_category = $trans_category;
         $this->post = $post;
+        $this->user = $user;
     }
 
     /**
@@ -36,10 +39,12 @@ class HomeController extends Controller
         $all_categories = $this->category->all();
         $all_trans_categories = $this->trans_category->all();
         $all_posts = $this->post->latest()->get();
+        $all_user = $this->post->latest()->get();
 
         return view('home')
             ->with('all_categories', $all_categories)
             ->with('all_trans_categories', $all_trans_categories)
-            ->with('all_posts', $all_posts);
+            ->with('all_posts', $all_posts)
+            ->with('all_user', $all_user);
     }
 }

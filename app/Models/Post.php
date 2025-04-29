@@ -63,4 +63,14 @@ class Post extends Model
         'startdatetime' => 'datetime',
         'enddatetime' => 'datetime',
     ];
+
+    public function participations(){
+        return $this->hasMany(Participation::class);
+    }
+
+    public function isParticipanted(){
+        // check if the user id exists on the likes table and returns boolean
+        // value true or false
+        return $this->participations()->where('user_id',Auth::user()->id)->exists();
+    }
 }
