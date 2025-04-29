@@ -16,7 +16,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SocialLoginController;
 use App\Http\Controllers\ReportController;
-
+use App\Http\Controllers\ParticipationController;
 
 
 Auth::routes();
@@ -59,7 +59,12 @@ Route::group(['middleware' => 'auth'], function () {
     // Event route
     Route::group(['prefix' => 'event', 'as' => 'event.'], function () {
         Route::get('/', [EventController::class, 'index'])->name('index');
-        Route::get('/{id}', [EventController::class, 'show'])->name('show');
+        // Route::get('/{id}', [EventController::class, 'show'])->name('show');
+    });
+
+    Route::group(['prefix' => 'participation','as' => 'participation.'], function(){
+        Route::post('/{id}/store', [ParticipationController::class, 'store'])->name('store');
+        Route::delete('/{id}/delete', [ParticipationController::class, 'delete'])->name('delete');
     });
 
     // Food route
