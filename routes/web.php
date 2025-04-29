@@ -45,6 +45,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'comment', 'as' => 'comment.'], function () {
         Route::post('/{id}/store', [CommentController::class, 'store'])->name('store');
         Route::delete('/{id}/destroy', [CommentController::class, 'destroy'])->name('destroy');
+        Route::patch('/{post_id}/{id}', [CommentController::class, 'update'])->name('update');
     });
 
     // Profile route
@@ -92,7 +93,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     // Question route
-    Route::group(['prefix' => 'questions', 'as' => 'questions.'], function () {
+    Route::group(['prefix' => 'question', 'as' => 'question.'], function () {
         Route::get('/', [QuestionController::class, 'index'])->name('index');
         Route::get('/{id}', [QuestionController::class, 'show'])->name('show');
     });
@@ -120,12 +121,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/admin/foods', function () {
         return view('admin.foods.index');
     });
-
-    Route::get('/questions/{id}', function ($id) {
-        return view('posts.categories.questions.index', ['id' => $id]);
-    });
-
-    Route::get('/questions/show/{id}', [QuestionController::class, 'show'])->name('posts.categories.questions.show');
 
 
     //Profile//

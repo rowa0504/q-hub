@@ -11,23 +11,6 @@
                         </button>
                     @endforeach
                 @endif
-
-                {{-- @foreach (['event', 'food', 'item', 'travel', 'transportation', 'question', 'other'] as $category)
-                    @switch($category)
-                        @case('other')
-                            <a href="#" class="btn btn-info text-white text-capitalize" data-bs-dismiss="modal"
-                                data-bs-toggle="modal" data-bs-target="#otherPostModal">
-                                {{ $category }}
-                            </a>
-                        @break
-
-                        @default
-                            <a href="#" class="btn btn-info text-white text-capitalize">
-                                {{ $category }}
-                            </a>
-                    @endswitch
-                @endforeach --}}
-                
                 <button class="btn btn-outline-info" data-bs-dismiss="modal">Cancel</button>
             </div>
         </div>
