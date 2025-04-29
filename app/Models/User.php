@@ -2,52 +2,41 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    const ADMIN_ROLE_ID = 1;//administrator
-    const USER_ROLE_ID = 2;//the ragular user
+    const ADMIN_ROLE_ID = 1;  // administrator
+    const USER_ROLE_ID = 2;   // the regular user
 
-    public function posts(){
+    // 投稿とのリレーション
+    public function posts()
+    {
         return $this->hasMany(Post::class);
     }
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    // ←← ここの $fillable を1つだけにして、必要な項目をぜんぶ書く！
     protected $fillable = [
         'name',
         'email',
         'password',
+        'enrollment_start_date',
+        'enrollment_end_date',
+        'graduation_status',
     ];
 
-    
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
+    // パスワードなど見せたくないやつ
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+    // 自動キャスト設定
     protected function casts(): array
     {
         return [
@@ -56,9 +45,9 @@ class User extends Authenticatable
         ];
     }
 
-        public function reportedPosts()
+    // 通報した投稿との関係
+    public function reportedPosts()
     {
         return $this->belongsToMany(Post::class, 'post_user_reports')->withTimestamps();
     }
-
 }
