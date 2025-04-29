@@ -82,16 +82,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/{id}', [ItemController::class, 'show'])->name('show');
     });
 
-    // Question route
+    // Chatroom route
     Route::group(['prefix' => 'chatRoom', 'as' => 'chatRoom.'], function () {
         Route::get('/{id}/start', [ChatRoomController::class, 'start'])->name('start');
         Route::get('/{id}/show', [ChatRoomController::class, 'show'])->name('show');
+        Route::post('/{id}/leave', [ChatRoomController::class, 'leave'])->name('leave');
 
-        // Route::post('rooms/{id}/join', [ChatRoomController::class, 'join'])->name('join');
-        // Route::post('rooms/{id}/leave', [ChatRoomController::class, 'leave'])->name('leave');
-
-        // Route::post('rooms/{id}/messages', [ChatMessageController::class, 'store'])->name('messages.store');
-        // Route::get('rooms/{id}/messages', [ChatMessageController::class, 'index'])->name('messages.index');
+        //Chat Message route
+        Route::post('/{id}/messages/store', [ChatMessageController::class, 'store'])->name('messages.store');
+        Route::get('/{id}/messages/index', [ChatMessageController::class, 'index'])->name('messages.index');
     });
 
 
@@ -116,7 +115,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Report route
     Route::post('/posts/{id}/report', [ReportController::class, 'store'])->name('posts.report');
-    
+
 
     // Admin route
     // Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {

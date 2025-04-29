@@ -3,29 +3,29 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\ChatRoom;
+use App\Models\ChatMessage;
+use Illuminate\Support\Facades\Auth;
 
 class ChatMessageController extends Controller
 {
-    // メッセージ送信
-    public function store(Request $request, ChatRoom $chatRoom)
-    {
-        $validated = $request->validate([
-            'body' => 'required|string',
-        ]);
+    private $chatMessage;
 
-        $message = new ChatMessage([
-            'body' => $validated['body'],
-            'user_id' => auth()->id(),
-        ]);
-
-        $chatRoom->chatMessages()->save($message);
-        return redirect()->route('chatRooms.show', $chatRoom);
+    public function __construct(ChatMessage $chatMessage){
+        $this->chatMessage = $chatMessage;
     }
-
-    // メッセージ一覧
-    public function index(ChatRoom $chatRoom)
+    // メッセージ送信
+    public function store(Request $request, $id)
     {
-        $messages = $chatRoom->chatMessages()->with('user')->get();
-        return view('chatRooms.messages', compact('chatRoom', 'messages'));
+        // $validated = $request->validate([
+        //     'body' => 'required|string',
+        // ]);
+
+        $this->chatMessage->user_id     = Auth::user()->id;
+        $this->chatMessage->chat_room_id = $id;
+        $this->chatMessage->body = $request->body;
+        $this->chatMessage->save();
+
+        return redirect()->back();
     }
 }

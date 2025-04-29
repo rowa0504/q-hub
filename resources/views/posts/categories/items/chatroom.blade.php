@@ -16,17 +16,17 @@
 
     {{-- メッセージ一覧 --}}
     <div class="border p-4 mb-4 h-64 overflow-y-scroll bg-gray-100 rounded">
-        {{-- @foreach ($chatMessages as $message)
+        @foreach ($all_message as $message)
             <div class="mb-3">
                 <strong>{{ $message->user->name }}</strong>
                 <span class="text-sm text-gray-500">{{ $message->created_at->format('H:i') }}</span>
                 <p class="ml-2">{{ $message->body }}</p>
             </div>
-        @endforeach --}}
+        @endforeach
     </div>
 
     {{-- メッセージ送信フォーム --}}
-    <form action="#" method="POST">
+    <form action="{{ route('chatRoom.messages.store', $chatdate->id) }}" method="POST">
         @csrf
         <div class="flex">
             <textarea name="body" class="flex-1 p-2 border rounded-l" rows="2" placeholder="メッセージを入力..."></textarea>
@@ -35,8 +35,9 @@
     </form>
 
     {{-- チャットルーム退出ボタン --}}
-    <form action="#" method="POST" class="mt-4">
+    <form action="{{ route('chatRoom.leave', $chatdate->id) }}" method="POST" class="mt-4">
         @csrf
+
         <button type="submit" class="text-red-600 underline">チャットルームを退出する</button>
     </form>
 </div>

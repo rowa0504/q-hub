@@ -78,11 +78,4 @@ class ProfileController extends Controller
 
         return redirect('/profile')->with('success', 'Profile updated successfully!');
     }
-
-    // ユーザーが参加しているチャットルーム一覧
-    public function chatRooms(User $user)
-    {
-        $chatRooms = $user->chatRooms;
-        return view('users.chatRooms', compact('chatRooms'));
-    }
 }

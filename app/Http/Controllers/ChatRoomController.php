@@ -6,14 +6,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Post;
 use App\Models\ChatRoom;
+use App\Models\ChatMessage;
 use App\Models\User;
 
 class ChatRoomController extends Controller
 {
     private $chatroom;
+    private $chatMessage;
 
-    public function __construct(ChatRoom $chatroom){
+    public function __construct(ChatRoom $chatroom, ChatMessage $chatMessage){
         $this->chatroom = $chatroom;
+        $this->chatMessage = $chatMessage;
     }
 
     public function start($post_id){
@@ -32,41 +35,21 @@ class ChatRoomController extends Controller
         return redirect()->route('chatRoom.show', $chatRoom->id);
     }
 
-    public function show($chatRoom)
-    {
+    public function show($chatRoom){
         $chatdate = $this->chatroom->findOrFail($chatRoom);
-        return view('posts.categories.items.chatroom', compact('chatRoom', 'chatdate'));
+        $all_message = $this->chatMessage->latest()->get();
+
+        return view('posts.categories.items.chatroom', compact('chatRoom', 'chatdate', 'all_message'));
     }
 
-    // // チャットルーム作成
-    // public function store(Request $request, Post $post)
-    // {
-    //     $chatRoom = $post->chatRoom()->create();
+    // チャットルーム退出
+    public function leave($id){
+        // 対象のチャットルームを取得
+        $chatRoom = ChatRoom::findOrFail($id);
 
-    //     // 投稿者が最初に参加する
-    //     $chatRoom->users()->attach(auth()->id(), ['joined_at' => now()]);
+        // 認証済みユーザーをチャットルームから削除
+        $chatRoom->users()->detach(auth()->id());
 
-    //     return redirect()->route('chatRooms.show', $chatRoom);
-    // }
-
-    // // チャットルーム参加
-    // public function join(ChatRoom $chatRoom)
-    // {
-    //     $maxParticipants = $chatRoom->post->max_participants;
-    //     $currentParticipants = $chatRoom->users()->count();
-
-    //     if ($currentParticipants >= $maxParticipants) {
-    //         return response()->json(['message' => 'このチャットルームは満員です'], 403);
-    //     }
-
-    //     $chatRoom->users()->attach(auth()->id(), ['joined_at' => now()]);
-    //     return redirect()->route('chatRooms.show', $chatRoom);
-    // }
-
-    // // チャットルーム退出
-    // public function leave(ChatRoom $chatRoom)
-    // {
-    //     $chatRoom->users()->detach(auth()->id());
-    //     return redirect()->route('chatRooms.index');
-    // }
+        return redirect()->route('item.index')->with('status', 'チャットルームから退出しました');
+    }
 }
