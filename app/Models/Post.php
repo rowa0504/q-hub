@@ -53,7 +53,7 @@ class Post extends Model
             case 5:
                 return route('transportation.index', ['id' => $this->id]);
             case 6:
-                return route('questions.index', ['id' => $this->id]);
+                return route('question.index', ['id' => $this->id]);
             default:
                 return '#';
         }

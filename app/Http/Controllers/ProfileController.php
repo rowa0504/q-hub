@@ -40,24 +40,42 @@ class ProfileController extends Controller
 
     public function update(Request $request, $id)
     {
+        // 🛡バリデーションするよ！変なデータはブロック！
         $request->validate([
-            'name'         => 'required|max:20',
-            'email'        => 'required|max:50',
-            'introduction' => 'required|min:1|max:1000',
-            'avatar'       => 'mimes:jpeg,jpg,png,gif|max:1048'
+            'name'                   => 'required|max:20',
+            'email'                  => 'required|max:50',
+            'introduction'           => 'required|min:1|max:1000',
+            'avatar'                 => 'mimes:jpeg,jpg,png,gif|max:1048',
+            'enrollment_start'  => 'nullable|date',   // 🆕 入学日
+            'enrollment_end'    => 'nullable|date|after_or_equal:enrollment_start', // 🆕 卒業日は入学日以降
+            'graduation_status'      => 'nullable|string|max:255', // 🆕 卒業ステータス
         ]);
 
+        if ($request->enrollment_start && $request->enrollment_end) {
+            if ($request->enrollment_end < $request->enrollment_start) {
+                return back()->withErrors(['enrollment_end' => 'Graduation date must be after enrollment date.'])
+                    ->withInput();
+            }
+        }
+
         $user = $this->user->findOrFail($id);
+
+        // 💅 データをギャル仕様に着せ替え
         $user->name = $request->name;
         $user->email = $request->email;
         $user->introduction = $request->introduction;
 
         if ($request->avatar) {
-            $user->avatar = 'data:image/' . $request->avatar->extension() .
-                ';base64,' . base64_encode(file_get_contents($request->avatar));
+            $user->avatar = 'data:image/' . $request->avatar->extension() . ';base64,' . base64_encode(file_get_contents($request->avatar));
         }
 
+        // 🌸ここから新しく追加したプロパティたち
+        $user->enrollment_start = $request->enrollment_start;
+        $user->enrollment_end = $request->enrollment_end;
+        $user->graduation_status = $request->graduation_status;
+
         $user->save();
+
         return redirect('/profile')->with('success', 'Profile updated successfully!');
     }
 

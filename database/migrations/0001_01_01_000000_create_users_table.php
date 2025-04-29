@@ -1,52 +1,73 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace App\Models;
 
-return new class extends Migration
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+
+class User extends Authenticatable
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    /** @use HasFactory<\Database\Factories\UserFactory> */
+    use HasFactory, Notifiable;
+
+    const ADMIN_ROLE_ID = 1;  // administrator
+    const USER_ROLE_ID = 2;   // the regular user
+
+    public function posts()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->longText('avatar')->nullable();
-            $table->string('password');
-            $table->string('introduction',100)->nullable();
-            $table->unsignedBigInteger('role_id')
-                        ->default(2)
-                        ->comment('1:admin 2:user');
-            $table->timestamps();
-        });
-
-        Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
-        });
-
-        Schema::create('sessions', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
-            $table->string('ip_address', 45)->nullable();
-            $table->text('user_agent')->nullable();
-            $table->longText('payload');
-            $table->integer('last_activity')->index();
-        });
+        return $this->hasMany(Post::class);
     }
 
     /**
-     * Reverse the migrations.
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
      */
-    public function down(): void
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var list<string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
-        Schema::dropIfExists('sessions');
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
-};
+
+    // 投稿に関するリレーション
+    public function reportedPosts()
+    {
+        return $this->belongsToMany(Post::class, 'post_user_reports')->withTimestamps();
+    }
+
+    // ここから追加部分
+    /**
+     * ユーザーに関連するプロフィール情報
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function profile()
+    {
+        return $this->hasOne(UserProfile::class);  // ユーザー1人に対してプロフィール1つの関係
+    }
+}
