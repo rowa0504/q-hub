@@ -153,9 +153,9 @@
 
                         {{-- 現在の参加者数 --}}
                         <div class="d-flex align-items-center">
-                            <i class="fa-solid fa-users text-muted me-1"></i>
                             <button class="btn btn-link text-decoration-none p-0 m-0" data-bs-toggle="modal"
                                 data-bs-target="#participant-user-{{ $post->id }}">
+                                <i class="fa-solid fa-users text-muted me-1"></i>
                                 <span class="fw-bold fs-5 text-dark">{{ $post->participations->count() }}</span>
                             </button>
                             <span class="mx-2 text-muted">/</span>
