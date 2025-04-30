@@ -18,7 +18,7 @@
             </div>
             <div class="mb-3">
               <label for="description" class="form-label">Question Body</label>
-              <textarea class="form-control" id="description" name="description" rows="5" required>{{ old('description') }}</textarea>
+              <textarea class="form-control" id="description" name="description" rows="5">{{ old('description') }}</textarea>
                 @error('description')
                     <p class="text-danger small">{{ $message }}</p>
                 @enderror
