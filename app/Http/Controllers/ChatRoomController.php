@@ -13,13 +13,17 @@ class ChatRoomController extends Controller
 {
     private $chatroom;
     private $chatMessage;
+    private $post;
 
-    public function __construct(ChatRoom $chatroom, ChatMessage $chatMessage){
+    public function __construct(ChatRoom $chatroom, ChatMessage $chatMessage, Post $post){
         $this->chatroom = $chatroom;
         $this->chatMessage = $chatMessage;
+        $this->post = $post;
     }
 
     public function start($post_id){
+        $post = $this->post->findOrFail($post_id);
+
         // 全てチャットルームがあれば取得、なければ新規作成
         $chatRoom = ChatRoom::firstOrCreate(
             ['post_id' => $post_id],
@@ -28,6 +32,14 @@ class ChatRoomController extends Controller
 
         // 既に参加していなければ参加（user_id + chat_room_id が未登録なら）
         if (!$chatRoom->users()->where('users.id', Auth::id())->exists()) {
+            // 現在の参加人数を確認
+            $currentCount = $chatRoom->users()->count();
+
+            // 上限に達しているか確認
+            if ($currentCount >= $post->max) {
+                return redirect()->back()->with('error', 'This chat room is full.');
+            }
+
             $chatRoom->users()->attach(Auth::id(), ['joined_at' => now()]);
         }
 
