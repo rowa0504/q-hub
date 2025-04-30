@@ -161,6 +161,11 @@
                     <a href="{{ route('chatRoom.start', $post->id) }}">
                         <i class="fa-brands fa-rocketchat"></i>
                     </a>
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                     <p class="mb-1 text-muted small">Max participants: {{ $post->max ?? 'TBD' }}</p>
                 </div>
                 @break
