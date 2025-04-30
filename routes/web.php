@@ -17,6 +17,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SocialLoginController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ParticipationController;
+use App\Http\Controllers\ChatRoomController;
+use App\Http\Controllers\ChatMessageController;
 
 
 Auth::routes();
@@ -80,6 +82,18 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/{id}', [ItemController::class, 'show'])->name('show');
     });
 
+    // Chatroom route
+    Route::group(['prefix' => 'chatRoom', 'as' => 'chatRoom.'], function () {
+        Route::get('/{id}/start', [ChatRoomController::class, 'start'])->name('start');
+        Route::get('/{id}/show', [ChatRoomController::class, 'show'])->name('show');
+        Route::post('/{id}/leave', [ChatRoomController::class, 'leave'])->name('leave');
+
+        //Chat Message route
+        Route::post('/{id}/messages/store', [ChatMessageController::class, 'store'])->name('messages.store');
+        Route::get('/{id}/messages/index', [ChatMessageController::class, 'index'])->name('messages.index');
+    });
+
+
     // Travel route
     Route::group(['prefix' => 'travel', 'as' => 'travel.'], function () {
         Route::get('/', [TravelController::class, 'index'])->name('index');
@@ -101,7 +115,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Report route
     Route::post('/posts/{id}/report', [ReportController::class, 'store'])->name('posts.report');
-    
+
 
     // Admin route
     // Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {

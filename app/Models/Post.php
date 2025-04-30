@@ -73,4 +73,9 @@ class Post extends Model
         // value true or false
         return $this->participations()->where('user_id',Auth::user()->id)->exists();
     }
+
+    // 投稿に紐づくチャットルーム
+    public function chatRoom(){
+        return $this->hasOne(ChatRoom::class);
+    }
 }
