@@ -6,8 +6,7 @@
     <div class="container py-4" style="max-width: 500px;">
         <form method="POST" action="{{ route('profile.update', $user->id) }}" enctype="multipart/form-data">
             @csrf
-            @method('PUT')
-
+            @method('PATCH')
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul class="mb-0">

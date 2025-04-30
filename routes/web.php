@@ -52,7 +52,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
         Route::get('/', [ProfileController::class, 'index'])->name('index');
         Route::get('/edit', [ProfileController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [ProfileController::class, 'update'])->name('update');
+        Route::patch('/{id}', [ProfileController::class, 'update'])->name('update');
         Route::get('/{id}', [ProfileController::class, 'show'])->name('show');
     });
 
@@ -101,7 +101,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Report route
     Route::post('/posts/{id}/report', [ReportController::class, 'store'])->name('posts.report');
-    
+
 
     // Admin route
     // Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {

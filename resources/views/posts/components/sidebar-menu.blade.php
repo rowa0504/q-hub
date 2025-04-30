@@ -1,9 +1,17 @@
 <!-- ユーザー -->
-<div class="d-flex align-items-center mb-3 text-dark">
-    <img src="https://t3.ftcdn.net/jpg/10/95/73/04/240_F_1095730489_Y6aXUFzW3U60YbZvMJ7wVMwYTQ8o81c0.jpg"
-        class="rounded-circle me-2 avatar-sm" alt="Avatar">
-    <span>{{ Auth::user()->name ?? 'username' }}</span>
-</div>
+@if(Auth::check())
+    <div class="d-flex align-items-center mb-3 text-dark">
+        <img src="{{ Auth::user()->avatar }}" width="40" height="40" class="rounded-circle me-2 avatar-sm" alt="Avatar">
+        <span>{{ Auth::user()->name }}</span>
+    </div>
+@else
+    {{-- ゲストユーザー用の表示が必要ならここに書く --}}
+    <div class="d-flex align-items-center mb-3 text-dark">
+        <img src="/default-avatar.png" width="40" height="40" class="rounded-circle me-2 avatar-sm" alt="Default Avatar">
+        <span>Guest</span>
+    </div>
+@endif
+
 
 <hr class="text-dark">
 

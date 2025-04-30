@@ -19,9 +19,11 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $all_user = User::all();
         $all_posts = Post::where('user_id', Auth::id())->with('user')->latest()->get();
 
-        return view('users.profile.index', compact('user', 'all_posts'));
+
+        return view('users.profile.index', compact('user', 'all_user', 'all_posts'));
     }
 
     public function show($id)
