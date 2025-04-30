@@ -91,7 +91,7 @@ document.getElementById('imageInput1').addEventListener('change', function(e) {
 </script>
 
 @if (session('open_modal'))
-    <script>
+<script>
         document.addEventListener('DOMContentLoaded', function () {
             const modalId = @json(session('open_modal')); // セッションからモーダルIDを取得
             const modalElement = document.getElementById(modalId); // IDでモーダル要素を取得
@@ -101,5 +101,5 @@ document.getElementById('imageInput1').addEventListener('change', function(e) {
                 modal.show(); // モーダルを表示
             }
         });
-    </script>
+</script>
 @endif

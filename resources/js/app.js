@@ -1,5 +1,8 @@
 import './bootstrap';
 
+import * as bootstrap from 'bootstrap'; // ← 必須
+window.bootstrap = bootstrap; // ← スクリプトから使うためにグローバル化
+
 import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
