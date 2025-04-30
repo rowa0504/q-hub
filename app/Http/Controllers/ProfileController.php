@@ -22,8 +22,7 @@ class ProfileController extends Controller
         $all_user = User::all();
         $all_posts = Post::where('user_id', Auth::id())->with('user')->latest()->get();
 
-
-        return view('users.profile.index', compact('user', 'all_user', 'all_posts'));
+        return view('users.profile.index', compact('user', 'all_posts', 'all_user'));
     }
 
     public function show($id)
@@ -66,6 +65,9 @@ class ProfileController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->introduction = $request->introduction;
+        $user->enrollment_start  = $request->enrollment_start;
+        $user->enrollment_end    = $request->enrollment_end;
+        $user->graduation_status = $request->graduation_status;
 
         if ($request->avatar) {
             $user->avatar = 'data:image/' . $request->avatar->extension() . ';base64,' . base64_encode(file_get_contents($request->avatar));

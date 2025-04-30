@@ -20,7 +20,25 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
+    // ユーザーが参加しているチャットルーム
+    public function chatRooms(){
+        return $this->belongsToMany(ChatRoom::class, 'chat_room_user')
+                    ->withPivot('joined_at', 'left_at')
+                    ->withTimestamps();
+    }
+
+    // ユーザーが送信したメッセージ
+    public function chatMessages(){
+        return $this->hasMany(ChatMessage::class);
+    }
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
     // ←← ここの $fillable を1つだけにして、必要な項目をぜんぶ書く！
+
     protected $fillable = [
         'name',
         'email',

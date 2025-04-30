@@ -34,6 +34,12 @@ class Post extends Model
         return $this->hasMany(Like::class);
     }
 
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
+    }
+
+
     public function isLiked()
     {
         return $this->likes()->where('user_id', Auth::user()->id)->exists();
@@ -72,5 +78,10 @@ class Post extends Model
         // check if the user id exists on the likes table and returns boolean
         // value true or false
         return $this->participations()->where('user_id',Auth::user()->id)->exists();
+    }
+
+    // 投稿に紐づくチャットルーム
+    public function chatRoom(){
+        return $this->hasOne(ChatRoom::class);
     }
 }

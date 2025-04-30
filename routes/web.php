@@ -17,6 +17,9 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SocialLoginController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ParticipationController;
+use App\Http\Controllers\ChatRoomController;
+use App\Http\Controllers\ChatMessageController;
+use App\Http\Controllers\AnswerController;
 
 
 Auth::routes();
@@ -47,6 +50,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/{id}/destroy', [CommentController::class, 'destroy'])->name('destroy');
         Route::patch('/{post_id}/{id}', [CommentController::class, 'update'])->name('update');
     });
+
+    // Answer route
+    Route::group(['prefix' => 'answer', 'as' => 'answer.'], function () {
+        Route::post('/store', [AnswerController::class, 'store'])->name('store');
+        Route::post('/{answer}/best', [AnswerController::class, 'markBest'])->name('best');
+
+    });
+
 
     // Profile route
     Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
@@ -79,6 +90,18 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/', [ItemController::class, 'index'])->name('index');
         Route::get('/{id}', [ItemController::class, 'show'])->name('show');
     });
+
+    // Chatroom route
+    Route::group(['prefix' => 'chatRoom', 'as' => 'chatRoom.'], function () {
+        Route::get('/{id}/start', [ChatRoomController::class, 'start'])->name('start');
+        Route::get('/{id}/show', [ChatRoomController::class, 'show'])->name('show');
+        Route::post('/{id}/leave', [ChatRoomController::class, 'leave'])->name('leave');
+
+        //Chat Message route
+        Route::post('/{id}/messages/store', [ChatMessageController::class, 'store'])->name('messages.store');
+        Route::get('/{id}/messages/index', [ChatMessageController::class, 'index'])->name('messages.index');
+    });
+
 
     // Travel route
     Route::group(['prefix' => 'travel', 'as' => 'travel.'], function () {
