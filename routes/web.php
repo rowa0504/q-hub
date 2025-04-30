@@ -19,6 +19,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ParticipationController;
 use App\Http\Controllers\ChatRoomController;
 use App\Http\Controllers\ChatMessageController;
+use App\Http\Controllers\AnswerController;
 
 
 Auth::routes();
@@ -49,6 +50,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/{id}/destroy', [CommentController::class, 'destroy'])->name('destroy');
         Route::patch('/{post_id}/{id}', [CommentController::class, 'update'])->name('update');
     });
+
+    // Answer route
+    Route::group(['prefix' => 'answer', 'as' => 'answer.'], function () {
+        Route::post('/store', [AnswerController::class, 'store'])->name('store');
+        Route::post('/{answer}/best', [AnswerController::class, 'markBest'])->name('best');
+
+    });
+
 
     // Profile route
     Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {

@@ -47,7 +47,7 @@
                 <div class="text-start small">
                     <p><strong>Enrollment Period:</strong><br>
                         {{ $user->enrollment_start ? \Carbon\Carbon::parse($user->enrollment_start)->format('M d, Y') : 'N/A' }}
-                        –
+                        
                         {{ $user->enrollment_end ? \Carbon\Carbon::parse($user->enrollment_end)->format('M d, Y') : 'N/A' }}
                     </p>
                     <p><strong>Graduation Status:</strong><br>
