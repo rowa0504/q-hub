@@ -134,9 +134,9 @@
 
                         {{-- 現在の参加者数 --}}
                         <div class="d-flex align-items-center">
-                            <i class="fa-solid fa-users text-muted me-1"></i>
                             <button class="btn btn-link text-decoration-none p-0 m-0" data-bs-toggle="modal"
                                 data-bs-target="#participant-user-{{ $post->id }}">
+                                <i class="fa-solid fa-users text-muted me-1"></i>
                                 <span class="fw-bold fs-5 text-dark">{{ $post->participations->count() }}</span>
                             </button>
                             <span class="mx-2 text-muted">/</span>
@@ -157,6 +157,10 @@
             @case(3)
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Item name: {{ $post->title ?? 'TBD' }}</p>
+                    <p class="mb-1">Max participants: {{ $post->max ?? 'TBD' }}</p>
+                    <a href="{{ route('chatRoom.start', $post->id) }}">
+                        <i class="fa-brands fa-rocketchat"></i>
+                    </a>
                     <p class="mb-1 text-muted small">Max participants: {{ $post->max ?? 'TBD' }}</p>
                 </div>
                 @break
