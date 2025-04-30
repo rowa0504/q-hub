@@ -68,7 +68,7 @@
             <div class="me-3">
                 @if ($post->category_id == 6)
                     <span onclick="toggleAnswer({{ $post->id }})" style="cursor:pointer;">
-                        <i class="fa-solid fa-reply"></i>
+                        <i class="fa-solid fa-2x fa-reply"></i>
                     </span>
                 @else
                     <span data-bs-toggle="modal" data-bs-target="#commentsModal-{{ $post->id }}" style="cursor:pointer;">
@@ -208,7 +208,7 @@
                                 <img src="{{ Auth::user()->avatar }}" class="rounded-circle me-2" width="40" height="40" alt="avatar">
                             @else
                                 <div class="rounded-circle bg-light d-flex justify-content-center align-items-center me-2" style="width:40px;height:40px;">
-                                    <i class="fa-solid fa-circle-user text-secondary"></i>
+                                    <i class="fa-solid fa-circle-user fa-2x text-secondary"></i>
                                 </div>
                             @endif
                             <textarea class="form-control" name="body" rows="2" placeholder="Add an answer..." required></textarea>
@@ -224,7 +224,7 @@
                                 <img src="{{ $answer->user->avatar }}" class="rounded-circle me-2" width="40" height="40" alt="{{ $answer->user->name }}">
                             @else
                                 <div class="rounded-circle bg-light d-flex justify-content-center align-items-center me-2" style="width:40px;height:40px;">
-                                    <i class="fa-solid fa-circle-user text-secondary"></i>
+                                    <i class="fa-solid fa-circle-user fa-2x text-secondary"></i>
                                 </div>
                             @endif
                             <div>
