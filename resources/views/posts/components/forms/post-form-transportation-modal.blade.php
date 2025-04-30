@@ -19,7 +19,7 @@ aria-hidden="true">
 
                 <!-- File input -->
                 <div class="mb-3">
-                    <input class="form-control" type="file" name="image" id="imageInput5" accept="image/*">
+                    <input class="form-control" type="file" name="image" id="imageInput5" accept="image/*" value="{{ old('image') }}">
                     @error('image')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
@@ -27,7 +27,7 @@ aria-hidden="true">
 
                 <!-- Title input -->
                 <div class="mb-3">
-                    <input type="text" class="form-control" name="title" id="title" placeholder="Enter your post title...">
+                    <input type="text" class="form-control" name="title" id="title" placeholder="Enter your post title..." value="{{ old('title') }}">
                     @error('title')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
@@ -35,7 +35,7 @@ aria-hidden="true">
 
                 {{-- Fee input --}}
                 <div class="mb-3">
-                    <input type="number" class="form-control" name="fee" id="fee" placeholder="fee">
+                    <input type="number" class="form-control" name="fee" id="fee" placeholder="fee" value="{{ old('fee') }}">
                     @error('fee')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
@@ -45,9 +45,12 @@ aria-hidden="true">
                 <div class="mb-3">
                     @if (!empty($all_trans_categories))
                         <select name="trans_category" id="trans_category">
-                            <option value="" selected>Select transportation</option>
+                            <option value="" {{ old('trans_category') ? '' : 'selected' }}>Select transportation</option>
                             @foreach ($all_trans_categories as $trans_category)
-                                <option value="{{ $trans_category->id }}">{{ $trans_category->name }}</option>
+                                <option value="{{ $trans_category->id }}"
+                                    {{ old('trans_category') == $trans_category->id ? 'selected' : '' }}>
+                                    {{ $trans_category->name }}
+                                </option>
                             @endforeach
                         </select>
                     @endif
@@ -58,7 +61,7 @@ aria-hidden="true">
 
                 {{-- Deporture input --}}
                 <div class="mb-3">
-                    <input type="text" class="form-control" name="departure" id="departure" placeholder="departure">
+                    <input type="text" class="form-control" name="departure" id="departure" placeholder="departure" value="{{ old('departure') }}">
                     @error('departure')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
@@ -66,7 +69,7 @@ aria-hidden="true">
 
                 {{-- Destination input --}}
                 <div class="mb-3">
-                    <input type="text" class="form-control" name="destination" id="destination" placeholder="destination">
+                    <input type="text" class="form-control" name="destination" id="destination" placeholder="destination" value="{{ old('destination') }}">
                     @error('destination')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
@@ -74,7 +77,7 @@ aria-hidden="true">
 
                 <!-- Description input -->
                 <div class="mb-3">
-                    <textarea class="form-control" name="description" id="description" placeholder="Enter your post description..." rows="3"></textarea>
+                    <textarea class="form-control" name="description" id="description" placeholder="Enter your post description..." rows="3">{{ old('description') }}</textarea>
                     @error('description')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror

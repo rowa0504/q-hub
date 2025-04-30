@@ -11,14 +11,14 @@
             @csrf
             <div class="mb-3">
               <label for="title" class="form-label">Title</label>
-              <input type="text" class="form-control" id="title" name="title" required placeholder='Start your question with “What”, “How”, etc.'>
+              <input type="text" class="form-control" id="title" name="title" placeholder='Start your question with “What”, “How”, etc.' value="{{ old('title') }}">
                 @error('title')
                     <p class="text-danger small">{{ $message }}</p>
                 @enderror
             </div>
             <div class="mb-3">
               <label for="description" class="form-label">Question Body</label>
-              <textarea class="form-control" id="description" name="description" rows="5" required></textarea>
+              <textarea class="form-control" id="description" name="description" rows="5" required>{{ old('description') }}</textarea>
                 @error('description')
                     <p class="text-danger small">{{ $message }}</p>
                 @enderror
@@ -32,7 +32,7 @@
 
             <!-- File input -->
             <div class="mb-3">
-                <input class="form-control" type="file" name="image" id="imageInput6" accept="image/*">
+                <input class="form-control" type="file" name="image" id="imageInput6" accept="image/*" value="{{ old('image') }}">
                 @error('image')
                     <p class="text-danger small">{{ $message }}</p>
                 @enderror

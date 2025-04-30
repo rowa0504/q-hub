@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\Category;
 use App\Models\TransCategory;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
@@ -21,30 +22,60 @@ class PostController extends Controller
         $this->trans_category = $trans_category;
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
+    public function store(Request $request){
+        $commonRules = [//other,question
             'title' => 'required|min:1|max:50',
             'description' => 'required|min:1|max:1000',
             'image' => 'nullable|mimes:jpeg,jpg,png,gif|max:1048',
-            'location'  => 'nullable|string|max:50',
-            'departure' => 'nullable|string|max:50',
-            'destination' => 'nullable|string|max:50',
-            'fee' => 'nullable|numeric|min:1',
-            'max' => 'nullable|numeric|min:1',
-            'startdate' => 'nullable|date',
-            'enddate' => 'nullable|date',
-            'category_id' => 'required',
-            'trans_category' => 'nullable',
-        ]);
+            'category_id' => 'required|exists:categories,id',
+        ];
 
-        $this->post->user_id     = Auth::user()->id;
+        // カテゴリIDごとに追加のバリデーションを分ける
+        $categoryId = $request->input('category_id');
+
+        if ($categoryId == 1 || $categoryId == 3) { // event,item
+            $extraRules = [
+                'max' => 'required|numeric|min:1',
+                'startdate' => 'required|date',
+                'enddate'   => 'date|after_or_equal:startdate',
+            ];
+            $modalId = 'post-form-' . $categoryId;
+        } elseif ($categoryId == 2 || $categoryId == 4) { // food,travel
+            $extraRules = [
+                'location'  => 'required|string|max:50',
+            ];
+            $modalId = 'post-form-' . $categoryId;
+        } elseif ($categoryId == 5) { // item
+            $extraRules = [
+                'departure' => 'required|string|max:50',
+                'destination' => 'required|string|max:50',
+                'fee' => 'required|numeric|min:1',
+                'trans_category' => 'required|exists:trans_categories,id',
+            ];
+            $modalId = 'post-form-' . $categoryId;
+        }elseif ($categoryId == 6 || $categoryId == 7) { // item
+            $extraRules = $commonRules;
+            $modalId = 'post-form-' . $categoryId;
+        }
+
+        $validator = Validator::make($request->all(), array_merge($commonRules, $extraRules));
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('open_modal', $modalId);  // モーダルIDをセッションに保存
+        }
+
+        $this->post->user_id = Auth::id();
         $this->post->title = $request->title;
         $this->post->description = $request->description;
+
         if ($request->hasFile('image')) {
             $this->post->image = 'data:image/' . $request->image->extension() .
                 ';base64,' . base64_encode(file_get_contents($request->image));
         }
+
         $this->post->location = $request->location;
         $this->post->departure = $request->departure;
         $this->post->destination = $request->destination;
@@ -59,8 +90,51 @@ class PostController extends Controller
         return redirect()->back();
     }
 
-    public function edit($id)
-    {
+
+    public function edit($id){
+        $commonRules = [//other,question
+            'title' => 'required|min:1|max:50',
+            'description' => 'required|min:1|max:1000',
+            'image' => 'nullable|mimes:jpeg,jpg,png,gif|max:1048',
+            'category_id' => 'required|exists:categories,id',
+        ];
+
+        // カテゴリIDごとに追加のバリデーションを分ける
+        $categoryId = $request->input('category_id');
+
+        if ($categoryId == 1 || $categoryId == 3) { // event,item
+            $extraRules = [
+                'max' => 'required|numeric|min:1',
+                'startdate' => 'required|date',
+                'enddate'   => 'date|after_or_equal:startdate',
+            ];
+            $modalId = 'post-form-' . $categoryId;
+        } elseif ($categoryId == 2 || $categoryId == 4) { // food,travel
+            $extraRules = [
+                'location'  => 'required|string|max:50',
+            ];
+            $modalId = 'post-form-' . $categoryId;
+        } elseif ($categoryId == 5) { // item
+            $extraRules = [
+                'departure' => 'required|string|max:50',
+                'destination' => 'required|string|max:50',
+                'fee' => 'required|numeric|min:1',
+                'trans_category' => 'required|exists:trans_categories,id',
+            ];
+            $modalId = 'post-form-' . $categoryId;
+        }elseif ($categoryId == 6 || $categoryId == 7) { // item
+            $extraRules = $commonRules;
+            $modalId = 'post-form-' . $categoryId;
+        }
+
+        $validator = Validator::make($request->all(), array_merge($commonRules, $extraRules));
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('open_modal', $modalId);
+        }
         $post = $this->post->findOrFail($id);
 
         // 画像データがBase64形式で保存されている場合、そのまま返す
@@ -83,20 +157,48 @@ class PostController extends Controller
     }
 
     public function update($id, Request $request){
-        $request->validate([
+        $commonRules = [//other,question
             'title' => 'required|min:1|max:50',
             'description' => 'required|min:1|max:1000',
             'image' => 'nullable|mimes:jpeg,jpg,png,gif|max:1048',
-            'location'  => 'nullable|string|max:50',
-            'departure' => 'nullable|string|max:50',
-            'destination' => 'nullable|string|max:50',
-            'fee' => 'nullable|numeric|min:1',
-            'max' => 'nullable|numeric|min:1',
-            'startdate' => 'nullable|date',
-            'enddate' => 'nullable|date',
-            'category_id' => 'required',
-            'trans_category' => 'nullable',
-        ]);
+            'category_id' => 'required|exists:categories,id',
+        ];
+
+        // カテゴリIDごとに追加のバリデーションを分ける
+        $categoryId = $request->input('category_id');
+
+        if ($categoryId == 1 || $categoryId == 3) { // event,item
+            $extraRules = [
+                'max' => 'required|numeric|min:1',
+                'startdate' => 'required|date',
+                'enddate'   => 'date|after_or_equal:startdate',
+            ];
+            $modalId = 'post-form-' . $categoryId;
+        } elseif ($categoryId == 2 || $categoryId == 4) { // food,travel
+            $extraRules = [
+                'location'  => 'required|string|max:50',
+            ];
+            $modalId = 'post-form-' . $categoryId;
+        } elseif ($categoryId == 5) { // item
+            $extraRules = [
+                'departure' => 'required|string|max:50',
+                'destination' => 'required|string|max:50',
+                'fee' => 'required|numeric|min:1',
+                'trans_category' => 'required|exists:trans_categories,id',
+            ];
+            $modalId = 'post-form-5';
+        }
+
+        // バリデーション処理
+        $validator = Validator::make($request->all(), array_merge($commonRules, $extraRules));
+        // $request->validate(array_merge($commonRules, $extraRules));
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('open_modal', $modalId); // モーダル再表示用
+        }
 
         $post = $this->post->findOrFail($id);
         $post->user_id     = Auth::user()->id;
