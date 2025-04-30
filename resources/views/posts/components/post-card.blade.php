@@ -180,6 +180,7 @@
             @case(5)
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
+                    <p class="mb-1">Transportation: {{ $post->transCategory->name ?? 'TBD' }}</p>
                     <p class="mb-1 text-muted small">Fee: {{ $post->fee ?? 'TBD' }}₱</p>
                     <p class="mb-1 text-muted small">Departure: {{ $post->departure ?? 'TBD' }}</p>
                     <p class="mb-1 text-muted small">Destination: {{ $post->destination ?? 'TBD' }}</p>
@@ -291,7 +292,7 @@
 </div>
 
 {{-- モーダル --}}
-@include('posts.components.modals.edit-modal', ['post' => $post])
+@include('posts.components.edit-forms.edit-form-modal', ['post' => $post])
 @include('posts.components.modals.report-modal', ['post' => $post])
 @include('posts.components.modals.delete-modal', ['post' => $post])
 @include('posts.components.modals.comment-modal', ['post' => $post])
