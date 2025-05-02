@@ -19,7 +19,7 @@ aria-hidden="true">
 
                 <!-- File input -->
                 <div class="mb-3">
-                    <input class="form-control" type="file" name="image" id="imageInput3" accept="image/*">
+                    <input class="form-control" type="file" name="image" id="imageInput3" accept="image/*" value="{{ old('image') }}">
                     @error('image')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
@@ -27,7 +27,7 @@ aria-hidden="true">
 
                 {{-- Max input --}}
                 <div class="mb-3">
-                    <input type="number" name="max" id="max" class="form-control" placeholder="max">
+                    <input type="number" name="max" id="max" class="form-control" placeholder="max" value="{{ old('max') }}">
                     @error('max')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
@@ -35,7 +35,7 @@ aria-hidden="true">
 
                 {{-- Startdate input --}}
                 <div class="mb-3">
-                    <input type="date" class="form-control" id="startdate" name="startdate">
+                    <input type="date" class="form-control" id="startdate" name="startdate" value="{{ old('startdate') }}">
                     @error('startdate')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
@@ -43,7 +43,7 @@ aria-hidden="true">
 
                 {{-- Enddate input --}}
                 <div class="mb-3">
-                    <input type="date" class="form-control" id="enddate" name="enddate">
+                    <input type="date" class="form-control" id="enddate" name="enddate" value="{{ old('enddate') }}">
                     @error('enddate')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
@@ -51,7 +51,7 @@ aria-hidden="true">
 
                 <!-- Title input -->
                 <div class="mb-3">
-                    <input type="text" class="form-control" name="title" id="title" placeholder="Enter your post title...">
+                    <input type="text" class="form-control" name="title" id="title" placeholder="Enter your post title..." value="{{ old('title') }}">
                     @error('title')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
@@ -59,7 +59,7 @@ aria-hidden="true">
 
                 <!-- Description input -->
                 <div class="mb-3">
-                    <textarea class="form-control" name="description" id="description" placeholder="Enter your post description..." rows="3"></textarea>
+                    <textarea class="form-control" name="description" id="description" placeholder="Enter your post description..." rows="3">{{ old('description') }}</textarea>
                     @error('description')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror

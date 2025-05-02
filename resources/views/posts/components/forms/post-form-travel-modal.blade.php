@@ -57,10 +57,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <input type="hidden" name="category_id" value="4">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-info text-white">Post</button>
-
-                    <input type="hidden" name="category_id" value="4">
                 </div>
             </form>
         </div>
@@ -111,3 +110,5 @@
         }
     });
 </script>
+
+
