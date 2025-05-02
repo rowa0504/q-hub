@@ -9,14 +9,14 @@
     <div class="modal-body">
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>
-            <input type="text" class="form-control" id="question-title-{{ $post->id }}" name="title" required placeholder='Start your question with “What”, “How”, etc.'>
+            <input type="text" class="form-control" id="question-title-{{ $post->id }}" name="title" placeholder='Start your question with “What”, “How”, etc.'>
               @error('title')
                   <p class="text-danger small">{{ $message }}</p>
               @enderror
           </div>
           <div class="mb-3">
             <label for="description" class="form-label">Question Body</label>
-            <textarea class="form-control" id="question-description-{{ $post->id }}" name="description" rows="5" required></textarea>
+            <textarea class="form-control" id="question-description-{{ $post->id }}" name="description" rows="5"></textarea>
               @error('description')
                   <p class="text-danger small">{{ $message }}</p>
               @enderror
