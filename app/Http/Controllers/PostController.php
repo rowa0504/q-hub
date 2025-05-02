@@ -28,6 +28,8 @@ class PostController extends Controller
             'description' => 'required|min:1|max:1000',
             'image' => 'nullable|mimes:jpeg,jpg,png,gif|max:1048',
             'location'  => 'nullable|string|max:50',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
             'departure' => 'nullable|string|max:50',
             'destination' => 'nullable|string|max:50',
             'fee' => 'nullable|numeric|min:1',
@@ -46,6 +48,8 @@ class PostController extends Controller
                 ';base64,' . base64_encode(file_get_contents($request->image));
         }
         $this->post->location = $request->location;
+        $this->post->latitude = $request->latitude;
+        $this->post->longitude = $request->longitude;
         $this->post->departure = $request->departure;
         $this->post->destination = $request->destination;
         $this->post->fee = $request->fee;

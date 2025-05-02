@@ -19,16 +19,19 @@
             <i class="fas fa-ellipsis-h" style="cursor:pointer;" data-bs-toggle="dropdown"></i>
             <ul class="dropdown-menu dropdown-menu-end">
                 @if (Auth::id() === $post->user_id)
-                    <li><a class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-{{ $post->id }}">
-                        <i class="fa-solid fa-trash"></i> Delete</a></li>
+                    <li><a class="dropdown-item text-danger" data-bs-toggle="modal"
+                            data-bs-target="#deleteModal-{{ $post->id }}">
+                            <i class="fa-solid fa-trash"></i> Delete</a></li>
                     <li>
-                        <button class="dropdown-item text-warning btn-edit" data-id="{{ $post->id }}" data-bs-toggle="modal" data-bs-target="#edit-form-{{ $post->id }}">
+                        <button class="dropdown-item text-warning btn-edit" data-id="{{ $post->id }}"
+                            data-bs-toggle="modal" data-bs-target="#edit-form-{{ $post->id }}">
                             <i class="fa-solid fa-pen-to-square"></i> Edit
                         </button>
                     </li>
                 @else
-                    <li><a class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#reportModal-{{ $post->id }}">
-                        <i class="fa-solid fa-flag"></i> Report</a></li>
+                    <li><a class="dropdown-item text-danger" data-bs-toggle="modal"
+                            data-bs-target="#reportModal-{{ $post->id }}">
+                            <i class="fa-solid fa-flag"></i> Report</a></li>
                 @endif
             </ul>
         </div>
@@ -45,7 +48,8 @@
             {{-- いいね --}}
             <div class="me-3 d-flex align-items-center">
                 @if ($post->isLiked())
-                    <form action="{{ route('like.delete', $post->id) }}" method="post" class="d-flex align-items-center">
+                    <form action="{{ route('like.delete', $post->id) }}" method="post"
+                        class="d-flex align-items-center">
                         @csrf
                         @method('DELETE')
                         <button class="btn btn-sm p-0 border-0 bg-transparent d-flex align-items-center">
@@ -54,7 +58,8 @@
                         <span class="ms-1">{{ $post->likes->count() }}</span>
                     </form>
                 @else
-                    <form action="{{ route('like.store', $post->id) }}" method="post" class="d-flex align-items-center">
+                    <form action="{{ route('like.store', $post->id) }}" method="post"
+                        class="d-flex align-items-center">
                         @csrf
                         <button class="btn btn-sm p-0 border-0 bg-transparent d-flex align-items-center">
                             <i class="fa-regular fa-heart"></i>
@@ -65,22 +70,36 @@
             </div>
 
             {{-- コメント or アンサー --}}
-            <div class="me-3">
+            <div class="me-3 d-flex align-items-center gap-3">
                 @if ($post->category_id == 6)
                     <span onclick="toggleAnswer({{ $post->id }})" style="cursor:pointer;">
                         <i class="fa-solid fa-2x fa-reply"></i>
                     </span>
                 @else
-                    <span data-bs-toggle="modal" data-bs-target="#commentsModal-{{ $post->id }}" style="cursor:pointer;">
+                    <span data-bs-toggle="modal" data-bs-target="#commentsModal-{{ $post->id }}"
+                        style="cursor:pointer;">
                         <i class="fa-regular fa-comment"></i>
                     </span>
                 @endif
                 <span>{{ $post->comments->count() }}</span>
+
+                {{-- カテゴリーIDが3（item）の場合だけチャットアイコンを表示 --}}
+                @if ($post->category_id == 3)
+                    <a href="{{ route('chatRoom.start', $post->id) }}">
+                        <i class="fa-solid fa-comments text-end icon-sm"></i>
+                    </a>
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+                @endif
             </div>
         </div>
 
         {{-- カテゴリ別情報 --}}
         @switch($post->category_id)
+        {{-- event --}}
             @case(1)
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Event: {{ $post->title ?? 'TBD' }}</p>
@@ -145,42 +164,55 @@
                     </div>
                     @include('posts.components.modals.participation-modal')
                 </div>
-                @break
+            @break
+
             @case(2)
+            {{-- food --}}
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
-                    <p class="mb-1 text-muted small">Location: {{ $post->location ?? 'TBD' }}
-                        <i class="fa-solid fa-location-dot"></i>
+                    <p>
+                        <a href="https://www.google.com/maps?q={{ $post->latitude }},{{ $post->longitude }}" target="_blank">
+                            <i class="fa-solid fa-location-dot"></i>
+                            {{ $post->location ?? 'TBD' }}
+                        </a>
                     </p>
                 </div>
-                @break
+            @break
+
             @case(3)
+            {{-- item --}}
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Item name: {{ $post->title ?? 'TBD' }}</p>
                     <p class="mb-1">Max participants: {{ $post->max ?? 'TBD' }}</p>
-                    <a href="{{ route('chatRoom.start', $post->id) }}">
-                        <i class="fa-brands fa-rocketchat"></i>
-                    </a>
                     <p class="mb-1 text-muted small">Max participants: {{ $post->max ?? 'TBD' }}</p>
                 </div>
-                @break
+            @break
+
             @case(4)
-                <div class="mt-2 fw-bold">
-                    <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
-                    <p class="mb-1 text-muted small">Location: {{ $post->location ?? 'TBD' }}
+            {{-- travel --}}
+            <div class="mt-2 fw-bold">
+                <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
+                <p>
+                    <a href="https://www.google.com/maps?q={{ $post->latitude }},{{ $post->longitude }}" target="_blank">
                         <i class="fa-solid fa-location-dot"></i>
-                    </p>
-                </div>
-                @break
+                        {{ $post->location ?? 'TBD' }}
+                    </a>
+                </p>
+            </div>
+            @break
+
             @case(5)
+            {{-- transportation --}}
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
                     <p class="mb-1 text-muted small">Fee: {{ $post->fee ?? 'TBD' }}₱</p>
                     <p class="mb-1 text-muted small">Departure: {{ $post->departure ?? 'TBD' }}</p>
                     <p class="mb-1 text-muted small">Destination: {{ $post->destination ?? 'TBD' }}</p>
                 </div>
-                @break
+            @break
+
             @case(6)
+            {{-- question --}}
                 <div class="mt-2 fw-bold">
                     <p>Question: {{ $post->title ?? 'TBD' }}</p>
                 </div>
@@ -201,7 +233,7 @@
                 </button>
 
                 <div id="answer-section-{{ $post->id }}" class="mt-3"
-                     style="{{ session('open_answer_post_id') == $post->id ? 'display: block;' : 'display: none;' }}">
+                    style="{{ session('open_answer_post_id') == $post->id ? 'display: block;' : 'display: none;' }}">
 
                     {{-- アンサー投稿フォーム --}}
                     <form method="POST" action="{{ route('answer.store') }}">
@@ -209,9 +241,11 @@
                         <input type="hidden" name="post_id" value="{{ $post->id }}">
                         <div class="d-flex mb-3">
                             @if (Auth::user()->avatar)
-                                <img src="{{ Auth::user()->avatar }}" class="rounded-circle me-2" width="40" height="40" alt="avatar">
+                                <img src="{{ Auth::user()->avatar }}" class="rounded-circle me-2" width="40"
+                                    height="40" alt="avatar">
                             @else
-                                <div class="rounded-circle bg-light d-flex justify-content-center align-items-center me-2" style="width:40px;height:40px;">
+                                <div class="rounded-circle bg-light d-flex justify-content-center align-items-center me-2"
+                                    style="width:40px;height:40px;">
                                     <i class="fa-solid fa-circle-user fa-2x text-secondary"></i>
                                 </div>
                             @endif
@@ -225,9 +259,11 @@
                     @foreach ($post->answers as $answer)
                         <div class="d-flex mb-2">
                             @if ($answer->user->avatar)
-                                <img src="{{ $answer->user->avatar }}" class="rounded-circle me-2" width="40" height="40" alt="{{ $answer->user->name }}">
+                                <img src="{{ $answer->user->avatar }}" class="rounded-circle me-2" width="40"
+                                    height="40" alt="{{ $answer->user->name }}">
                             @else
-                                <div class="rounded-circle bg-light d-flex justify-content-center align-items-center me-2" style="width:40px;height:40px;">
+                                <div class="rounded-circle bg-light d-flex justify-content-center align-items-center me-2"
+                                    style="width:40px;height:40px;">
                                     <i class="fa-solid fa-circle-user fa-2x text-secondary"></i>
                                 </div>
                             @endif
@@ -241,9 +277,11 @@
                                     @if ($post->best_answer_id === $answer->id)
                                         <span class="badge bg-success">Best Answer</span>
                                     @endif
-                                    <form method="POST" action="{{ route('answer.best', $answer->id) }}" class="d-inline">
+                                    <form method="POST" action="{{ route('answer.best', $answer->id) }}"
+                                        class="d-inline">
                                         @csrf
-                                        <button type="submit" class="btn btn-outline-success btn-sm mt-1">Mark as Best</button>
+                                        <button type="submit" class="btn btn-outline-success btn-sm mt-1">Mark as
+                                            Best</button>
                                     </form>
                                 @elseif ($post->best_answer_id === $answer->id)
                                     {{-- 他人から見たときも表示 --}}
