@@ -21,61 +21,64 @@
                 </form>
                 <!-- コメント一覧 -->
                 @foreach ($post->comments as $comment)
-                    <div class="d-flex justify-content-between align-items-start border-bottom py-2">
-                        <div class="w-100">
-                            <div class="d-flex align-items-center mb-1">
-                                <img src="{{ $comment->user->avatar }}"
-                                    onerror="this.onerror=null; this.src='{{ asset('images/user_icon.png') }}';"
-                                    alt="User Avatar" class="rounded-circle me-2" width="40" height="40">
-                                <a href="{{ route('profile.show', $comment->user->id) }}"
-                                    class="text-decoration-none text-dark">
-                                    <strong>{{ $comment->user->name }}</strong>
-                                </a>
-                            </div>
-
-                            {{-- 表示用 --}}
-                            <p class="text-start mb-0" id="comment-body-{{ $comment->id }}">{{ $comment->body }}</p>
-
-                            {{-- 編集用フォーム（初期は非表示） --}}
-                            <!-- 編集フォーム（非表示で最初は隠す） -->
-                            <form class="d-none" id="edit-form-{{ $comment->id }}"
-                                action="{{ route('comment.update', ['post_id' => $comment->post_id, 'id' => $comment->id]) }}"
-                                method="POST">
-                                @csrf
-                                @method('PATCH')
-                                <div class="input-group mb-2">
-                                    <input type="text" name="body" class="form-control form-control-sm"
-                                        value="{{ $comment->body }}" required>
-                                    <button type="submit" class="btn btn-sm btn-primary">Save</button>
-                                    <button type="button" class="btn btn-sm btn-secondary"
-                                        onclick="cancelEdit({{ $comment->id }})">Cancel</button>
+                    @if ($comment->user && !$comment->user->trashed())
+                        <div class="d-flex justify-content-between align-items-start border-bottom py-2">
+                            <div class="w-100">
+                                <div class="d-flex align-items-center mb-1">
+                                    <img src="{{ $comment->user->avatar }}"
+                                        onerror="this.onerror=null; this.src='{{ asset('images/user_icon.png') }}';"
+                                        alt="User Avatar" class="rounded-circle me-2" width="40" height="40">
+                                    <a href="{{ route('profile.show', $comment->user->id) }}"
+                                        class="text-decoration-none text-dark">
+                                        <strong>{{ $comment->user->name }}</strong>
+                                    </a>
                                 </div>
-                            </form>
-                        </div>
 
-                        @if (Auth::id() === $comment->user_id)
-                            <div class="dropdown ms-2">
-                                <i class="fas fa-ellipsis-h" data-bs-toggle="dropdown" style="cursor:pointer;"></i>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li>
-                                        <a href="#" class="dropdown-item text-warning"
-                                            onclick="event.preventDefault(); editComment({{ $comment->id }})">
-                                            <i class="fa-solid fa-pen-to-square"></i> Edit
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <form action="{{ route('comment.destroy', $comment->id) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="dropdown-item text-danger">
-                                                <i class="fa-solid fa-trash-can"></i> Delete
-                                            </button>
-                                        </form>
-                                    </li>
-                                </ul>
+                                {{-- 表示用 --}}
+                                <p class="text-start mb-0" id="comment-body-{{ $comment->id }}">{{ $comment->body }}
+                                </p>
+
+                                {{-- 編集用フォーム（初期は非表示） --}}
+                                <!-- 編集フォーム（非表示で最初は隠す） -->
+                                <form class="d-none" id="edit-form-{{ $comment->id }}"
+                                    action="{{ route('comment.update', ['post_id' => $comment->post_id, 'id' => $comment->id]) }}"
+                                    method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <div class="input-group mb-2">
+                                        <input type="text" name="body" class="form-control form-control-sm"
+                                            value="{{ $comment->body }}" required>
+                                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                                        <button type="button" class="btn btn-sm btn-secondary"
+                                            onclick="cancelEdit({{ $comment->id }})">Cancel</button>
+                                    </div>
+                                </form>
                             </div>
-                        @endif
-                    </div>
+
+                            @if (Auth::id() === $comment->user_id)
+                                <div class="dropdown ms-2">
+                                    <i class="fas fa-ellipsis-h" data-bs-toggle="dropdown" style="cursor:pointer;"></i>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <a href="#" class="dropdown-item text-warning"
+                                                onclick="event.preventDefault(); editComment({{ $comment->id }})">
+                                                <i class="fa-solid fa-pen-to-square"></i> Edit
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <form action="{{ route('comment.destroy', $comment->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="dropdown-item text-danger">
+                                                    <i class="fa-solid fa-trash-can"></i> Delete
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            @endif
+                        </div>
+                    @endif
                 @endforeach
             </div>
         </div>
