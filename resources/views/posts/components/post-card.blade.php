@@ -1,14 +1,14 @@
 <div class="card w-100">
     {{-- 投稿ヘッダー --}}
     <div class="d-flex align-items-center border-bottom mb-2 p-2">
-        <a href="{{ route('profile.show', $post->user->id) }}">
-            @if ($post->user->avatar)
+        <a href="{{ route('profile.show', $post->user->id ?? '#') }}">
+            @if ($post->user && $post->user->avatar)
                 <img src="{{ $post->user->avatar }}" alt="{{ $post->user->name }}" class="rounded-circle avatar-sm">
             @else
                 <i class="fa-solid fa-circle-user text-secondary icon-sm"></i>
             @endif
         </a>
-        <strong class="mx-2">{{ $post->user->name }}</strong>
+        <strong class="mx-2">{{ $post->user->name ?? 'UNkNOWN user' }}</strong>
 
         <div class="ms-auto position-relative">
             {{-- カテゴリ --}}
@@ -19,16 +19,19 @@
             <i class="fas fa-ellipsis-h" style="cursor:pointer;" data-bs-toggle="dropdown"></i>
             <ul class="dropdown-menu dropdown-menu-end">
                 @if (Auth::id() === $post->user_id)
-                    <li><a class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-{{ $post->id }}">
-                        <i class="fa-solid fa-trash"></i> Delete</a></li>
+                    <li><a class="dropdown-item text-danger" data-bs-toggle="modal"
+                            data-bs-target="#deleteModal-{{ $post->id }}">
+                            <i class="fa-solid fa-trash"></i> Delete</a></li>
                     <li>
-                        <button class="dropdown-item text-warning btn-edit" data-id="{{ $post->id }}" data-bs-toggle="modal" data-bs-target="#edit-form-{{ $post->id }}">
+                        <button class="dropdown-item text-warning btn-edit" data-id="{{ $post->id }}"
+                            data-bs-toggle="modal" data-bs-target="#edit-form-{{ $post->id }}">
                             <i class="fa-solid fa-pen-to-square"></i> Edit
                         </button>
                     </li>
                 @else
-                    <li><a class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#reportModal-{{ $post->id }}">
-                        <i class="fa-solid fa-flag"></i> Report</a></li>
+                    <li><a class="dropdown-item text-danger" data-bs-toggle="modal"
+                            data-bs-target="#reportModal-{{ $post->id }}">
+                            <i class="fa-solid fa-flag"></i> Report</a></li>
                 @endif
             </ul>
         </div>
@@ -45,7 +48,8 @@
             {{-- いいね --}}
             <div class="me-3 d-flex align-items-center">
                 @if ($post->isLiked())
-                    <form action="{{ route('like.delete', $post->id) }}" method="post" class="d-flex align-items-center">
+                    <form action="{{ route('like.delete', $post->id) }}" method="post"
+                        class="d-flex align-items-center">
                         @csrf
                         @method('DELETE')
                         <button class="btn btn-sm p-0 border-0 bg-transparent d-flex align-items-center">
@@ -54,7 +58,8 @@
                         <span class="ms-1">{{ $post->likes->count() }}</span>
                     </form>
                 @else
-                    <form action="{{ route('like.store', $post->id) }}" method="post" class="d-flex align-items-center">
+                    <form action="{{ route('like.store', $post->id) }}" method="post"
+                        class="d-flex align-items-center">
                         @csrf
                         <button class="btn btn-sm p-0 border-0 bg-transparent d-flex align-items-center">
                             <i class="fa-regular fa-heart"></i>
@@ -65,18 +70,21 @@
             </div>
 
             {{-- コメント or アンサー --}}
-            <div class="me-3">
+            <div class="me-3 d-flex align-items-center">
                 @if ($post->category_id == 6)
                     <span onclick="toggleAnswer({{ $post->id }})" style="cursor:pointer;">
-                        <i class="fa-solid fa-2x fa-reply"></i>
+                        <i class="fa-solid fa-reply fa-lg"></i>
                     </span>
+                    <span class="ms-1">{{ $post->answers->count() }}</span>
                 @else
-                    <span data-bs-toggle="modal" data-bs-target="#commentsModal-{{ $post->id }}" style="cursor:pointer;">
-                        <i class="fa-regular fa-comment"></i>
+                    <span data-bs-toggle="modal" data-bs-target="#commentsModal-{{ $post->id }}"
+                        style="cursor:pointer;">
+                        <i class="fa-regular fa-comment fa-lg"></i>
                     </span>
+                    <span class="ms-1">{{ $post->comments->count() }}</span>
                 @endif
-                <span>{{ $post->comments->count() }}</span>
             </div>
+
         </div>
 
         {{-- カテゴリ別情報 --}}
@@ -145,7 +153,8 @@
                     </div>
                     @include('posts.components.modals.participation-modal')
                 </div>
-                @break
+            @break
+
             @case(2)
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
@@ -153,7 +162,8 @@
                         <i class="fa-solid fa-location-dot"></i>
                     </p>
                 </div>
-                @break
+            @break
+
             @case(3)
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Item name: {{ $post->title ?? 'TBD' }}</p>
@@ -168,7 +178,8 @@
                     @endif
                     <p class="mb-1 text-muted small">Max participants: {{ $post->max ?? 'TBD' }}</p>
                 </div>
-                @break
+            @break
+
             @case(4)
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
@@ -176,7 +187,8 @@
                         <i class="fa-solid fa-location-dot"></i>
                     </p>
                 </div>
-                @break
+            @break
+
             @case(5)
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
@@ -185,7 +197,8 @@
                     <p class="mb-1 text-muted small">Departure: {{ $post->departure ?? 'TBD' }}</p>
                     <p class="mb-1 text-muted small">Destination: {{ $post->destination ?? 'TBD' }}</p>
                 </div>
-                @break
+            @break
+
             @case(6)
                 <div class="mt-2 fw-bold">
                     <p>Question: {{ $post->title ?? 'TBD' }}</p>
@@ -207,7 +220,7 @@
                 </button>
 
                 <div id="answer-section-{{ $post->id }}" class="mt-3"
-                     style="{{ session('open_answer_post_id') == $post->id ? 'display: block;' : 'display: none;' }}">
+                    style="{{ session('open_answer_post_id') == $post->id ? 'display: block;' : 'display: none;' }}">
 
                     {{-- アンサー投稿フォーム --}}
                     <form method="POST" action="{{ route('answer.store') }}">
@@ -215,9 +228,11 @@
                         <input type="hidden" name="post_id" value="{{ $post->id }}">
                         <div class="d-flex mb-3">
                             @if (Auth::user()->avatar)
-                                <img src="{{ Auth::user()->avatar }}" class="rounded-circle me-2" width="40" height="40" alt="avatar">
+                                <img src="{{ Auth::user()->avatar }}" class="rounded-circle me-2" width="40"
+                                    height="40" alt="avatar">
                             @else
-                                <div class="rounded-circle bg-light d-flex justify-content-center align-items-center me-2" style="width:40px;height:40px;">
+                                <div class="rounded-circle bg-light d-flex justify-content-center align-items-center me-2"
+                                    style="width:40px;height:40px;">
                                     <i class="fa-solid fa-circle-user fa-2x text-secondary"></i>
                                 </div>
                             @endif
@@ -229,34 +244,40 @@
                     {{-- アンサー一覧 --}}
                     <hr>
                     @foreach ($post->answers as $answer)
-                        <div class="d-flex mb-2">
-                            @if ($answer->user->avatar)
-                                <img src="{{ $answer->user->avatar }}" class="rounded-circle me-2" width="40" height="40" alt="{{ $answer->user->name }}">
-                            @else
-                                <div class="rounded-circle bg-light d-flex justify-content-center align-items-center me-2" style="width:40px;height:40px;">
-                                    <i class="fa-solid fa-circle-user fa-2x text-secondary"></i>
-                                </div>
-                            @endif
-                            <div>
-                                <strong>{{ $answer->user->name }}</strong>
-                                <p class="mb-1">{{ $answer->body }}</p>
+                        @if ($answer->user)
+                            <div class="d-flex mb-2">
+                                @if ($answer->user->avatar)
+                                    <img src="{{ $answer->user->avatar }}" class="rounded-circle me-2"
+                                        width="40" height="40" alt="{{ $answer->user->name }}">
+                                @else
+                                    <div class="rounded-circle bg-light d-flex justify-content-center align-items-center me-2"
+                                        style="width:40px;height:40px;">
+                                        <i class="fa-solid fa-circle-user fa-2x text-secondary"></i>
+                                    </div>
+                                @endif
+                                <div>
+                                    <strong>{{ $answer->user->name }}</strong>
+                                    <p class="mb-1">{{ $answer->body }}</p>
 
-                                {{-- ベストアンサー表示・ボタン --}}
-                                @if ($post->user_id === Auth::id())
-                                    {{-- 投稿者本人 --}}
-                                    @if ($post->best_answer_id === $answer->id)
+                                    {{-- ベストアンサー表示・ボタン --}}
+                                    @if ($post->user_id === Auth::id())
+                                        {{-- 投稿者本人 --}}
+                                        @if ($post->best_answer_id === $answer->id)
+                                            <span class="badge bg-success">Best Answer</span>
+                                        @endif
+                                        <form method="POST" action="{{ route('answer.best', $answer->id) }}"
+                                            class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-outline-success btn-sm mt-1">Mark as
+                                                Best</button>
+                                        </form>
+                                    @elseif ($post->best_answer_id === $answer->id)
+                                        {{-- 他人から見たときも表示 --}}
                                         <span class="badge bg-success">Best Answer</span>
                                     @endif
-                                    <form method="POST" action="{{ route('answer.best', $answer->id) }}" class="d-inline">
-                                        @csrf
-                                        <button type="submit" class="btn btn-outline-success btn-sm mt-1">Mark as Best</button>
-                                    </form>
-                                @elseif ($post->best_answer_id === $answer->id)
-                                    {{-- 他人から見たときも表示 --}}
-                                    <span class="badge bg-success">Best Answer</span>
-                                @endif
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     @endforeach
                 </div>
             </div>

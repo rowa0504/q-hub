@@ -50,14 +50,24 @@ class AdminController extends Controller
 
     public function deactivate(User $user)
     {
-        $user->delete(); // ソフトデリート
-        return back()->with('success', "{$user->name} has been deactivated.");
+        // 投稿も論理削除
+        $user->posts()->delete(); // ←★これを追加！
+
+        // ユーザーをソフトデリート
+        $user->delete();
+
+        return back()->with('success', "{$user->name} has been deactivated along with their posts.");
     }
+
+
 
     public function activate($id)
     {
         $user = User::withTrashed()->findOrFail($id);
         $user->restore(); // ソフトデリート解除
+
+        // 関連する投稿も復元
+        $user->posts()->withTrashed()->restore();
         return back()->with('success', "{$user->name} has been reactivated.");
     }
 }

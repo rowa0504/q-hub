@@ -11,7 +11,7 @@ class User extends Authenticatable
 {
 
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable,SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes;
 
     const ADMIN_ROLE_ID = 1;  // administrator
     const USER_ROLE_ID = 2;   // the regular user
@@ -23,14 +23,16 @@ class User extends Authenticatable
     }
 
     // ユーザーが参加しているチャットルーム
-    public function chatRooms(){
+    public function chatRooms()
+    {
         return $this->belongsToMany(ChatRoom::class, 'chat_room_user')
-                    ->withPivot('joined_at', 'left_at')
-                    ->withTimestamps();
+            ->withPivot('joined_at', 'left_at')
+            ->withTimestamps();
     }
 
     // ユーザーが送信したメッセージ
-    public function chatMessages(){
+    public function chatMessages()
+    {
         return $this->hasMany(ChatMessage::class);
     }
 
@@ -71,4 +73,14 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Post::class, 'post_user_reports')->withTimestamps();
     }
+
+    protected static function booted()
+    {
+        static::deleting(function ($user) {
+            if (! $user->isForceDeleting()) {
+                $user->posts()->delete(); // ← 論理削除
+            }
+        });
+    }
+
 }
