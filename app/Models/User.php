@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable,SoftDeletes;
 
     const ADMIN_ROLE_ID = 1;  // administrator
     const USER_ROLE_ID = 2;   // the regular user
@@ -43,6 +45,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
         'enrollment_start_date',
         'enrollment_end_date',
         'graduation_status',

@@ -88,7 +88,7 @@
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="account-dropdown">
                                     @can('admin')
-                                        <a href="#" class="dropdown-item">
+                                        <a href="{{route('admin.dashboard')}}" class="dropdown-item">
                                             <i class="fa-solid fa-user-gear"></i> Admin
                                         </a>
                                         <hr class="dropdown-divider">
@@ -114,33 +114,57 @@
             </nav>
         @endif
 
-        <main class="py-5">
-            <div class="container">
-                <div class="row justify-content-center">
-                    @if (request()->is('admin/*'))
-                        <div class="col-3">
-                            <div class="list-group">
-                                <a href="#"
-                                    class="list-group-item {{ request()->is('admin/users') ? 'active' : '' }}">
-                                    <i class="fa-solid fa-users"></i> Users
+        <main class="py-0">
+            @if (request()->is('admin/*'))
+                {{-- 管理画面レイアウト --}}
+                <div class="d-flex">
+                    {{-- サイドバー --}}
+                    <div class="bg-dark text-white p-3" style="width: 250px; height: 100vh;">
+                        <h5 class="mb-4">QHub Admin</h5>
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link text-white {{ request()->is('admin/dashboard') ? 'fw-bold' : '' }}" href="{{ route('admin.dashboard') }}">
+                                    <i class="fa-solid fa-chart-line me-2"></i> Dashboard
                                 </a>
-                                <a href="#"
-                                    class="list-group-item {{ request()->is('admin/posts') ? 'active' : '' }}">
-                                    <i class="fa-solid fa-newspaper"></i> Posts
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white {{ request()->is('admin/users') ? 'fw-bold' : '' }}" href="{{ route('admin.users') }}">
+                                    <i class="fa-solid fa-users me-2"></i> Users
                                 </a>
-                                <a href="#"
-                                    class="list-group-item {{ request()->is('admin/foods') ? 'active' : '' }}">
-                                    <i class="fa-solid fa-utensils"></i> foods
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white {{ request()->is('admin/posts') ? 'fw-bold' : '' }}" href="#">
+                                    <i class="fa-solid fa-newspaper me-2"></i> Posts
                                 </a>
-                            </div>
-                        </div>
-                    @endif
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white {{ request()->is('admin/categories') ? 'fw-bold' : '' }}" href="#">
+                                    <i class="fa-solid fa-tags me-2"></i> Categories
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
 
-                    <div class="{{ request()->is('admin/*') ? 'col-9' : 'col-12' }}">
+                    {{-- メインコンテンツ --}}
+                    <div class="flex-grow-1 p-4" style="background-color: #f8f9fa; min-height: 100vh;">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2 class="fw-bold">@yield('title', 'Admin Dashboard')</h2>
+                            <a href="{{ route('logout') }}"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                               class="btn btn-outline-danger btn-sm">Logout</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
+                        </div>
+
+                        {{-- 管理画面の中身 --}}
                         @yield('content')
                     </div>
                 </div>
-            </div>
+            @else
+                {{-- 通常画面 --}}
+                <div class="container py-4">
+                    @yield('content')
+                </div>
+            @endif
         </main>
     </div>
     {{-- スマホ用ハンバーガー --}}
@@ -151,7 +175,7 @@
     {{-- スマホ用オーバーレイ（背景を暗くする） --}}
     <div id="sidebarOverlay" class="sidebar-overlay d-md-none" onclick="toggleSidebar()"></div>
 
-    {{-- スマホ用サイドバー --}}
+    {{-- スマホ用サイドバー --}}<a href="#">
     <div class="sidebar-mobile d-md-none" id="mobileSidebar">
         <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
             <a class="navbar-brand" href="{{ url('/') }}">
