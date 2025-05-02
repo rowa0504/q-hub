@@ -27,10 +27,19 @@ document.addEventListener('DOMContentLoaded', function () {
             calendar = new Calendar(calendarEl, {
                 plugins: [dayGridPlugin, interactionPlugin],
                 initialView: 'dayGridMonth',
+                selectable: true,//日付をマウスで選択できるかどうか
                 events: '/api/events',
                 dateClick: function(info) {
                     openPostForm(info.dateStr); // フォームモーダルを表示
-                }
+                },
+
+                eventClick: function(info) {
+                    let projectId = info.event.id;
+                    if (projectId) {
+                        window.location.href = `/event/${projectId}/show`; // 先頭にスラッシュを追加
+                    }
+                    info.jsEvent.preventDefault();
+                },
             });
 
             calendar.render();
