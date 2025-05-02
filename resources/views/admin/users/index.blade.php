@@ -1,115 +1,100 @@
 @extends('layouts.app')
 
-@section('title', 'Admin:Users')
-
-{{-- ▼▼▼ テストデータ（Blade内に直接定義） ▼▼▼ --}}
-@php
-    $all_users = [
-        (object)[
-            'id' => 1,
-            'avatar' => null,
-            'name' => 'Alice Johnson',
-            'role' => 'Admin',
-            'created_at' => now()->subDays(1),
-            'is_active' => true,
-        ],
-        (object)[
-            'id' => 2,
-            'avatar' => null,
-            'name' => 'Bob Smith',
-            'role' => 'Editor',
-            'created_at' => now()->subDays(2),
-            'is_active' => false,
-        ],
-        (object)[
-            'id' => 3,
-            'avatar' => null,
-            'name' => 'Charlie Brown',
-            'role' => 'Viewer',
-            'created_at' => now()->subDays(3),
-            'is_active' => true,
-        ],
-    ];
-@endphp
+@section('title', 'Admin: Users')
 
 @section('content')
 <div class="container">
-    <!-- ヘッダーと検索機能 -->
-    <div class="d-flex justify-content-between align-items-center bg-secondary text-white p-3 rounded-top">
-        <h2>User lists</h2>
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center bg-dark text-white p-3 rounded-top">
+        <h4 class="mb-0"><i class="fa-solid fa-users"></i> User Management</h4>
     </div>
 
-    <!-- ユーザーテーブル（テストデータをweb.phpに入れてます） -->
-    <div class="bg-light p-3 border rounded-bottom">
-        <table class="table table-hover align-middle bg-white border text-secondary">
-            <thead class="small bg-info text-white">
+    <!-- User Table -->
+    <div class="bg-white p-3 border rounded-bottom table-responsive">
+        <table class="table table-hover align-middle text-secondary">
+            <thead class="table-info text-dark">
                 <tr>
-                    <th>ID</th>
+                    <th>#ID</th>
                     <th>Avatar</th>
                     <th>Name</th>
+                    <th>Email</th>
                     <th>Role</th>
-                    <th>Created at</th>
+                    <th>Created At</th>
                     <th>Status</th>
+                    <th>Action</th> {{-- ★ ここ追加 --}}
                 </tr>
             </thead>
             <tbody>
-                @if (!empty($all_users))
-                @foreach ($all_users as $user)
+                @forelse ($all_users as $user)
                     <tr>
                         <td>{{ $user->id }}</td>
-                        <td>
+                        <td class="text-center">
                             @if ($user->avatar)
-                                <img src="{{ $user->avatar }}" alt="{{ $user->name }}"
-                                    class="img-thumbnail rounded-circle d-block mx-auto avatar-sm">
+                                <img src="{{ $user->avatar }}" alt="{{ $user->name }}" class="rounded-circle" width="40" height="40">
                             @else
-                                <i class="fa-solid fa-circle-user text-secondary d-block text-center icon-sm"></i>
+                                <i class="fa-solid fa-circle-user fa-2x text-muted"></i>
                             @endif
                         </td>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->role }}</td>
-                        <td>{{ $user->created_at }}</td>
                         <td>
-                            @if (!$user->is_active)
-                                <i class="fa-solid fa-circle text-secondary"></i> &nbsp;Inactive
+                            <a href="{{ route('profile.show', $user->id) }}" class="text-decoration-none text-dark">
+                                {{ $user->name }}
+                            </a>
+                        </td>
+                        <td>{{ $user->email }}</td>
+                        <td>
+                            @if ($user->role_id == \App\Models\User::ADMIN_ROLE_ID)
+                                <span class="badge bg-danger">Admin</span>
                             @else
-                                <i class="fa-solid fa-circle text-success"></i> &nbsp;Active
+                                <span class="badge bg-secondary">User</span>
+                            @endif
+                        </td>
+                        <td>{{ $user->created_at->format('Y-m-d') }}</td>
+                        <td>
+                            @if ($user->trashed())
+                                <span class="text-muted"><i class="fa-solid fa-circle"></i> Inactive</span>
+                            @else
+                                <span class="text-success"><i class="fa-solid fa-circle"></i> Active</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if ($user->role_id !== \App\Models\User::ADMIN_ROLE_ID)
+                                @if ($user->trashed())
+                                    {{-- Activate --}}
+                                    <form action="{{ route('admin.users.activate', ['user' => $user->id]) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="btn btn-success btn-sm">
+                                            <i class="fa-solid fa-user-check"></i> Activate
+                                        </button>
+                                    </form>
+                                @else
+                                    {{-- Deactivate --}}
+                                    <form action="{{ route('admin.users.deactivate', ['user' => $user->id]) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="fa-solid fa-user-slash"></i> Deactivate
+                                        </button>
+                                    </form>
+                                @endif
+                            @else
+                                <span class="text-muted small">Admin actions disabled</span>
                             @endif
                         </td>
                     </tr>
-                @endforeach
-                @endif
+                @empty
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">No users found.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
-    </div>
 
-    <!-- ページネーションまだ仮です -->
-    <div class="d-flex justify-content-center mt-3">
-        <nav>
-            <ul class="pagination">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">&laquo;</a>
-                </li>
-                <li class="page-item active">
-                    <a class="page-link" href="#">1</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">2</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">...</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">9</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">10</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">&raquo;</a>
-                </li>
-            </ul>
-        </nav>
+        <!-- Pagination -->
+        <div class="d-flex justify-content-center">
+            {{ $all_users->links() }}
+        </div>
     </div>
 </div>
 @endsection
-

@@ -4,11 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
 
 
 class Post extends Model
 {
+
+    use SoftDeletes;
     public function user()
     {
         return $this->belongsTo(User::class);
