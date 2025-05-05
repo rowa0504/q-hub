@@ -16,17 +16,19 @@
                 <i class="fa-solid fa-tag"></i>
                 <span class="ms-1 text-muted">{{ $post->category->name }}</span>
             </div>
+            {{-- 編集＆削除 --}}
             <i class="fas fa-ellipsis-h" style="cursor:pointer;" data-bs-toggle="dropdown"></i>
             <ul class="dropdown-menu dropdown-menu-end">
                 @if (Auth::id() === $post->user_id)
-                    <li><a class="dropdown-item text-danger" data-bs-toggle="modal"
-                            data-bs-target="#deleteModal-{{ $post->id }}">
-                            <i class="fa-solid fa-trash"></i> Delete</a></li>
                     <li>
                         <button class="dropdown-item text-warning btn-edit" data-id="{{ $post->id }}"
                             data-bs-toggle="modal" data-bs-target="#edit-form-{{ $post->id }}">
                             <i class="fa-solid fa-pen-to-square"></i> Edit
                         </button>
+                    <li>
+                        <a class="dropdown-item text-danger" data-bs-toggle="modal"
+                            data-bs-target="#deleteModal-{{ $post->id }}">
+                            <i class="fa-solid fa-trash"></i> Delete</a>
                     </li>
                 @else
                     <li><a class="dropdown-item text-danger" data-bs-toggle="modal"
@@ -89,7 +91,7 @@
 
         {{-- カテゴリ別情報 --}}
         @switch($post->category_id)
-        {{-- event --}}
+            {{-- event --}}
             @case(1)
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Event: {{ $post->title ?? 'TBD' }}</p>
@@ -157,7 +159,7 @@
             @break
 
             @case(2)
-            {{-- food --}}
+                {{-- food --}}
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
                     <p>
@@ -170,7 +172,7 @@
             @break
 
             @case(3)
-            {{-- item --}}
+                {{-- item --}}
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Item name: {{ $post->title ?? 'TBD' }}</p>
                     <p class="mb-1">Max participants: {{ $post->max ?? 'TBD' }}</p>
@@ -179,20 +181,20 @@
             @break
 
             @case(4)
-            {{-- travel --}}
-            <div class="mt-2 fw-bold">
-                <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
-                <p>
-                    <a href="https://www.google.com/maps?q={{ $post->latitude }},{{ $post->longitude }}" target="_blank">
-                        <i class="fa-solid fa-location-dot"></i>
-                        {{ $post->location ?? 'TBD' }}
-                    </a>
-                </p>
-            </div>
+                {{-- travel --}}
+                <div class="mt-2 fw-bold">
+                    <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
+                    <p>
+                        <a href="https://www.google.com/maps?q={{ $post->latitude }},{{ $post->longitude }}" target="_blank">
+                            <i class="fa-solid fa-location-dot"></i>
+                            {{ $post->location ?? 'TBD' }}
+                        </a>
+                    </p>
+                </div>
             @break
 
             @case(5)
-            {{-- transportation --}}
+                {{-- transportation --}}
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
                     <p class="mb-1">Transportation: {{ $post->transCategory->name ?? 'TBD' }}</p>
@@ -203,7 +205,7 @@
             @break
 
             @case(6)
-            {{-- question --}}
+                {{-- question --}}
                 <div class="mt-2 fw-bold">
                     <p>Question: {{ $post->title ?? 'TBD' }}</p>
                 </div>
