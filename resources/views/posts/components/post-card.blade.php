@@ -20,9 +20,6 @@
 
             <ul class="dropdown-menu dropdown-menu-end">
                 @if (Auth::id() === $post->user_id)
-                    <li><a class="dropdown-item text-danger" data-bs-toggle="modal"
-                            data-bs-target="#deleteModal-{{ $post->id }}">
-                            <i class="fa-solid fa-trash"></i> Delete</a></li>
                     <li>
                         <button class="dropdown-item text-warning btn-edit" data-id="{{ $post->id }}"
                             data-bs-toggle="modal" data-bs-target="#edit-form-{{ $post->id }}">
