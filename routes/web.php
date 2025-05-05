@@ -90,7 +90,8 @@ Route::group(['middleware' => 'auth'], function () {
     // Item route
     Route::group(['prefix' => 'item', 'as' => 'item.'], function () {
         Route::get('/', [ItemController::class, 'index'])->name('index');
-        Route::get('/{id}', [ItemController::class, 'show'])->name('show');
+        // Route::get('/{id}', [ItemController::class, 'show'])->name('show');
+        Route::get('/search', [ItemController::class, 'search'])->name('search');
     });
 
     // Chatroom route
