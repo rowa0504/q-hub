@@ -35,8 +35,14 @@
         <div class="mb-3">
             <input type="text" id="food-location-{{ $post->id }}" name="location" class="form-control"
                 placeholder="Enter a location...">
-            <input type="hidden" id="latitude-2" name="latitude">
-            <input type="hidden" id="longitude-2" name="longitude">
+            <input type="hidden" id="latitude-{{ $post->id }}" name="latitude">
+            <input type="hidden" id="longitude-{{ $post->id }}" name="longitude">
+            @error('latitude')
+                <p class="text-danger small">{{ $message }}</p>
+            @enderror
+            @error('longitude')
+                <p class="text-danger small">{{ $message }}</p>
+            @enderror
             @error('location')
                 <p class="text-danger small">{{ $message }}</p>
             @enderror
@@ -59,6 +65,11 @@
         <input type="hidden" name="category_id" value="2">
     </div>
 </form>
+
+<!-- Google Maps JavaScript API -->
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFMuLHnV2h0BxRv9qXGV22-Z5rG3jG9Mc&libraries=places&callback=initAutocomplete">
+</script>
 
 <script>
     document.getElementById('food-imageInput-{{ $post->id }}').addEventListener('change', function(e) {
@@ -91,6 +102,38 @@
                 $('#food-imagePreview-{{ $post->id }}').attr('src',
                     'https://via.placeholder.com/300x200');
             }
+        });
+    });
+
+    // 投稿ごとにGoogle Autocompleteを初期化
+    function initAutocomplete(postId) {
+        const input = document.getElementById(`food-location-${postId}`);
+        if (!input) return;
+
+        const autocomplete = new google.maps.places.Autocomplete(input, {
+            types: ['geocode'],
+            componentRestrictions: {
+                country: 'ph'
+            }
+        });
+
+        autocomplete.addListener('place_changed', function() {
+            const place = autocomplete.getPlace();
+            if (!place.geometry) return;
+            document.getElementById(`latitude-${postId}`).value = place.geometry.location.lat();
+            document.getElementById(`longitude-${postId}`).value = place.geometry.location.lng();
+        });
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        $('.btn-edit').on('click', function() {
+            const postId = $(this).data('id');
+
+            // モーダルの表示を監視（実際のIDに合わせる）
+            $(`#edit-form-${postId}`).on('shown.bs.modal', function() {
+                initAutocomplete(postId);
+            });
         });
     });
 </script>

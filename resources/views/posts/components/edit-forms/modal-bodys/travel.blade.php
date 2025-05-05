@@ -9,12 +9,14 @@
     <div class="modal-body">
         <!-- Image preview -->
         <div class="mb-3 text-center">
-            <img id="travel-imagePreview-{{ $post->id }}" src="https://via.placeholder.com/300x200" alt="Image Preview" class="img-fluid rounded">
+            <img id="travel-imagePreview-{{ $post->id }}" src="https://via.placeholder.com/300x200"
+                alt="Image Preview" class="img-fluid rounded">
         </div>
 
         <!-- File input -->
         <div class="mb-3">
-            <input class="form-control" type="file" name="image" id="travel-imageInput-{{ $post->id }}" accept="image/*">
+            <input class="form-control" type="file" name="image" id="travel-imageInput-{{ $post->id }}"
+                accept="image/*">
             @error('image')
                 <p class="text-danger small">{{ $message }}</p>
             @enderror
@@ -22,7 +24,8 @@
 
         <!-- Title input -->
         <div class="mb-3">
-            <input type="text" class="form-control" name="title" id="travel-title-{{ $post->id }}" placeholder="Enter your post title...">
+            <input type="text" class="form-control" name="title" id="travel-title-{{ $post->id }}"
+                placeholder="Enter your post title...">
             @error('title')
                 <p class="text-danger small">{{ $message }}</p>
             @enderror
@@ -30,7 +33,16 @@
 
         <!-- Location input -->
         <div class="mb-3">
-            <input type="text" class="form-control" name="location" id="travel-location-{{ $post->id }}" placeholder="location">
+            <input type="text" class="form-control" name="location" id="travel-location-{{ $post->id }}"
+                placeholder="location">
+            <input type="hidden" id="latitude-4" name="latitude">
+            <input type="hidden" id="longitude-4" name="longitude">
+            @error('latitude')
+                <p class="text-danger small">{{ $message }}</p>
+            @enderror
+            @error('longitude')
+                <p class="text-danger small">{{ $message }}</p>
+            @enderror
             @error('location')
                 <p class="text-danger small">{{ $message }}</p>
             @enderror
@@ -38,15 +50,15 @@
 
         <!-- Description input -->
         <div class="mb-3">
-            <textarea class="form-control" name="description" id="travel-description-{{ $post->id }}" placeholder="Enter your post description..." rows="3"></textarea>
+            <textarea class="form-control" name="description" id="travel-description-{{ $post->id }}"
+                placeholder="Enter your post description..." rows="3"></textarea>
             @error('description')
                 <p class="text-danger small">{{ $message }}</p>
             @enderror
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-warning"
-            data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">Cancel</button>
         <button type="submit" class="btn btn-warning text-white">Edit</button>
 
         <input type="hidden" name="category_id" value="4">
@@ -59,18 +71,19 @@
         if (file) {
             const reader = new FileReader();
             reader.onload = function(event) {
-                document.getElementById('travel-imagePreview-{{ $post->id }}').src = event.target.result;
+                document.getElementById('travel-imagePreview-{{ $post->id }}').src = event.target
+                    .result;
             };
             reader.readAsDataURL(file);
         }
     });
 
-    $('.btn-edit').on('click', function () {
+    $('.btn-edit').on('click', function() {
         const postId = $(this).data('id');
         const categoryId = $(this).data('category-id');
 
         // サーバーから投稿データを取得
-        $.get(`/posts/${postId}/edit`, function (data) {
+        $.get(`/posts/${postId}/edit`, function(data) {
 
             // フォームへのデータの流し込み
             $('#travel-title-{{ $post->id }}').val(data.title || '');
@@ -81,9 +94,41 @@
             if (data.image && data.image.startsWith('data:image')) {
                 $('#travel-imagePreview-{{ $post->id }}').attr('src', data.image);
             } else {
-                $('#travel-imagePreview-{{ $post->id }}').attr('src', 'https://via.placeholder.com/300x200');
+                $('#travel-imagePreview-{{ $post->id }}').attr('src',
+                    'https://via.placeholder.com/300x200');
             }
         });
     });
 
+    // Google Maps Autocomplete 初期化（Travel Post用）
+    function initAutocomplete4() {
+        const input = document.getElementById('travel-location-{{ $post->id }}');
+        if (!input) return;
+
+        const autocomplete = new google.maps.places.Autocomplete(input, {
+            types: ['geocode'],
+            componentRestrictions: {
+                country: 'ph'
+            }
+        });
+
+        autocomplete.addListener('place_changed', function() {
+            const place = autocomplete.getPlace();
+            if (!place.geometry) return;
+
+            document.getElementById('latitude-4').value = place.geometry.location.lat();
+            document.getElementById('longitude-4').value = place.geometry.location.lng();
+        });
+    }
+
+    // モーダル表示時に初期化
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('post-form-4');
+
+        if (modal) {
+            modal.addEventListener('shown.bs.modal', function() {
+                initAutocomplete4();
+            });
+        }
+    });
 </script>
