@@ -55,7 +55,7 @@
             </p>
 
             @if (strlen($post->description) > 100)
-                <button class="btn btn-link p-0" @click = "!expanded">
+                <button class="btn btn-link p-0" @click="expanded = !expanded">
                     <span x-text="expanded ? 'Read less' : 'Read more'"></span>
                 </button>
             @endif
