@@ -16,19 +16,17 @@
                 <i class="fa-solid fa-tag"></i>
                 <span class="ms-1 text-muted">{{ $post->category->name }}</span>
             </div>
-            {{-- 編集＆削除 --}}
             <i class="fas fa-ellipsis-h" style="cursor:pointer;" data-bs-toggle="dropdown"></i>
             <ul class="dropdown-menu dropdown-menu-end">
                 @if (Auth::id() === $post->user_id)
+                    <li><a class="dropdown-item text-danger" data-bs-toggle="modal"
+                            data-bs-target="#deleteModal-{{ $post->id }}">
+                            <i class="fa-solid fa-trash"></i> Delete</a></li>
                     <li>
                         <button class="dropdown-item text-warning btn-edit" data-id="{{ $post->id }}"
                             data-bs-toggle="modal" data-bs-target="#edit-form-{{ $post->id }}">
                             <i class="fa-solid fa-pen-to-square"></i> Edit
                         </button>
-                    <li>
-                        <a class="dropdown-item text-danger" data-bs-toggle="modal"
-                            data-bs-target="#deleteModal-{{ $post->id }}">
-                            <i class="fa-solid fa-trash"></i> Delete</a>
                     </li>
                 @else
                     <li><a class="dropdown-item text-danger" data-bs-toggle="modal"
@@ -91,7 +89,6 @@
 
         {{-- カテゴリ別情報 --}}
         @switch($post->category_id)
-            {{-- event --}}
             @case(1)
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Event: {{ $post->title ?? 'TBD' }}</p>
@@ -159,42 +156,40 @@
             @break
 
             @case(2)
-                {{-- food --}}
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
-                    <p>
-                        <a href="https://www.google.com/maps?q={{ $post->latitude }},{{ $post->longitude }}" target="_blank">
-                            <i class="fa-solid fa-location-dot"></i>
-                            {{ $post->location ?? 'TBD' }}
-                        </a>
+                    <p class="mb-1 text-muted small">Location: {{ $post->location ?? 'TBD' }}
+                        <i class="fa-solid fa-location-dot"></i>
                     </p>
                 </div>
             @break
 
             @case(3)
-                {{-- item --}}
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Item name: {{ $post->title ?? 'TBD' }}</p>
                     <p class="mb-1">Max participants: {{ $post->max ?? 'TBD' }}</p>
+                    <a href="{{ route('chatRoom.start', $post->id) }}">
+                        <i class="fa-brands fa-rocketchat"></i>
+                    </a>
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                     <p class="mb-1 text-muted small">Max participants: {{ $post->max ?? 'TBD' }}</p>
                 </div>
             @break
 
             @case(4)
-                {{-- travel --}}
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
-                    <p>
-                        <a href="https://www.google.com/maps?q={{ $post->latitude }},{{ $post->longitude }}" target="_blank">
-                            <i class="fa-solid fa-location-dot"></i>
-                            {{ $post->location ?? 'TBD' }}
-                        </a>
+                    <p class="mb-1 text-muted small">Location: {{ $post->location ?? 'TBD' }}
+                        <i class="fa-solid fa-location-dot"></i>
                     </p>
                 </div>
             @break
 
             @case(5)
-                {{-- transportation --}}
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
                     <p class="mb-1">Transportation: {{ $post->transCategory->name ?? 'TBD' }}</p>
@@ -205,7 +200,6 @@
             @break
 
             @case(6)
-                {{-- question --}}
                 <div class="mt-2 fw-bold">
                     <p>Question: {{ $post->title ?? 'TBD' }}</p>
                 </div>
