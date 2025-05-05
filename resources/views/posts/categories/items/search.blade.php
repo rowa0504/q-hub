@@ -14,10 +14,11 @@
                     <i class="fas fa-search"></i>
                 </button>
             </form>
-            @forelse($all_posts as $post)
+            <p class="h5 text-muted mb-4">Search results for "<span class="fw-bold">{{ $search }}</span>"</p>
+            @forelse($posts as $post)
                 @include('posts.components.post-card', ['post' => $post])
             @empty
-                <p>No posts available.</p>
+                <p>No items found.</p>
             @endforelse
         </div>
         <div class="col-md-3 d-none d-md-block ps-md-4">
