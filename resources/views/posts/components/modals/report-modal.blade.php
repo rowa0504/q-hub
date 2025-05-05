@@ -7,7 +7,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <form action="#" method="POST">
+            <form action="{{ route('report.store', $post->id) }}" method="POST">
                 @csrf
                 <div class="modal-body text-start">
                     @foreach($all_report_reasons as $report_reason )
