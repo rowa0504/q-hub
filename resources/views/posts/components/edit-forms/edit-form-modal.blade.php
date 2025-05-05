@@ -18,7 +18,9 @@ aria-hidden="true">
             @elseif ($post->category_id == 7)
                 @include('posts.components.edit-forms.modal-bodys.other', ['post' => $post])
             @endif
-
         </div>
     </div>
 </div>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFMuLHnV2h0BxRv9qXGV22-Z5rG3jG9Mc&libraries=places&callback=initAutocomplete">
+</script>
