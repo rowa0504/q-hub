@@ -55,6 +55,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'answer', 'as' => 'answer.'], function () {
         Route::post('/store', [AnswerController::class, 'store'])->name('store');
         Route::post('/{answer}/best', [AnswerController::class, 'markBest'])->name('best');
+        Route::patch('/answers/{id}', [AnswerController::class, 'update'])->name('update');
+        Route::delete('/answers/{id}', [AnswerController::class, 'destroy'])->name('destroy');
+
     });
 
 
@@ -153,13 +156,5 @@ Route::group(['middleware' => 'auth'], function () {
 
     });
 
-
-    //////////////////江上専用テストルートは下です////////////////////////////////////////////////////////////////////////
-
-    Route::post('/answers/{answer}/best', function () {
-        return back();
-    })->name('answers.best');
-
-    //////////////////////////////江上専用テストデータはここまでです///////////////////////////////////////////
 
 });

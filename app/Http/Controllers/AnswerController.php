@@ -30,17 +30,56 @@ class AnswerController extends Controller
     {
         $post = $answer->post;
 
-        // 投稿者だけがベストアンサーを選べる
         if (Auth::id() !== $post->user_id) {
             return back()->with('error', 'You are not authorized to select the best answer.');
         }
 
-        // ★ 前のベストアンサーがあっても、常に更新！
-        $post->best_answer_id = $answer->id;
+        // ★ すでにベストアンサーの場合は解除、それ以外はセット
+        if ($post->best_answer_id === $answer->id) {
+            $post->best_answer_id = null;
+        } else {
+            $post->best_answer_id = $answer->id;
+        }
+
         $post->save();
 
+        return back()->with('success', 'Best answer updated!')
+                     ->with('open_answer_post_id', $post->id);
+    }
+
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'body' => 'required|string|max:1000',
+        ]);
+
+        $answer = Answer::findOrFail($id);
+
+        if (Auth::id() !== $answer->user_id) {
+            return back()->with('error', 'Unauthorized action.');
+        }
+
+        $answer->body = $request->body;
+        $answer->save();
+
         return back()
-            ->with('success', 'Best answer updated!')
-            ->with('open_answer_post_id', $post->id); // 開いたままにするために
+            ->with('success', 'Answer updated successfully!')
+            ->with('open_answer_post_id', $answer->post_id);
+    }
+
+    public function destroy($id)
+    {
+        $answer = Answer::findOrFail($id);
+
+        if (Auth::id() !== $answer->user_id) {
+            return back()->with('error', 'Unauthorized action.');
+        }
+
+        $answer->delete();
+
+        return back()
+            ->with('success', 'Answer deleted successfully.')
+            ->with('open_answer_post_id', $answer->post_id);
     }
 }
