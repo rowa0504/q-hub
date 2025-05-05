@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ReportReason extends Model
 {
-    public function reports(){
-        return $this->hasMany(Report::class);
+    public function reportReasonReport(){
+        return $this->hasMany(reportReasonReport::class);
     }
 }
