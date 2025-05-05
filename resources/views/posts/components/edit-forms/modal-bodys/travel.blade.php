@@ -1,7 +1,8 @@
 <div class="modal-header">
-    <h5 class="modal-title" id="otherPostModalLabel">Edit Travel Post</h5>
+    <h5 class="modal-title" id="travelPostModalLabel">Edit Travel Post</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
+
 <form action="{{ route('posts.update', $post->id) }}" method="post" enctype="multipart/form-data">
     @csrf
     @method('PATCH')
@@ -34,16 +35,16 @@
         <!-- Location input -->
         <div class="mb-3">
             <input type="text" class="form-control" name="location" id="travel-location-{{ $post->id }}"
-                placeholder="location">
-            <input type="hidden" id="latitude-4" name="latitude">
-            <input type="hidden" id="longitude-4" name="longitude">
+                placeholder="Enter a location...">
+            <input type="hidden" id="latitude-{{ $post->id }}" name="latitude">
+            <input type="hidden" id="longitude-{{ $post->id }}" name="longitude">
+            @error('location')
+                <p class="text-danger small">{{ $message }}</p>
+            @enderror
             @error('latitude')
                 <p class="text-danger small">{{ $message }}</p>
             @enderror
             @error('longitude')
-                <p class="text-danger small">{{ $message }}</p>
-            @enderror
-            @error('location')
                 <p class="text-danger small">{{ $message }}</p>
             @enderror
         </div>
@@ -57,77 +58,68 @@
             @enderror
         </div>
     </div>
+
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">Cancel</button>
         <button type="submit" class="btn btn-warning text-white">Edit</button>
-
         <input type="hidden" name="category_id" value="4">
     </div>
 </form>
 
 <script>
+    // Image preview
     document.getElementById('travel-imageInput-{{ $post->id }}').addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = function(event) {
-                document.getElementById('travel-imagePreview-{{ $post->id }}').src = event.target
-                    .result;
+                document.getElementById('travel-imagePreview-{{ $post->id }}').src = event.target.result;
             };
             reader.readAsDataURL(file);
         }
     });
 
+    // Editボタンがクリックされたときの処理
     $('.btn-edit').on('click', function() {
         const postId = $(this).data('id');
-        const categoryId = $(this).data('category-id');
 
-        // サーバーから投稿データを取得
         $.get(`/posts/${postId}/edit`, function(data) {
+            $('#travel-title-' + postId).val(data.title || '');
+            $('#travel-location-' + postId).val(data.location || '');
+            $('#travel-description-' + postId).val(data.description || '');
 
-            // フォームへのデータの流し込み
-            $('#travel-title-{{ $post->id }}').val(data.title || '');
-            $('#travel-location-{{ $post->id }}').val(data.location || '');
-            $('#travel-description-{{ $post->id }}').val(data.description || '');
-
-            // 画像プレビュー（Base64データを使って表示）
             if (data.image && data.image.startsWith('data:image')) {
-                $('#travel-imagePreview-{{ $post->id }}').attr('src', data.image);
+                $('#travel-imagePreview-' + postId).attr('src', data.image);
             } else {
-                $('#travel-imagePreview-{{ $post->id }}').attr('src',
-                    'https://via.placeholder.com/300x200');
+                $('#travel-imagePreview-' + postId).attr('src', 'https://via.placeholder.com/300x200');
             }
         });
     });
 
-    // Google Maps Autocomplete 初期化（Travel Post用）
-    function initAutocomplete4() {
-        const input = document.getElementById('travel-location-{{ $post->id }}');
+    // Google Maps Autocomplete
+    function initAutocompleteTravel(postId) {
+        const input = document.getElementById('travel-location-' + postId);
         if (!input) return;
 
         const autocomplete = new google.maps.places.Autocomplete(input, {
             types: ['geocode'],
-            componentRestrictions: {
-                country: 'ph'
-            }
+            componentRestrictions: { country: 'ph' }
         });
 
         autocomplete.addListener('place_changed', function() {
             const place = autocomplete.getPlace();
             if (!place.geometry) return;
-
-            document.getElementById('latitude-4').value = place.geometry.location.lat();
-            document.getElementById('longitude-4').value = place.geometry.location.lng();
+            document.getElementById('latitude-' + postId).value = place.geometry.location.lat();
+            document.getElementById('longitude-' + postId).value = place.geometry.location.lng();
         });
     }
 
-    // モーダル表示時に初期化
+    // モーダルが表示されたときにGoogle Mapsオートコンプリート初期化
     document.addEventListener('DOMContentLoaded', function() {
-        const modal = document.getElementById('post-form-4');
-
+        const modal = document.getElementById('edit-form-{{ $post->id }}');
         if (modal) {
             modal.addEventListener('shown.bs.modal', function() {
-                initAutocomplete4();
+                initAutocompleteTravel('{{ $post->id }}');
             });
         }
     });

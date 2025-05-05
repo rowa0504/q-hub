@@ -137,6 +137,8 @@ class PostController extends Controller
         } elseif ($categoryId == 2 || $categoryId == 4) { // food,travel
             $extraRules = [
                 'location'  => 'required|string|max:50',
+                'latitude' => 'required|numeric',
+                'longitude' => 'required|numeric',
             ];
         } elseif ($categoryId == 5) { // item
             $extraRules = [
@@ -172,6 +174,8 @@ class PostController extends Controller
         }
 
         $post->location = $request->location;
+        $post->latitude = $request->latitude;
+        $post->longitude = $request->longitude;
         $post->departure = $request->departure;
         $post->destination = $request->destination;
         $post->fee = $request->fee;

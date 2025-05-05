@@ -66,11 +66,6 @@
     </div>
 </form>
 
-<!-- Google Maps JavaScript API -->
-<script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFMuLHnV2h0BxRv9qXGV22-Z5rG3jG9Mc&libraries=places&callback=initAutocomplete">
-</script>
-
 <script>
     document.getElementById('food-imageInput-{{ $post->id }}').addEventListener('change', function(e) {
         const file = e.target.files[0];
@@ -105,35 +100,32 @@
         });
     });
 
-    // 投稿ごとにGoogle Autocompleteを初期化
-    function initAutocomplete(postId) {
-        const input = document.getElementById(`food-location-${postId}`);
+    // Google Maps Autocomplete（Food用）
+    function initAutocomplete() {
+        const input = document.getElementById('food-location-{{ $post->id }}');
         if (!input) return;
 
         const autocomplete = new google.maps.places.Autocomplete(input, {
             types: ['geocode'],
-            componentRestrictions: {
-                country: 'ph'
-            }
+            componentRestrictions: { country: 'ph' }
         });
 
         autocomplete.addListener('place_changed', function() {
             const place = autocomplete.getPlace();
             if (!place.geometry) return;
-            document.getElementById(`latitude-${postId}`).value = place.geometry.location.lat();
-            document.getElementById(`longitude-${postId}`).value = place.geometry.location.lng();
+
+            document.getElementById('latitude-{{ $post->id }}').value = place.geometry.location.lat();
+            document.getElementById('longitude-{{ $post->id }}').value = place.geometry.location.lng();
         });
     }
 
-
+    // モーダル表示時にオートコンプリートを初期化
     document.addEventListener('DOMContentLoaded', function() {
-        $('.btn-edit').on('click', function() {
-            const postId = $(this).data('id');
-
-            // モーダルの表示を監視（実際のIDに合わせる）
-            $(`#edit-form-${postId}`).on('shown.bs.modal', function() {
-                initAutocomplete(postId);
+        const modal = document.getElementById('edit-form-{{ $post->id }}');
+        if (modal) {
+            modal.addEventListener('shown.bs.modal', function() {
+                initAutocomplete();
             });
-        });
+        }
     });
 </script>
