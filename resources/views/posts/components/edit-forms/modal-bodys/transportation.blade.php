@@ -30,7 +30,7 @@
 
         {{-- Fee input --}}
         <div class="mb-3">
-            <input type="number" class="form-control" name="fee" id="transportation-fee-{{ $post->id }}" placeholder="fee">
+            <input type="number" class="form-control" name="fee" id="transportation-fee-{{ $post->id }}" placeholder="fee (₱)" min="1" step="1">
             @error('fee')
                 <p class="text-danger small">{{ $message }}</p>
             @enderror

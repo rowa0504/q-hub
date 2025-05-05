@@ -35,7 +35,7 @@ aria-hidden="true">
 
                 {{-- Fee input --}}
                 <div class="mb-3">
-                    <input type="number" class="form-control" name="fee" id="fee" placeholder="fee" value="{{ old('fee') }}">
+                    <input type="number" class="form-control" name="fee" id="fee" value="{{ old('fee') }}" placeholder="fee (₱)" min="1" step="1">
                     @error('fee')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
