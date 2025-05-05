@@ -143,10 +143,14 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white {{ request()->is('admin/answers') ? 'fw-bold' : '' }}" href="{{ route('admin.answers')}}">
-                                    <i class="fa-solid fa-tags me-2"></i> Answers
+                                <a class="nav-link text-white {{ request()->is('admin/answers') ? 'fw-bold' : '' }}" href="{{ route('admin.answers') }}">
+                                    <i class="fa-solid fa-circle-question me-2"></i> Answers
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white {{ request()->is('admin/reports') ? 'fw-bold' : '' }}" href="#">
+                                    <i class="fa-solid fa-flag me-2"></i> Reports
+                                </a>
                         </ul>
                     </div>
 
