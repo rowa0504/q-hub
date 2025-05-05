@@ -6,31 +6,36 @@ use App\Models\User;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ReportReason;
 
 class ProfileController extends Controller
 {
     private $user;
+    private $reportReason;
 
-    public function __construct(User $user)
+    public function __construct(User $user,  ReportReason $reportReason)
     {
         $this->user = $user;
+        $this->reportReason = $reportReason;
     }
 
     public function index()
     {
+        $all_report_reasons = $this->reportReason->all();
         $user = Auth::user();
         $all_user = User::all();
         $all_posts = Post::where('user_id', Auth::id())->with('user')->latest()->get();
 
-        return view('users.profile.index', compact('user', 'all_posts', 'all_user'));
+        return view('users.profile.index', compact('user', 'all_posts', 'all_user', 'all_report_reasons'));
     }
 
     public function show($id)
     {
+        $all_report_reasons = $this->reportReason->all();
         $all_user = User::all();
         $user = $this->user->findOrFail($id);
         $all_posts = Post::where('user_id', $user->id)->with('user')->latest()->get();
-        return view('users.profile.index', compact('user', 'all_posts', 'all_user'));
+        return view('users.profile.index', compact('user', 'all_posts', 'all_user', 'all_report_reasons'));
     }
 
     public function edit()

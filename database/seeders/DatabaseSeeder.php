@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             AdminSeeder::class,
             UserSeeder::class,
-            TransCategorySeeder::class
+            TransCategorySeeder::class,
+            ReportReasonSeeder::class
         ]);
     }
 }
