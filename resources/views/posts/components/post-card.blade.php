@@ -55,7 +55,7 @@
             </p>
 
             @if (strlen($post->description) > 100)
-                <button class="btn btn-link p-0" @click="expanded = !expanded">
+                <button class="btn btn-link p-0" @click = "!expanded">
                     <span x-text="expanded ? 'Read less' : 'Read more'"></span>
                 </button>
             @endif
@@ -177,17 +177,11 @@
 
             @case(2)
                 <div class="mt-2 fw-bold">
-<<<<<<< HEAD
-                    <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
-                    <p class="mb-1 text-muted small">Location: {{ $post->location ?? 'TBD' }}
-                        <i class="fa-solid fa-location-dot"></i>
-=======
                     <p>
                         <a href="https://www.google.com/maps?q={{ $post->latitude }},{{ $post->longitude }}" target="_blank">
                             <i class="fa-solid fa-location-dot"></i>
                             {{ $post->location ?? 'TBD' }}
                         </a>
->>>>>>> c9ea3b91f79ddae6d1c8ae29f738d628cda0587c
                     </p>
                 </div>
             @break
