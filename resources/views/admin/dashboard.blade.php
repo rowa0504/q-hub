@@ -26,9 +26,9 @@
         <div class="col-md-4">
             <div class="card text-center shadow-sm">
                 <div class="card-body">
-                    <i class="fa-solid fa-tags fa-2x mb-2 text-primary"></i>
-                    <h5 class="card-title">Categories</h5>
-                    <p class="h4">{{ $category_count }}</p>
+                    <i class="fa-solid fa-comments fa-2x mb-2 text-primary"></i>
+                    <h5 class="card-title">Comments</h5>
+                    <p class="h4">{{ $comments_count }}</p>
                 </div>
             </div>
         </div>

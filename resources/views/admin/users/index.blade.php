@@ -92,7 +92,7 @@
         </table>
 
         <!-- Pagination -->
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center my-pagination">
             {{ $all_users->links() }}
         </div>
     </div>

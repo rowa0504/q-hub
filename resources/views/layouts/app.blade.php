@@ -133,13 +133,18 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white {{ request()->is('admin/posts') ? 'fw-bold' : '' }}" href="#">
+                                <a class="nav-link text-white {{ request()->is('admin/posts') ? 'fw-bold' : '' }}" href="{{ route('admin.posts')}}">
                                     <i class="fa-solid fa-newspaper me-2"></i> Posts
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white {{ request()->is('admin/categories') ? 'fw-bold' : '' }}" href="#">
-                                    <i class="fa-solid fa-tags me-2"></i> Categories
+                                <a class="nav-link text-white {{ request()->is('admin/coments') ? 'fw-bold' : '' }}" href="{{ route('admin.comments')}}">
+                                    <i class="fa-solid fa-tags me-2"></i> Comments
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white {{ request()->is('admin/answers') ? 'fw-bold' : '' }}" href="{{ route('admin.answers')}}">
+                                    <i class="fa-solid fa-tags me-2"></i> Answers
                                 </a>
                             </li>
                         </ul>

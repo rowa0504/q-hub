@@ -55,7 +55,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'answer', 'as' => 'answer.'], function () {
         Route::post('/store', [AnswerController::class, 'store'])->name('store');
         Route::post('/{answer}/best', [AnswerController::class, 'markBest'])->name('best');
-
     });
 
 
@@ -74,7 +73,7 @@ Route::group(['middleware' => 'auth'], function () {
         // Route::get('/{id}', [EventController::class, 'show'])->name('show');
     });
 
-    Route::group(['prefix' => 'participation','as' => 'participation.'], function(){
+    Route::group(['prefix' => 'participation', 'as' => 'participation.'], function () {
         Route::post('/{id}/store', [ParticipationController::class, 'store'])->name('store');
         Route::delete('/{id}/delete', [ParticipationController::class, 'delete'])->name('delete');
     });
@@ -128,15 +127,29 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Admin route
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
-        Route::get('/users', [AdminController::class, 'users'])->name('users');
-        Route::get('/foods', [AdminController::class, 'foods'])->name('foods');
-        Route::get('/events', [AdminController::class, 'events'])->name('events');
-        Route::get('/items', [AdminController::class, 'items'])->name('items');
-        Route::get('/travels', [AdminController::class, 'travels'])->name('travels');
-        Route::get('/transportations', [AdminController::class, 'transportations'])->name('transportations');
+
         Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+
+        // ユーザーの状態変更
+        Route::get('/users', [AdminController::class, 'users'])->name('users');
         Route::patch('/users/{user}/activate', [AdminController::class, 'activate'])->name('users.activate');
         Route::delete('/users/{user}/deactivate', [AdminController::class, 'deactivate'])->name('users.deactivate');
+
+        // 投稿の状態変更
+        Route::get('/posts', [AdminController::class, 'posts'])->name('posts');
+        Route::delete('/posts/{id}/deactivate', [AdminController::class, 'deactivatePost'])->name('posts.deactivate');
+        Route::patch('/posts/{id}/activate', [AdminController::class, 'activatePost'])->name('posts.activate');
+
+        // コメントの状態変更
+        Route::get('/comments', [AdminController::class, 'comments'])->name('comments');
+        Route::patch('/comments/{comment}/activate', [AdminController::class, 'activateComment'])->name('comments.activate');
+        Route::delete('/comments/{comment}/deactivate', [AdminController::class, 'deactivateComment'])->name('comments.deactivate');
+
+
+        Route::get('/answers', [AdminController::class, 'answers'])->name('answers');
+        Route::delete('/answers/{answer}/deactivate', [AdminController::class, 'deactivateAnswer'])->name('answers.deactivate');
+        Route::patch('/answers/{answer}/activate', [AdminController::class, 'activateAnswer'])->name('answers.activate');
+
     });
 
 
