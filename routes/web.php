@@ -127,29 +127,20 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     // Admin route
-    // Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
-    //     Route::get('/users', [AdminController::class, 'users'])->name('users');
-    //     Route::get('/foods', [AdminController::class, 'foods'])->name('foods');
-    //     Route::get('/events', [AdminController::class, 'events'])->name('events');
-    //     Route::get('/items', [AdminController::class, 'items'])->name('items');
-    //     Route::get('/travels', [AdminController::class, 'travels'])->name('travels');
-    //     Route::get('/transportations', [AdminController::class, 'transportations'])->name('transportations');
-    // });
+    Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+        Route::get('/users', [AdminController::class, 'users'])->name('users');
+        Route::get('/foods', [AdminController::class, 'foods'])->name('foods');
+        Route::get('/events', [AdminController::class, 'events'])->name('events');
+        Route::get('/items', [AdminController::class, 'items'])->name('items');
+        Route::get('/travels', [AdminController::class, 'travels'])->name('travels');
+        Route::get('/transportations', [AdminController::class, 'transportations'])->name('transportations');
+        Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+        Route::patch('/users/{user}/activate', [AdminController::class, 'activate'])->name('users.activate');
+        Route::delete('/users/{user}/deactivate', [AdminController::class, 'deactivate'])->name('users.deactivate');
+    });
 
 
     //////////////////江上専用テストルートは下です////////////////////////////////////////////////////////////////////////
-    Route::get('/admin/users', function () {
-        return view('admin.users.index');
-    });
-    Route::get('/admin/foods', function () {
-        return view('admin.foods.index');
-    });
-
-
-    //Profile//
-    Route::get('/profile/edit/{id}', function ($id) {
-        return view('users.profile.edit', ['id' => $id]);
-    });
 
     Route::post('/answers/{answer}/best', function () {
         return back();

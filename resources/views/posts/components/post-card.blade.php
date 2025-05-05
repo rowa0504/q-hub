@@ -1,14 +1,14 @@
 <div class="card w-100">
     {{-- 投稿ヘッダー --}}
     <div class="d-flex align-items-center border-bottom mb-2 p-2">
-        <a href="{{ route('profile.show', $post->user->id) }}">
-            @if ($post->user->avatar)
+        <a href="{{ route('profile.show', $post->user->id ?? '#') }}">
+            @if ($post->user && $post->user->avatar)
                 <img src="{{ $post->user->avatar }}" alt="{{ $post->user->name }}" class="rounded-circle avatar-sm">
             @else
                 <i class="fa-solid fa-circle-user text-secondary icon-sm"></i>
             @endif
         </a>
-        <strong class="mx-2">{{ $post->user->name }}</strong>
+        <strong class="mx-2">{{ $post->user->name ?? 'UNkNOWN user' }}</strong>
 
         <div class="ms-auto position-relative">
             {{-- カテゴリ --}}
@@ -70,31 +70,21 @@
             </div>
 
             {{-- コメント or アンサー --}}
-            <div class="me-3 d-flex align-items-center gap-3">
+            <div class="me-3 d-flex align-items-center">
                 @if ($post->category_id == 6)
                     <span onclick="toggleAnswer({{ $post->id }})" style="cursor:pointer;">
-                        <i class="fa-solid fa-2x fa-reply"></i>
+                        <i class="fa-solid fa-reply fa-lg"></i>
                     </span>
+                    <span class="ms-1">{{ $post->answers->count() }}</span>
                 @else
                     <span data-bs-toggle="modal" data-bs-target="#commentsModal-{{ $post->id }}"
                         style="cursor:pointer;">
-                        <i class="fa-regular fa-comment"></i>
+                        <i class="fa-regular fa-comment fa-lg"></i>
                     </span>
-                @endif
-                <span>{{ $post->comments->count() }}</span>
-
-                {{-- カテゴリーIDが3（item）の場合だけチャットアイコンを表示 --}}
-                @if ($post->category_id == 3)
-                    <a href="{{ route('chatRoom.start', $post->id) }}">
-                        <i class="fa-solid fa-comments text-end icon-sm"></i>
-                    </a>
-                    @if (session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
-                    @endif
+                    <span class="ms-1">{{ $post->comments->count() }}</span>
                 @endif
             </div>
+
         </div>
 
         {{-- カテゴリ別情報 --}}
@@ -258,38 +248,40 @@
                     {{-- アンサー一覧 --}}
                     <hr>
                     @foreach ($post->answers as $answer)
-                        <div class="d-flex mb-2">
-                            @if ($answer->user->avatar)
-                                <img src="{{ $answer->user->avatar }}" class="rounded-circle me-2" width="40"
-                                    height="40" alt="{{ $answer->user->name }}">
-                            @else
-                                <div class="rounded-circle bg-light d-flex justify-content-center align-items-center me-2"
-                                    style="width:40px;height:40px;">
-                                    <i class="fa-solid fa-circle-user fa-2x text-secondary"></i>
-                                </div>
-                            @endif
-                            <div>
-                                <strong>{{ $answer->user->name }}</strong>
-                                <p class="mb-1">{{ $answer->body }}</p>
+                        @if ($answer->user)
+                            <div class="d-flex mb-2">
+                                @if ($answer->user->avatar)
+                                    <img src="{{ $answer->user->avatar }}" class="rounded-circle me-2"
+                                        width="40" height="40" alt="{{ $answer->user->name }}">
+                                @else
+                                    <div class="rounded-circle bg-light d-flex justify-content-center align-items-center me-2"
+                                        style="width:40px;height:40px;">
+                                        <i class="fa-solid fa-circle-user fa-2x text-secondary"></i>
+                                    </div>
+                                @endif
+                                <div>
+                                    <strong>{{ $answer->user->name }}</strong>
+                                    <p class="mb-1">{{ $answer->body }}</p>
 
-                                {{-- ベストアンサー表示・ボタン --}}
-                                @if ($post->user_id === Auth::id())
-                                    {{-- 投稿者本人 --}}
-                                    @if ($post->best_answer_id === $answer->id)
+                                    {{-- ベストアンサー表示・ボタン --}}
+                                    @if ($post->user_id === Auth::id())
+                                        {{-- 投稿者本人 --}}
+                                        @if ($post->best_answer_id === $answer->id)
+                                            <span class="badge bg-success">Best Answer</span>
+                                        @endif
+                                        <form method="POST" action="{{ route('answer.best', $answer->id) }}"
+                                            class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-outline-success btn-sm mt-1">Mark as
+                                                Best</button>
+                                        </form>
+                                    @elseif ($post->best_answer_id === $answer->id)
+                                        {{-- 他人から見たときも表示 --}}
                                         <span class="badge bg-success">Best Answer</span>
                                     @endif
-                                    <form method="POST" action="{{ route('answer.best', $answer->id) }}"
-                                        class="d-inline">
-                                        @csrf
-                                        <button type="submit" class="btn btn-outline-success btn-sm mt-1">Mark as
-                                            Best</button>
-                                    </form>
-                                @elseif ($post->best_answer_id === $answer->id)
-                                    {{-- 他人から見たときも表示 --}}
-                                    <span class="badge bg-success">Best Answer</span>
-                                @endif
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     @endforeach
                 </div>
             </div>
