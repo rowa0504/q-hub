@@ -7,26 +7,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <form action="#" method="POST">
+            <form action="{{ route('report.store', $post->id) }}" method="POST">
                 @csrf
                 <div class="modal-body text-start">
+                    @foreach($all_report_reasons as $report_reason )
                     <div class="form-check mb-2">
-                        <input class="form-check-input me-3" type="checkbox" name="reasons[]" value="Hate Speech or Symbols" id="reason1">
-                        <label class="form-check-label" for="reason1">Hate Speech or Symbols</label>
+                        <input class="form-check-input me-3" type="checkbox" name="reason[]" value="{{ $report_reason->id }}" id="{{ $report_reason->name }}">
+                        <label class="form-check-label" for="{{ $report_reason->name }}">{{ $report_reason->name }}</label>
                     </div>
-                    <div class="form-check mb-2">
-                        <input class="form-check-input me-3" type="checkbox" name="reasons[]" value="Nudity or Sexual Content" id="reason2">
-                        <label class="form-check-label" for="reason2">Nudity or Sexual Content</label>
-                    </div>
-                    <div class="form-check mb-2">
-                        <input class="form-check-input me-3" type="checkbox" name="reasons[]" value="Violence or Dangerous" id="reason3">
-                        <label class="form-check-label" for="reason3">Violence or Dangerous</label>
-                    </div>
-                    <div class="form-check mb-3">
-                        <input class="form-check-input me-3" type="checkbox" name="reasons[]" value="Scams or Fraud" id="reason4">
-                        <label class="form-check-label" for="reason4">Scams or Fraud</label>
-                    </div>
+                    @error('reason')
+                        <p class="text-danger small">{{ $message }}</p>
+                    @enderror
+                    @endforeach
                 </div>
+
 
                 <div class="modal-footer border-0 d-flex justify-content-center">
                     <span class="text-muted text-start">* You can choose multiple options</span>

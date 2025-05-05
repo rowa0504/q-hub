@@ -122,8 +122,9 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     // Report route
-    Route::post('/posts/{id}/report', [ReportController::class, 'store'])->name('posts.report');
-
+    Route::group(['prefix' => 'report', 'as' => 'report.'], function () {
+        Route::post('/{id}/store', [ReportController::class, 'store'])->name('store');
+    });
 
     // Admin route
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
