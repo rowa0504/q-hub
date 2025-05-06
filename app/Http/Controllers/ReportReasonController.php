@@ -11,7 +11,9 @@ class ReportReasonController extends Controller
     public function __construct(ReportReason $reportReason)
     {
         $this->reportReason = $reportReason;
-    } 
+    }
+
+    
 }
 
 

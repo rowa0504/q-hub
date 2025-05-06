@@ -1,0 +1,103 @@
+@extends('layouts.app')
+
+@section('title', 'Admin: Reports')
+
+@section('content')
+<div class="container">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center bg-dark text-white p-3 rounded-top">
+        <h4 class="mb-0"><i class="fa-solid fa-flag"></i> Report Management</h4>
+    </div>
+
+    <!-- Report Table -->
+    <div class="bg-white p-3 border rounded-bottom table-responsive">
+        <table class="table table-hover align-middle text-secondary">
+            <thead class="table-info text-dark">
+                <tr>
+                    <th>#ID</th>
+                    <th>Reporter</th>
+                    <th>Reported Post</th>
+                    <th>Reasons</th>
+                    <th>Reported User</th>
+                    <th>Status</th>
+                    <th>Warn</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($reports as $report)
+                    @php
+                        $post = $report->post;
+                        $user = $post?->user;
+                    @endphp
+                    <tr>
+                        <td>{{ $report->id }}</td>
+
+                        <td>{{ $report->user->name ?? 'Unknown' }}</td>
+
+                        <td>
+                            @if ($post && $post->getCategoryRoute())
+                                <a href="{{ $post->getCategoryRoute() }}" class="text-decoration-none">
+                                    {{ $post->title }}
+                                </a>
+                            @else
+                                <span class="text-muted">No route</span>
+                            @endif
+                        </td>
+
+
+                        <td>
+                            <ul class="mb-0">
+                                @foreach ($report->reportReasonReport as $reasonReport)
+                                    <li>{{ $reasonReport->reason->name }}</li>
+                                @endforeach
+                            </ul>
+                        </td>
+
+                        <td>{{ $user->name ?? 'Deleted User' }}</td>
+
+                        <td>
+                            {{-- User Status via deleted_at --}}
+                            <div>
+                                <strong>User:</strong>
+                                @if ($user && !$user->deleted_at)
+                                    <span class="text-success">Active</span>
+                                @elseif ($user && $user->deleted_at)
+                                    <span class="text-danger">Inactive</span>
+                                @else
+                                    <span class="text-muted">Unknown</span>
+                                @endif
+                            </div>
+
+                            {{-- Post Status via trashed() --}}
+                            <div>
+                                <strong>Post:</strong>
+                                @if ($post && method_exists($post, 'trashed') && $post->trashed())
+                                    <span class="text-muted">Inactive</span>
+                                @else
+                                    <span class="text-success">Active</span>
+                                @endif
+                            </div>
+                        </td>
+
+                        <td>
+                            @if ($user && !$user->warning_sent)
+                                <form action="{{ route('admin.users.warn', $user->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-warning btn-sm">
+                                        <i class="fa-solid fa-triangle-exclamation"></i> Warn
+                                    </button>
+                                </form>
+                            @elseif ($user)
+                                <span class="text-success">Sent</span>
+                            @else
+                                <span class="text-muted">No user</span>
+                            @endif
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+@endsection
