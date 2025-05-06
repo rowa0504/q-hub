@@ -22,31 +22,6 @@ class AdminController extends Controller
         return view('admin.posts.index', compact('all_posts'));
     }
 
-    public function foods()
-    {
-        return view('admin.foods.index');
-    }
-
-    public function events()
-    {
-        return view('admin.events.index');
-    }
-
-    public function items()
-    {
-        return view('admin.items.index');
-    }
-
-    public function travels()
-    {
-        return view('admin.travels.index');
-    }
-
-    public function transportations()
-    {
-        return view('admin.transportations.index');
-    }
-
     public function dashboard()
     {
         return view('admin.dashboard', [
@@ -135,22 +110,29 @@ class AdminController extends Controller
     }
 
     // 警告送信
-    public function warn(User $user)
-    {
-        if ($user->warning_sent) {
-            return back()->with('message', 'Warning has already been sent.');
-        }
+// AdminController.php
 
-        $user->warning_sent = true;
-        $user->save();
-
-        return back()->with('success', "{$user->name} has been warned.");
+public function warnPost(\App\Models\Post $post)
+{
+    if ($post->warning_sent) {
+        return back()->with('message', 'Warning has already been sent to this post.');
     }
+
+    $post->warning_sent = true;
+    $post->save();
+
+    return back()->with('success', "Warning has been sent for post: {$post->title}");
+}
 
 
     public function reports()
     {
-        $reports = \App\Models\Report::with(['user', 'post.user', 'reportReasonReport.reason'])->latest()->get();
+        $reports = \App\Models\Report::with([
+            'user' => fn($query) => $query->withTrashed(),
+            'post' => fn($query) => $query->withTrashed()->with(['user' => fn($q) => $q->withTrashed()]),
+            'reportReasonReport.reason'
+        ])->latest()->get();
+
         return view('admin.reports.index', compact('reports'));
     }
 }

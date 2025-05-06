@@ -45,7 +45,6 @@
                             @endif
                         </td>
 
-
                         <td>
                             <ul class="mb-0">
                                 @foreach ($report->reportReasonReport as $reasonReport)
@@ -81,17 +80,17 @@
                         </td>
 
                         <td>
-                            @if ($user && !$user->warning_sent)
-                                <form action="{{ route('admin.users.warn', $user->id) }}" method="POST">
+                            @if ($post && !$post->warning_sent)
+                                <form action="{{ route('admin.posts.warn', $post->id) }}" method="POST">
                                     @csrf
                                     <button type="submit" class="btn btn-warning btn-sm">
                                         <i class="fa-solid fa-triangle-exclamation"></i> Warn
                                     </button>
                                 </form>
-                            @elseif ($user)
+                            @elseif ($post)
                                 <span class="text-success">Sent</span>
                             @else
-                                <span class="text-muted">No user</span>
+                                <span class="text-muted">No post</span>
                             @endif
                         </td>
                     </tr>
