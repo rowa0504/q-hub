@@ -37,11 +37,14 @@
 
                         <td>
                             @if ($post && $post->getCategoryRoute())
-                                <a href="{{ $post->getCategoryRoute() }}" class="text-decoration-none">View Post</a>
+                                <a href="{{ $post->getCategoryRoute() }}" class="text-decoration-none">
+                                    {{ $post->title }}
+                                </a>
                             @else
                                 <span class="text-muted">No route</span>
                             @endif
                         </td>
+
 
                         <td>
                             <ul class="mb-0">
