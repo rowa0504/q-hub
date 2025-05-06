@@ -44,7 +44,7 @@ class HomeController extends Controller
         $all_posts = $this->post->latest()->get();
         $all_user = $this->user->all();
         $all_report_reasons = $this->reportReason->all();
-        
+
         return view('home')
             ->with('all_categories', $all_categories)
             ->with('all_trans_categories', $all_trans_categories)
