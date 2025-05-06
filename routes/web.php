@@ -158,6 +158,8 @@ Route::group(['middleware' => 'auth'], function () {
 
         // 報告の状態変更
         Route::get('/reports', [AdminController::class, 'reports'])->name('reports.index');
+        Route::post('/admin/posts/{post}/warn', [AdminController::class, 'warnPost'])->name('posts.warn');
+
 
     });
 });
