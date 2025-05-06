@@ -20,14 +20,6 @@
             @enderror
         </div>
 
-        <!-- Title input -->
-        <div class="mb-3">
-            <input type="text" class="form-control" name="title" id="transportation-title-{{ $post->id }}" placeholder="Enter your post title...">
-            @error('title')
-                <p class="text-danger small">{{ $message }}</p>
-            @enderror
-        </div>
-
         {{-- Fee input --}}
         <div class="mb-3">
             <input type="number" class="form-control" name="fee" id="transportation-fee-{{ $post->id }}" placeholder="fee (₱)" min="1" step="1">
@@ -106,7 +98,6 @@
         $.get(`/posts/${postId}/edit`, function (data) {
 
             // フォームへのデータの流し込み
-            $('#transportation-title-{{ $post->id }}').val(data.title || '');
             $('#transportation-fee-{{ $post->id }}').val(data.fee || '');
             $('#transportation-departure-{{ $post->id }}').val(data.departure || '');
             $('#transportation-destination-{{ $post->id }}').val(data.destination || '');

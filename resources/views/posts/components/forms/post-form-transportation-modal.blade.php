@@ -25,14 +25,6 @@ aria-hidden="true">
                     @enderror
                 </div>
 
-                <!-- Title input -->
-                <div class="mb-3">
-                    <input type="text" class="form-control" name="title" id="title" placeholder="Enter your post title..." value="{{ old('title') }}">
-                    @error('title')
-                        <p class="text-danger small">{{ $message }}</p>
-                    @enderror
-                </div>
-
                 {{-- Fee input --}}
                 <div class="mb-3">
                     <input type="number" class="form-control" name="fee" id="fee" value="{{ old('fee') }}" placeholder="fee (₱)" min="1" step="1">

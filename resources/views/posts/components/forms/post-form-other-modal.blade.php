@@ -25,14 +25,6 @@ aria-hidden="true">
                     @enderror
                 </div>
 
-                <!-- Title input -->
-                <div class="mb-3">
-                    <input type="text" class="form-control" name="title" id="title" placeholder="Enter your post title..." value="{{ old('title') }}">
-                    @error('title')
-                        <p class="text-danger small">{{ $message }}</p>
-                    @enderror
-                </div>
-
                 <!-- Description input -->
                 <div class="mb-3">
                     <textarea class="form-control" name="description" id="description" placeholder="Enter your post description..." rows="3">{{ old('description') }}</textarea>

@@ -24,15 +24,6 @@
                         @enderror
                     </div>
 
-                    <!-- Title input -->
-                    <div class="mb-3">
-                        <input type="text" class="form-control" name="title" id="title"
-                            placeholder="Enter your post title...">
-                        @error('title')
-                            <p class="text-danger small">{{ $message }}</p>
-                        @enderror
-                    </div>
-
                     <!-- Location input -->
                     <div class="mb-3">
                         <!-- Location input -->

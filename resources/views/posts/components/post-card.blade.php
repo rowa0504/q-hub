@@ -185,6 +185,12 @@
 
             @case(3)
                 <div class="mt-2 fw-bold">
+                    @if ($post->is_recommended)
+                        <span class="inline-block text-warning text-xs px-2 py-1 rounded-full mb-2">
+                            ★ RECOMMENDED: 「{{ $post->matched_keyword }}」！
+                        </span>
+                    @endif
+
                     <p class="mb-1">Max participants: {{ $post->max ?? 'TBD' }}</p>
                     <a href="{{ route('chatRoom.start', $post->id) }}">
                         <i class="fa-brands fa-rocketchat"></i>
