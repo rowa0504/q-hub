@@ -16,4 +16,14 @@ class ReportReasonReport extends Model
     {
         return $this->belongsTo(ReportReason::class);
     }
+
+    public function reason()
+    {
+        return $this->belongsTo(ReportReason::class, 'report_reason_id');
+    }
+
+    public function report()
+    {
+        return $this->belongsTo(\App\Models\Report::class);
+    }
 }

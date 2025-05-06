@@ -22,7 +22,7 @@
                     <th>Role</th>
                     <th>Created At</th>
                     <th>Status</th>
-                    <th>Action</th> {{-- ★ ここ追加 --}}
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,7 +37,7 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('profile.show', $user->id) }}" class="text-decoration-none text-dark">
+                            <a href="{{ route('profile.show', $user->id) }}" class="text-decoration-none">
                                 {{ $user->name }}
                             </a>
                         </td>

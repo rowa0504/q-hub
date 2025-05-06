@@ -57,7 +57,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/{answer}/best', [AnswerController::class, 'markBest'])->name('best');
         Route::patch('/answers/{id}', [AnswerController::class, 'update'])->name('update');
         Route::delete('/answers/{id}', [AnswerController::class, 'destroy'])->name('destroy');
-
     });
 
 
@@ -139,6 +138,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/users', [AdminController::class, 'users'])->name('users');
         Route::patch('/users/{user}/activate', [AdminController::class, 'activate'])->name('users.activate');
         Route::delete('/users/{user}/deactivate', [AdminController::class, 'deactivate'])->name('users.deactivate');
+        Route::post('/users/{user}/warn', [AdminController::class, 'warn'])->name('users.warn');
+        Route::patch('/users/{user}/toggle-status', [AdminController::class, 'toggleStatus'])->name('users.toggleStatus');
 
         // 投稿の状態変更
         Route::get('/posts', [AdminController::class, 'posts'])->name('posts');
@@ -150,12 +151,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::patch('/comments/{comment}/activate', [AdminController::class, 'activateComment'])->name('comments.activate');
         Route::delete('/comments/{comment}/deactivate', [AdminController::class, 'deactivateComment'])->name('comments.deactivate');
 
-
+        // いいねの状態変更
         Route::get('/answers', [AdminController::class, 'answers'])->name('answers');
         Route::delete('/answers/{answer}/deactivate', [AdminController::class, 'deactivateAnswer'])->name('answers.deactivate');
         Route::patch('/answers/{answer}/activate', [AdminController::class, 'activateAnswer'])->name('answers.activate');
 
+        // 報告の状態変更
+        Route::get('/reports', [AdminController::class, 'reports'])->name('reports.index');
+
     });
-
-
 });

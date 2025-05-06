@@ -133,4 +133,24 @@ class AdminController extends Controller
         $answer->restore();
         return back()->with('success', 'Answer has been restored.');
     }
+
+    // 警告送信
+    public function warn(User $user)
+    {
+        if ($user->warning_sent) {
+            return back()->with('message', 'Warning has already been sent.');
+        }
+
+        $user->warning_sent = true;
+        $user->save();
+
+        return back()->with('success', "{$user->name} has been warned.");
+    }
+
+
+    public function reports()
+    {
+        $reports = \App\Models\Report::with(['user', 'post.user', 'reportReasonReport.reason'])->latest()->get();
+        return view('admin.reports.index', compact('reports'));
+    }
 }

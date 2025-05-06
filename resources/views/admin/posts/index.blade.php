@@ -28,16 +28,24 @@
                 @forelse ($all_posts as $post)
                     <tr>
                         <td>{{ $post->id }}</td>
-                        <td>{{ $post->title }}</td>
+                        <td>
+                            @if ($post->getCategoryRoute())
+                                <a href="{{ $post->getCategoryRoute() }}" class="text-decoration-none">
+                                    {{ $post->title }}
+                                </a>
+                            @else
+                                <span class="text-muted">No route</span>
+                            @endif
+                        </td>
+
                         <td>
                             @if ($post->user)
-                                <a href="{{ route('profile.show', $post->user->id) }}" class="text-decoration-none text-dark">
-                                    {{ $post->user->name }}
-                                </a>
+                                {{ $post->user->name }}
                             @else
                                 <span class="text-muted">[Unknown]</span>
                             @endif
                         </td>
+
                         <td>{{ $post->category->name ?? 'N/A' }}</td>
                         <td>{{ $post->created_at->format('Y-m-d') }}</td>
                         <td>

@@ -148,9 +148,11 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white {{ request()->is('admin/reports') ? 'fw-bold' : '' }}" href="#">
+                                <a class="nav-link text-white {{ request()->is('admin/reports') ? 'fw-bold' : '' }}"
+                                   href="{{ route('admin.reports.index') }}">
                                     <i class="fa-solid fa-flag me-2"></i> Reports
                                 </a>
+                            </li>
                         </ul>
                     </div>
 
