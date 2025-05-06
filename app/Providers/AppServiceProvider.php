@@ -27,5 +27,6 @@ class AppServiceProvider extends ServiceProvider
             $view->with('all_categories', Category::all());
             $view->with('all_trans_categories', TransCategory::all());
         });
+
     }
 }

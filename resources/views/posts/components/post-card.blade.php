@@ -17,6 +17,7 @@
         </div>
         <div class="ms-auto">
             <i class="fas fa-ellipsis-h text-muted" style="cursor:pointer;" data-bs-toggle="dropdown"></i>
+
             <ul class="dropdown-menu dropdown-menu-end">
                 @if (Auth::id() === $post->user_id)
                     <li>
@@ -106,7 +107,6 @@
 
         {{-- カテゴリ別情報 --}}
         @switch($post->category_id)
-            {{-- event --}}
             @case(1)
                 <div class="mt-2 fw-bold">
                     <p class="mb-1 text-muted small">
@@ -173,7 +173,6 @@
             @break
 
             @case(2)
-                {{-- food --}}
                 <div class="mt-2 fw-bold">
                     <p>
                         <a href="https://www.google.com/maps?q={{ $post->latitude }},{{ $post->longitude }}" target="_blank">
@@ -185,15 +184,27 @@
             @break
 
             @case(3)
-                {{-- item --}}
                 <div class="mt-2 fw-bold">
+                    @if ($post->is_recommended)
+                        <span class="inline-block text-warning text-xs px-2 py-1 rounded-full mb-2">
+                            ★ RECOMMENDED: 「{{ $post->matched_keyword }}」！
+                        </span>
+                    @endif
+
                     <p class="mb-1">Max participants: {{ $post->max ?? 'TBD' }}</p>
+                    <a href="{{ route('chatRoom.start', $post->id) }}">
+                        <i class="fa-brands fa-rocketchat"></i>
+                    </a>
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                     <p class="mb-1 text-muted small">Max participants: {{ $post->max ?? 'TBD' }}</p>
                 </div>
             @break
 
             @case(4)
-                {{-- travel --}}
                 <div class="mt-2 fw-bold">
                     <p>
                         <a href="https://www.google.com/maps?q={{ $post->latitude }},{{ $post->longitude }}"
@@ -206,7 +217,6 @@
             @break
 
             @case(5)
-                {{-- transportation --}}
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">
                         Transportation:
@@ -237,7 +247,6 @@
             @break
 
             @case(6)
-                {{-- question --}}
                 <div class="mt-2 fw-bold">
                     <p>Question: {{ $post->title ?? 'TBD' }}</p>
                 </div>
@@ -251,73 +260,7 @@
 
         {{-- ▼▼ 質問カテゴリー専用：アンサー入力・一覧表示 ▼▼ --}}
         @if ($post->category_id == 6)
-            <div class="px-3 pb-3">
-                <button class="btn btn-sm btn-outline-secondary mt-2" onclick="toggleAnswer({{ $post->id }})">
-                    <i class="fa-solid fa-reply"></i> Show Answers
-                </button>
-
-                <div id="answer-section-{{ $post->id }}" class="mt-3"
-                    style="{{ session('open_answer_post_id') == $post->id ? 'display: block;' : 'display: none;' }}">
-
-                    {{-- アンサー投稿フォーム --}}
-                    <form method="POST" action="{{ route('answer.store') }}">
-                        @csrf
-                        <input type="hidden" name="post_id" value="{{ $post->id }}">
-                        <div class="d-flex mb-3">
-                            @if (Auth::user()->avatar)
-                                <img src="{{ Auth::user()->avatar }}" class="rounded-circle me-2" width="40"
-                                    height="40" alt="avatar">
-                            @else
-                                <div class="rounded-circle bg-light d-flex justify-content-center align-items-center me-2"
-                                    style="width:40px;height:40px;">
-                                    <i class="fa-solid fa-circle-user fa-2x text-secondary"></i>
-                                </div>
-                            @endif
-                            <textarea class="form-control" name="body" rows="2" placeholder="Add an answer..." required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-sm">Answer</button>
-                    </form>
-
-                    {{-- アンサー一覧 --}}
-                    <hr>
-                    @foreach ($post->answers as $answer)
-                        @if ($answer->user)
-                            <div class="d-flex mb-2">
-                                @if ($answer->user->avatar)
-                                    <img src="{{ $answer->user->avatar }}" class="rounded-circle me-2"
-                                        width="40" height="40" alt="{{ $answer->user->name }}">
-                                @else
-                                    <div class="rounded-circle bg-light d-flex justify-content-center align-items-center me-2"
-                                        style="width:40px;height:40px;">
-                                        <i class="fa-solid fa-circle-user fa-2x text-secondary"></i>
-                                    </div>
-                                @endif
-                                <div>
-                                    <strong>{{ $answer->user->name }}</strong>
-                                    <p class="mb-1">{{ $answer->body }}</p>
-
-                                    {{-- ベストアンサー表示・ボタン --}}
-                                    @if ($post->user_id === Auth::id())
-                                        {{-- 投稿者本人 --}}
-                                        @if ($post->best_answer_id === $answer->id)
-                                            <span class="badge bg-success">Best Answer</span>
-                                        @endif
-                                        <form method="POST" action="{{ route('answer.best', $answer->id) }}"
-                                            class="d-inline">
-                                            @csrf
-                                            <button type="submit" class="btn btn-outline-success btn-sm mt-1">Mark as
-                                                Best</button>
-                                        </form>
-                                    @elseif ($post->best_answer_id === $answer->id)
-                                        {{-- 他人から見たときも表示 --}}
-                                        <span class="badge bg-success">Best Answer</span>
-                                    @endif
-                                </div>
-                            </div>
-                        @endif
-                    @endforeach
-                </div>
-            </div>
+             @include('posts.categories.questions.modal', ['post' => $post])
         @endif
 
         {{-- スクロール保持 --}}

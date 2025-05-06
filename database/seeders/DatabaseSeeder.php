@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             UserSeeder::class,
             TransCategorySeeder::class,
-            ReportReasonSeeder::class
+            ReportReasonSeeder::class,
+            PostSeeder::class,
         ]);
     }
 }

@@ -1,6 +1,5 @@
 /* all */
-body
-{
+body {
     font-family: "Poppins", sans-serif;
     font-optical-sizing: auto;
     font-weight: bolder;
@@ -9,8 +8,7 @@ body
 }
 
 /* btn for register and login */
-.btn-qhub
-{
+.btn-qhub {
     background-color: #00B7D6;
     color: #fff;
     border: none;
@@ -27,15 +25,13 @@ body
     text-transform: uppercase;
 }
 
-.btn-qhub:hover
-{
+.btn-qhub:hover {
     background-color: #008bb5;
     box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.5);
 }
 
 /* card */
-.card
-{
+.card {
     border-radius: 0.5rem;
     box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
     background-color: #fff;
@@ -48,93 +44,78 @@ body
 }
 
 /* icon */
-.icon-xsm
-{
+.icon-xsm {
     font-size: 1.5rem;
 }
 
-.icon-sm
-{
+.icon-sm {
     font-size: 2rem;
 }
 
-.avatar-sm
-{
+.avatar-sm {
     width: 2rem;
     height: 2rem;
     object-fit: cover;
 }
 
-.image-sm
-{
+.image-sm {
     width: 2rem;
     height: 2rem;
     object-fit: cover;
 }
 
-.icon-md
-{
+.icon-md {
     font-size: 3.5rem;
 }
 
-.avatar-md
-{
+.avatar-md {
     width: 3.5rem;
     height: 3.5rem;
     object-fit: cover;
 }
 
-.image-md
-{
+.image-md {
     width: 3.5rem;
     height: 3.5rem;
     object-fit: cover;
 }
 
-.image-lg
-{
+.image-lg {
     width: 9rem;
     height: 9rem;
     object-fit: cover;
 }
 
-.icon-lg
-{
+.icon-lg {
     font-size: 9rem;
 }
 
-.avatar-lg
-{
+.avatar-lg {
     width: 9rem;
     height: 9rem;
     object-fit: cover;
 }
 
-.fa-heart
-{
+.fa-heart {
     font-size: 1.5rem;
 }
 
-.fa-comment
-{
+.fa-comment {
     font-size: 1.5rem;
 }
 
-.xsmall
-{
+.xsmall {
     font-size: 0.65rem;
 }
 
-.grid-img
-{
+.grid-img {
     width: 100%;
     height: 300px;
     object-fit: cover;
 }
 
 /* sidebar */
-.sidebar
-{
+.sidebar {
     position: fixed;
     top: 0;
     right: 0;
@@ -146,25 +127,23 @@ body
     display: none;
     flex-direction: column;
     padding: 1.5rem;
-  }
+}
 
-.sidebar.show
-{
+.sidebar.show {
     display: flex;
 }
 
-.sidebar .divider
-{
+.sidebar .divider {
     border-bottom: 1px solid #ccc;
     margin: 1rem 0;
 }
 
-.hamburger-menu
-{
+.hamburger-menu {
     top: 150px;
     right: 20px;
     z-index: 1300;
 }
+
 .sidebar-mobile {
     position: fixed;
     top: 0;
@@ -172,20 +151,22 @@ body
     width: 250px;
     height: 100%;
     background-color: white;
-    box-shadow: -2px 0 6px rgba(0,0,0,0.2);
+    box-shadow: -2px 0 6px rgba(0, 0, 0, 0.2);
     transition: right 0.3s ease;
     z-index: 1200;
 }
+
 .sidebar-mobile.show {
     right: 0;
 }
+
 .sidebar-overlay {
     position: fixed;
     top: 0;
     left: 0;
     height: 100%;
     width: 100%;
-    background: rgba(0,0,0,0.3);
+    background: rgba(0, 0, 0, 0.3);
     z-index: 1100;
     display: none;
 }
@@ -194,8 +175,7 @@ body
     display: block;
 }
 
-.close-btn
-{
+.close-btn {
     position: absolute;
     top: 1rem;
     right: 1rem;
@@ -203,39 +183,46 @@ body
     cursor: pointer;
 }
 
-.close-btn:hover
-{
+.close-btn:hover {
     color: #000000;
     transition: all 0.3s ease;
 }
 
 /* modal for post */
-.modal-content
-{
-  border-radius: 1rem;
-  text-align: center;
+.modal-content {
+    border-radius: 1rem;
+    text-align: center;
 }
 
-.modal .btn-info
-{
-  background-color: #00B7D6;
-  color: #fff;
-  font-weight: bold;
-  border-radius: 0.5rem;
-  font-size: 1rem;
+.modal .btn-info {
+    background-color: #00B7D6;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    font-size: 1rem;
 }
 
-.modal .btn-outline-info
-{
-  border: 2px solid #00B7D6;
-  color: #00B7D6;
-  background-color: #fff;
-  font-weight: bold;
-  border-radius: 0.5rem;
-  font-size: 1rem;
+.modal .btn-outline-info {
+    border: 2px solid #00B7D6;
+    color: #00B7D6;
+    background-color: #fff;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    font-size: 1rem;
 }
 
 .pac-container
 {
     z-index: 1055 !important; /* Bootstrap modalより前面に */
+}
+
+.my-pagination a,
+.my-pagination span {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 2.25rem !important;
+    min-height: 2.25rem !important;
+    padding: 0.25rem 0.5rem !important;
+    border-radius: 0.375rem !important;
 }
