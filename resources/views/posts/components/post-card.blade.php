@@ -1,97 +1,114 @@
-<div class="card w-100">
+<div class="card shadow-sm mb-4 rounded-4 overflow-hidden">
     {{-- 投稿ヘッダー --}}
-    <div class="d-flex align-items-center border-bottom mb-2 p-2">
-        <a href="{{ route('profile.show', $post->user->id ?? '#') }}">
+    <div class="d-flex align-items-center border-bottom px-3 py-2 bg-light">
+        <a href="{{ route('profile.show', $post->user->id ?? '#') }}" class="text-decoration-none">
             @if ($post->user && $post->user->avatar)
-                <img src="{{ $post->user->avatar }}" alt="{{ $post->user->name }}" class="rounded-circle avatar-sm">
+                <img src="{{ $post->user->avatar }}" alt="{{ $post->user->name }}" class="rounded-circle" width="40"
+                    height="40">
             @else
-                <i class="fa-solid fa-circle-user text-secondary icon-sm"></i>
+                <i class="fa-solid fa-circle-user text-secondary fs-3"></i>
             @endif
         </a>
-        <strong class="mx-2">{{ $post->user->name ?? 'UNkNOWN user' }}</strong>
-
-        <div class="ms-auto position-relative">
-            {{-- カテゴリ --}}
-            <div class="mb-3">
-                <i class="fa-solid fa-tag"></i>
-                <span class="ms-1 text-muted">{{ $post->category->name }}</span>
-            </div>
-            <i class="fas fa-ellipsis-h" style="cursor:pointer;" data-bs-toggle="dropdown"></i>
+        <div class="ms-2">
+            <strong class="d-block">{{ $post->user->name ?? 'UNKNOWN user' }}</strong>
+            <small class="text-muted">
+                <i class="fa-solid fa-tag me-1"></i>{{ $post->category->name }}
+            </small>
+        </div>
+        <div class="ms-auto">
+            <i class="fas fa-ellipsis-h text-muted" style="cursor:pointer;" data-bs-toggle="dropdown"></i>
             <ul class="dropdown-menu dropdown-menu-end">
                 @if (Auth::id() === $post->user_id)
-                    <li><a class="dropdown-item text-danger" data-bs-toggle="modal"
-                            data-bs-target="#deleteModal-{{ $post->id }}">
-                            <i class="fa-solid fa-trash"></i> Delete</a></li>
                     <li>
                         <button class="dropdown-item text-warning btn-edit" data-id="{{ $post->id }}"
                             data-bs-toggle="modal" data-bs-target="#edit-form-{{ $post->id }}">
-                            <i class="fa-solid fa-pen-to-square"></i> Edit
+                            <i class="fa-solid fa-pen-to-square me-1"></i> Edit
                         </button>
                     </li>
+                    <li>
+                        <a class="dropdown-item text-danger" data-bs-toggle="modal"
+                            data-bs-target="#deleteModal-{{ $post->id }}">
+                            <i class="fa-solid fa-trash me-1"></i> Delete
+                        </a>
+                    </li>
                 @else
-                    <li><a class="dropdown-item text-danger" data-bs-toggle="modal"
+                    <li>
+                        <a class="dropdown-item text-danger" data-bs-toggle="modal"
                             data-bs-target="#reportModal-{{ $post->id }}">
-                            <i class="fa-solid fa-flag"></i> Report</a></li>
+                            <i class="fa-solid fa-flag me-1"></i> Report
+                        </a>
+                    </li>
                 @endif
             </ul>
         </div>
     </div>
 
+    {{-- 説明文（上部） --}}
+    <div class="card-body pb-0">
+        <div x-data="{ expanded: false }">
+            <p class="fs-5 fw-bold mb-2">
+                <span x-text="expanded ? @js($post->description) : @js(Str::limit($post->description, 100))"></span>
+            </p>
+
+            @if (strlen($post->description) > 100)
+                <button class="btn btn-link p-0" @click="expanded = !expanded">
+                    <span x-text="expanded ? 'Read less' : 'Read more'"></span>
+                </button>
+            @endif
+        </div>
+    </div>
+
     {{-- 投稿画像 --}}
-    <a href="{{ $post->getCategoryRoute() }}">
-        <img src="{{ $post->image }}" class="img-fluid" alt="Post Image">
-    </a>
+    @if ($post->image)
+        <a href="{{ $post->getCategoryRoute() }}">
+            <img src="{{ $post->image }}" class="img-fluid w-100" alt="Post Image">
+        </a>
+    @endif
 
     <div class="card-body">
         {{-- いいね・コメント --}}
-        <div class="d-flex align-items-center mb-2">
+        <div class="d-flex align-items-center mb-3">
             {{-- いいね --}}
-            <div class="me-3 d-flex align-items-center">
+            <div class="me-3">
                 @if ($post->isLiked())
-                    <form action="{{ route('like.delete', $post->id) }}" method="post"
-                        class="d-flex align-items-center">
+                    <form action="{{ route('like.delete', $post->id) }}" method="post" class="d-inline">
                         @csrf
                         @method('DELETE')
-                        <button class="btn btn-sm p-0 border-0 bg-transparent d-flex align-items-center">
-                            <i class="fa-solid fa-heart text-danger"></i>
+                        <button class="btn p-0 text-danger d-flex align-items-center">
+                            <i class="fa-solid fa-heart me-1"></i>{{ $post->likes->count() }}
                         </button>
-                        <span class="ms-1">{{ $post->likes->count() }}</span>
                     </form>
                 @else
-                    <form action="{{ route('like.store', $post->id) }}" method="post"
-                        class="d-flex align-items-center">
+                    <form action="{{ route('like.store', $post->id) }}" method="post" class="d-inline">
                         @csrf
-                        <button class="btn btn-sm p-0 border-0 bg-transparent d-flex align-items-center">
-                            <i class="fa-regular fa-heart"></i>
+                        <button class="btn p-0 text-muted d-flex align-items-center">
+                            <i class="fa-regular fa-heart me-1"></i>{{ $post->likes->count() }}
                         </button>
-                        <span class="ms-1">{{ $post->likes->count() }}</span>
                     </form>
                 @endif
             </div>
 
             {{-- コメント or アンサー --}}
-            <div class="me-3 d-flex align-items-center">
+            <div class="me-3">
                 @if ($post->category_id == 6)
-                    <span onclick="toggleAnswer({{ $post->id }})" style="cursor:pointer;">
-                        <i class="fa-solid fa-reply fa-lg"></i>
-                    </span>
-                    <span class="ms-1">{{ $post->answers->count() }}</span>
+                    <button class="btn p-0 text-muted d-flex align-items-center"
+                        onclick="toggleAnswer({{ $post->id }})">
+                        <i class="fa-solid fa-reply me-1"></i>{{ $post->answers->count() }}
+                    </button>
                 @else
-                    <span data-bs-toggle="modal" data-bs-target="#commentsModal-{{ $post->id }}"
-                        style="cursor:pointer;">
-                        <i class="fa-regular fa-comment fa-lg"></i>
-                    </span>
-                    <span class="ms-1">{{ $post->comments->count() }}</span>
+                    <button class="btn p-0 text-muted d-flex align-items-center" data-bs-toggle="modal"
+                        data-bs-target="#commentsModal-{{ $post->id }}">
+                        <i class="fa-regular fa-comment me-1"></i>{{ $post->comments->count() }}
+                    </button>
                 @endif
             </div>
-
         </div>
 
         {{-- カテゴリ別情報 --}}
         @switch($post->category_id)
+            {{-- event --}}
             @case(1)
                 <div class="mt-2 fw-bold">
-                    <p class="mb-1">Event: {{ $post->title ?? 'TBD' }}</p>
                     <p class="mb-1 text-muted small">
                         Start Date:
                         {{ $post->startdatetime ? \Carbon\Carbon::parse($post->startdatetime)->format('M d, Y H:i') : 'TBD' }}
@@ -156,50 +173,71 @@
             @break
 
             @case(2)
+                {{-- food --}}
                 <div class="mt-2 fw-bold">
-                    <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
-                    <p class="mb-1 text-muted small">Location: {{ $post->location ?? 'TBD' }}
-                        <i class="fa-solid fa-location-dot"></i>
+                    <p>
+                        <a href="https://www.google.com/maps?q={{ $post->latitude }},{{ $post->longitude }}" target="_blank">
+                            <i class="fa-solid fa-location-dot"></i>
+                            {{ $post->location ?? 'TBD' }}
+                        </a>
                     </p>
                 </div>
             @break
 
             @case(3)
+                {{-- item --}}
                 <div class="mt-2 fw-bold">
-                    <p class="mb-1">Item name: {{ $post->title ?? 'TBD' }}</p>
                     <p class="mb-1">Max participants: {{ $post->max ?? 'TBD' }}</p>
-                    <a href="{{ route('chatRoom.start', $post->id) }}">
-                        <i class="fa-brands fa-rocketchat"></i>
-                    </a>
-                    @if (session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
-                    @endif
                     <p class="mb-1 text-muted small">Max participants: {{ $post->max ?? 'TBD' }}</p>
                 </div>
             @break
 
             @case(4)
+                {{-- travel --}}
                 <div class="mt-2 fw-bold">
-                    <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
-                    <p class="mb-1 text-muted small">Location: {{ $post->location ?? 'TBD' }}
-                        <i class="fa-solid fa-location-dot"></i>
+                    <p>
+                        <a href="https://www.google.com/maps?q={{ $post->latitude }},{{ $post->longitude }}"
+                            target="_blank">
+                            <i class="fa-solid fa-location-dot"></i>
+                            {{ $post->location ?? 'TBD' }}
+                        </a>
                     </p>
                 </div>
             @break
 
             @case(5)
+                {{-- transportation --}}
                 <div class="mt-2 fw-bold">
-                    <p class="mb-1">Title: {{ $post->title ?? 'TBD' }}</p>
-                    <p class="mb-1">Transportation: {{ $post->transCategory->name ?? 'TBD' }}</p>
-                    <p class="mb-1 text-muted small">Fee: {{ $post->fee ?? 'TBD' }}₱</p>
+                    <p class="mb-1">
+                        Transportation:
+                        @if ($post->transCategory)
+                            @php
+                                $name = $post->transCategory->name;
+                            @endphp
+                            @if ($name === 'Bike')
+                                <i class="fas fa-motorcycle"></i>
+                                {{ $name }}
+                            @elseif ($name === 'Taxi')
+                                <i class="fas fa-car"></i>
+                                {{ $name }}
+                            @elseif ($name === 'Jeepney')
+                                <i class="fas fa-bus"></i>
+                                {{ $name }}
+                            @else
+                                <i class="fas fa-question-circle"></i> {{-- 未定義カテゴリ用 --}}
+                            @endif
+                        @else
+                            TBD <i class="fas fa-question-circle"></i>
+                        @endif
+                    </p>
                     <p class="mb-1 text-muted small">Departure: {{ $post->departure ?? 'TBD' }}</p>
                     <p class="mb-1 text-muted small">Destination: {{ $post->destination ?? 'TBD' }}</p>
+                    <p class="mb-1 text-muted small">Fee: {{ $post->fee ?? 'TBD' }}₱</p>
                 </div>
             @break
 
             @case(6)
+                {{-- question --}}
                 <div class="mt-2 fw-bold">
                     <p>Question: {{ $post->title ?? 'TBD' }}</p>
                 </div>
@@ -209,7 +247,6 @@
         @endswitch
 
         {{-- 投稿本文 --}}
-        <p class="fs-5 fw-bold mb-2">{{ $post->description }}</p>
         <p class="text-uppercase text-muted small mb-0">{{ $post->created_at->format('M d, Y') }}</p>
 
         {{-- ▼▼ 質問カテゴリー専用：アンサー入力・一覧表示 ▼▼ --}}
@@ -234,7 +271,9 @@
             });
 
             function toggleAnswer(postId) {
-                const section = document.getElementById(`answer-section-${postId}`);
+                const section = document.getElementById(answer - section - $ {
+                    postId
+                });
                 if (section.style.display === 'none' || section.style.display === '') {
                     section.style.display = 'block';
                 } else {

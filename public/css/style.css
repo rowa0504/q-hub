@@ -211,8 +211,10 @@ body {
     font-size: 1rem;
 }
 
-
-
+.pac-container
+{
+    z-index: 1055 !important; /* Bootstrap modalより前面に */
+}
 
 .my-pagination a,
 .my-pagination span {
@@ -224,6 +226,3 @@ body {
     padding: 0.25rem 0.5rem !important;
     border-radius: 0.375rem !important;
 }
-
-
-
