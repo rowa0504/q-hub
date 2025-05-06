@@ -45,14 +45,6 @@
             @enderror
         </div>
 
-        <!-- Title input -->
-        <div class="mb-3">
-            <input type="text" class="form-control" name="title" id="item-title-{{ $post->id }}" placeholder="Enter your post title...">
-            @error('title')
-                <p class="text-danger small">{{ $message }}</p>
-            @enderror
-        </div>
-
         <!-- Description input -->
         <div class="mb-3">
             <textarea class="form-control" name="description" id="item-description-{{ $post->id }}" placeholder="Enter your post description..." rows="3"></textarea>
@@ -100,7 +92,6 @@
                 return `${year}-${month}-${day}`;  // 修正: YYYY-MM-DD 形式に変更
             }
             // フォームへのデータの流し込み
-            $('#item-title-{{ $post->id }}').val(data.title || '');
             $('#item-description-{{ $post->id }}').val(data.description || '');
             $('#item-startdate-{{ $post->id }}').val(formatDate(data.startdatetime) || '');
             $('#item-enddate-{{ $post->id }}').val(formatDate(data.enddatetime) || '');

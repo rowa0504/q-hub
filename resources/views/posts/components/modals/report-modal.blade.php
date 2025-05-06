@@ -15,10 +15,11 @@
                         <input class="form-check-input me-3" type="checkbox" name="reason[]" value="{{ $report_reason->id }}" id="{{ $report_reason->name }}">
                         <label class="form-check-label" for="{{ $report_reason->name }}">{{ $report_reason->name }}</label>
                     </div>
+                    @endforeach
+
                     @error('reason')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
-                    @endforeach
                 </div>
 
 
@@ -30,3 +31,16 @@
         </div>
     </div>
 </div>
+
+@if (session('open_modal'))
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            const modalId = '{{ session('open_modal') }}';
+            const targetModal = document.getElementById(modalId);
+            if (targetModal) {
+                const bsModal = new bootstrap.Modal(targetModal);
+                bsModal.show();
+            }
+        });
+    </script>
+@endif

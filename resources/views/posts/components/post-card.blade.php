@@ -17,6 +17,7 @@
         </div>
         <div class="ms-auto">
             <i class="fas fa-ellipsis-h text-muted" style="cursor:pointer;" data-bs-toggle="dropdown"></i>
+
             <ul class="dropdown-menu dropdown-menu-end">
                 @if (Auth::id() === $post->user_id)
                     <li>
@@ -106,7 +107,6 @@
 
         {{-- カテゴリ別情報 --}}
         @switch($post->category_id)
-            {{-- event --}}
             @case(1)
                 <div class="mt-2 fw-bold">
                     <p class="mb-1 text-muted small">
@@ -173,7 +173,6 @@
             @break
 
             @case(2)
-                {{-- food --}}
                 <div class="mt-2 fw-bold">
                     <p>
                         <a href="https://www.google.com/maps?q={{ $post->latitude }},{{ $post->longitude }}" target="_blank">
@@ -185,15 +184,27 @@
             @break
 
             @case(3)
-                {{-- item --}}
                 <div class="mt-2 fw-bold">
+                    @if ($post->is_recommended)
+                        <span class="inline-block text-warning text-xs px-2 py-1 rounded-full mb-2">
+                            ★ RECOMMENDED: 「{{ $post->matched_keyword }}」！
+                        </span>
+                    @endif
+
                     <p class="mb-1">Max participants: {{ $post->max ?? 'TBD' }}</p>
+                    <a href="{{ route('chatRoom.start', $post->id) }}">
+                        <i class="fa-brands fa-rocketchat"></i>
+                    </a>
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                     <p class="mb-1 text-muted small">Max participants: {{ $post->max ?? 'TBD' }}</p>
                 </div>
             @break
 
             @case(4)
-                {{-- travel --}}
                 <div class="mt-2 fw-bold">
                     <p>
                         <a href="https://www.google.com/maps?q={{ $post->latitude }},{{ $post->longitude }}"
@@ -206,7 +217,6 @@
             @break
 
             @case(5)
-                {{-- transportation --}}
                 <div class="mt-2 fw-bold">
                     <p class="mb-1">
                         Transportation:
@@ -237,7 +247,6 @@
             @break
 
             @case(6)
-                {{-- question --}}
                 <div class="mt-2 fw-bold">
                     <p>Question: {{ $post->title ?? 'TBD' }}</p>
                 </div>
