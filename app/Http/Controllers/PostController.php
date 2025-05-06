@@ -23,8 +23,7 @@ class PostController extends Controller
     }
 
     public function store(Request $request){
-        $commonRules = [//other,question
-            'title' => 'required|min:1|max:50',
+        $commonRules = [//other
             'description' => 'required|min:1|max:1000',
             'image' => 'nullable|mimes:jpeg,jpg,png,gif|max:1048',
             'category_id' => 'required|exists:categories,id',
@@ -55,7 +54,12 @@ class PostController extends Controller
                 'trans_category' => 'required|exists:trans_categories,id',
             ];
             $modalId = 'post-form-' . $categoryId;
-        }elseif ($categoryId == 6 || $categoryId == 7) { // item
+        } elseif ($categoryId == 6) { // question
+            $extraRules = [
+                'title' => 'required|min:1|max:50',
+            ];
+            $modalId = 'post-form-' . $categoryId;
+        }elseif ($categoryId == 7) { // item
             $extraRules = $commonRules;
             $modalId = 'post-form-' . $categoryId;
         }
@@ -118,8 +122,7 @@ class PostController extends Controller
     }
 
     public function update($id, Request $request){
-        $commonRules = [//other,question
-            'title' => 'required|min:1|max:50',
+        $commonRules = [//other
             'description' => 'required|min:1|max:1000',
             'image' => 'nullable|mimes:jpeg,jpg,png,gif|max:1048',
             'category_id' => 'required|exists:categories,id',
@@ -134,24 +137,32 @@ class PostController extends Controller
                 'startdate' => 'required|date',
                 'enddate'   => 'date|after_or_equal:startdate',
             ];
+            $modalId = 'edit-form-' . $categoryId;
         } elseif ($categoryId == 2 || $categoryId == 4) { // food,travel
             $extraRules = [
                 'location'  => 'required|string|max:50',
                 'latitude' => 'required|numeric',
                 'longitude' => 'required|numeric',
             ];
-        } elseif ($categoryId == 5) { // item
+            $modalId = 'edit-form-' . $categoryId;
+        } elseif ($categoryId == 5) { // transportation
             $extraRules = [
                 'departure' => 'required|string|max:50',
                 'destination' => 'required|string|max:50',
                 'fee' => 'required|numeric|min:1',
                 'trans_category' => 'required|exists:trans_categories,id',
             ];
-        }elseif ($categoryId == 6 || $categoryId == 7) { // item
+            $modalId = 'edit-form-' . $categoryId;
+        } elseif ($categoryId == 6) { // question
+            $extraRules = [
+                'title' => 'required|min:1|max:50',
+            ];
+            $modalId = 'edit-form-' . $categoryId;
+        }elseif ($categoryId == 7) { // item
             $extraRules = $commonRules;
+            $modalId = 'edit-form-' . $categoryId;
         }
 
-        $modalId = 'edit-form-' . $id;
         $validator = Validator::make($request->all(), array_merge($commonRules, $extraRules));
 
         if ($validator->fails()) {

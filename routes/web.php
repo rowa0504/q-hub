@@ -20,6 +20,7 @@ use App\Http\Controllers\ParticipationController;
 use App\Http\Controllers\ChatRoomController;
 use App\Http\Controllers\ChatMessageController;
 use App\Http\Controllers\AnswerController;
+use App\Http\Controllers\WantedItemController;
 
 
 Auth::routes();
@@ -91,6 +92,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/', [ItemController::class, 'index'])->name('index');
         // Route::get('/{id}', [ItemController::class, 'show'])->name('show');
         Route::get('/search', [ItemController::class, 'search'])->name('search');
+    });
+
+    // Wanted Item route
+    Route::group(['prefix' => 'wantedItem', 'as' => 'wantedItem.'], function () {
+        Route::post('/store', [WantedItemController::class, 'store'])->name('store');
     });
 
     // Chatroom route

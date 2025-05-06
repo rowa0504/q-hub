@@ -22,15 +22,6 @@
             @enderror
         </div>
 
-        <!-- Title input -->
-        <div class="mb-3">
-            <input type="text" class="form-control" name="title" id="food-title-{{ $post->id }}"
-                placeholder="Enter your post title...">
-            @error('title')
-                <p class="text-danger small">{{ $message }}</p>
-            @enderror
-        </div>
-
         <!-- Location input -->
         <div class="mb-3">
             <input type="text" id="food-location-{{ $post->id }}" name="location" class="form-control"
@@ -86,7 +77,6 @@
         $.get(`/posts/${postId}/edit`, function(data) {
 
             // フォームへのデータの流し込み
-            $('#food-title-{{ $post->id }}').val(data.title || '');
             $('#food-location-{{ $post->id }}').val(data.location || '');
             $('#food-description-{{ $post->id }}').val(data.description || '');
 

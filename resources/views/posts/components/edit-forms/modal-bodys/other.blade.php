@@ -20,14 +20,6 @@
             @enderror
         </div>
 
-        <!-- Title input -->
-        <div class="mb-3">
-            <input type="text" class="form-control" name="title" id="other-title-{{ $post->id }}" placeholder="Enter your post title...">
-            @error('title')
-                <p class="text-danger small">{{ $message }}</p>
-            @enderror
-        </div>
-
         <!-- Description input -->
         <div class="mb-3">
             <textarea class="form-control" name="description" id="other-description-{{ $post->id }}" placeholder="Enter your post description..." rows="3"></textarea>
@@ -65,7 +57,6 @@
         $.get(`/posts/${postId}/edit`, function (data) {
 
             // フォームへのデータの流し込み
-            $('#other-title-{{ $post->id }}').val(data.title || '');
             $('#other-description-{{ $post->id }}').val(data.description || '');
 
             // 画像プレビュー（Base64データを使って表示）

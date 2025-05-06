@@ -23,15 +23,6 @@
             @enderror
         </div>
 
-        <!-- Title input -->
-        <div class="mb-3">
-            <input type="text" class="form-control" name="title" id="travel-title-{{ $post->id }}"
-                placeholder="Enter your post title...">
-            @error('title')
-                <p class="text-danger small">{{ $message }}</p>
-            @enderror
-        </div>
-
         <!-- Location input -->
         <div class="mb-3">
             <input type="text" class="form-control" name="location" id="travel-location-{{ $post->id }}"
@@ -84,7 +75,6 @@
         const postId = $(this).data('id');
 
         $.get(`/posts/${postId}/edit`, function(data) {
-            $('#travel-title-' + postId).val(data.title || '');
             $('#travel-location-' + postId).val(data.location || '');
             $('#travel-description-' + postId).val(data.description || '');
 
