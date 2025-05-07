@@ -39,7 +39,9 @@ class AdminController extends Controller
             'user_count' => \App\Models\User::count(),
             'post_count' => \App\Models\Post::count(),
             'comments_count' => \App\Models\Comment::count(),
-            'recent_users' => \App\Models\User::latest()->take(5)->get(),
+            'answers_count' => \App\Models\Answer::count(),
+            'reports_count' => \App\Models\Report::count(),
+            'reports_sent_count' => \App\Models\Post::where('warning_sent', true)->count(),
         ]);
     }
 
@@ -120,30 +122,55 @@ class AdminController extends Controller
         return back()->with('success', 'Answer has been restored.');
     }
 
-    // 警告送信
-// AdminController.php
+    public function warnPost(\App\Models\Post $post)
+    {
+        if ($post->warning_sent) {
+            return back()->with('message', 'Warning has already been sent to this post.');
+        }
 
-public function warnPost(\App\Models\Post $post)
-{
-    if ($post->warning_sent) {
-        return back()->with('message', 'Warning has already been sent to this post.');
+        $post->warning_sent = true;
+        $post->save();
+
+        return back()->with('success', "Warning has been sent for post: {$post->title}");
     }
-
-    $post->warning_sent = true;
-    $post->save();
-
-    return back()->with('success', "Warning has been sent for post: {$post->title}");
-}
 
 
     public function reports()
     {
         $reports = \App\Models\Report::with([
             'user' => fn($query) => $query->withTrashed(),
-            'post' => fn($query) => $query->withTrashed()->with(['user' => fn($q) => $q->withTrashed()]),
+            'post' => fn($query) => $query->withTrashed()->with([
+                'user' => fn($q) => $q->withTrashed(),
+                'reports.reportReasonReport.reason'
+            ]),
             'reportReasonReport.reason'
         ])->latest()->get();
 
-        return view('admin.reports.index', compact('reports'));
+        // 投稿IDごとに通報理由を集める（重複除去）
+        $postReportedReasons = [];
+
+        foreach ($reports as $report) {
+            $post = $report->post;
+            if (!$post) continue;
+
+            $reasons = collect();
+            foreach ($post->reports ?? [] as $pReport) {
+                foreach ($pReport->reportReasonReport ?? [] as $rrr) {
+                    if ($rrr->reason) {
+                        $reasons->push($rrr->reason->name);
+                    }
+                }
+            }
+
+            $postReportedReasons[$post->id] = $reasons->unique()->values();
+        }
+
+        return view('admin.reports.index', compact('reports', 'postReportedReasons'));
+    }
+
+    public function reportSentIndex()
+    {
+        $warned_posts = \App\Models\Post::where('warning_sent', true)->with(['user', 'category'])->get();
+        return view('admin.report_sent.index', compact('warned_posts'));
     }
 }
