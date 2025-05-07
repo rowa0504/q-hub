@@ -28,7 +28,7 @@
                                     <img src="{{ $comment->user->avatar }}"
                                         onerror="this.onerror=null; this.src='{{ asset('images/user_icon.png') }}';"
                                         alt="User Avatar" class="rounded-circle me-2" width="40" height="40">
-                                    <a href="{{ route('profile.show', $comment->user->id) }}"
+                                    <a href="{{ route('profile.index', $comment->user->id) }}"
                                         class="text-decoration-none text-dark">
                                         <strong>{{ $comment->user->name }}</strong>
                                     </a>
