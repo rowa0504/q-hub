@@ -96,7 +96,7 @@
                                         <hr class="dropdown-divider">
                                     @endcan
 
-                                    <a href="{{ route('profile.show', Auth::user()->id) }}" class="dropdown-item">
+                                    <a href="{{ route('profile.index', Auth::user()->id) }}" class="dropdown-item">
                                         <i class="fa-solid fa-circle-user text-info"></i> Profile
                                     </a>
 

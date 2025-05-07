@@ -12,8 +12,6 @@ class ReportReasonController extends Controller
     {
         $this->reportReason = $reportReason;
     }
-
-    
 }
 
 

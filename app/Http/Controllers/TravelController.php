@@ -12,20 +12,15 @@ class TravelController extends Controller
     private $reportReason;
 
     public function __construct(Post $post, ReportReason $reportReason){
-        $this->post = $post;
+        $this->post         = $post;
         $this->reportReason = $reportReason;
     }
 
     public function index()
     {
         $all_report_reasons = $this->reportReason->all();
-        $all_posts = Post::where('category_id', 4)->get();
+        $all_posts          = $this->post->where('category_id', 4)->get();
 
         return view('posts.categories.travels.index', compact('all_posts', 'all_report_reasons'));
-    }
-
-    public function show($id)
-    {
-        return view('posts.categories.travels.show');
     }
 }

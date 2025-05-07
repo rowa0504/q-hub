@@ -8,8 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AnswerController extends Controller
 {
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $request->validate([
             'body' => 'required|string|max:1000',
             'post_id' => 'required|exists:posts,id',
@@ -26,8 +25,7 @@ class AnswerController extends Controller
             ->with('open_answer_post_id', $request->post_id);
     }
 
-    public function markBest(Answer $answer)
-    {
+    public function markBest(Answer $answer){
         $post = $answer->post;
 
         if (Auth::id() !== $post->user_id) {
@@ -48,8 +46,7 @@ class AnswerController extends Controller
     }
 
 
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
         $request->validate([
             'body' => 'required|string|max:1000',
         ]);
@@ -68,8 +65,7 @@ class AnswerController extends Controller
             ->with('open_answer_post_id', $answer->post_id);
     }
 
-    public function destroy($id)
-    {
+    public function destroy($id){
         $answer = Answer::findOrFail($id);
 
         if (Auth::id() !== $answer->user_id) {

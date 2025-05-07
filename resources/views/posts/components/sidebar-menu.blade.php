@@ -1,7 +1,7 @@
 <!-- ユーザー -->
 <div class="d-flex align-items-center mb-3 text-dark">
     @if (Auth::check())
-        <a href="{{ route('profile.show', Auth::user()->id) }}" class="text-decoration-none d-flex align-items-center">
+        <a href="{{ route('profile.index', Auth::user()->id) }}" class="text-decoration-none d-flex align-items-center">
             @if (Auth::user()->avatar)
                 <img src="{{ Auth::user()->avatar }}" class="rounded-circle me-2 avatar-sm"
                      alt="Avatar" style="width: 40px; height: 40px; object-fit: cover;">

@@ -1,7 +1,7 @@
 <div class="card shadow-sm mb-4 rounded-4 overflow-hidden">
     {{-- 投稿ヘッダー --}}
     <div class="d-flex align-items-center border-bottom px-3 py-2 bg-light">
-        <a href="{{ route('profile.show', $post->user->id ?? '#') }}" class="text-decoration-none">
+        <a href="{{ route('profile.index', $post->user->id ?? '#') }}" class="text-decoration-none">
             @if ($post->user && $post->user->avatar)
                 <img src="{{ $post->user->avatar }}" alt="{{ $post->user->name }}" class="rounded-circle" width="40"
                     height="40">

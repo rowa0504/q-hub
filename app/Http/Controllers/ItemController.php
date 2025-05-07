@@ -10,28 +10,30 @@ use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
 {
+    private $user;
     private $post;
     private $reportReason;
 
-    public function __construct(Post $post, ReportReason $reportReason){
-        $this->post = $post;
+    public function __construct(Post $post, ReportReason $reportReason, User $user){
+        $this->user         = $user;
+        $this->post         = $post;
         $this->reportReason = $reportReason;
     }
 
     public function index(){
         $all_report_reasons = $this->reportReason->all();
-        $all_user = User::all();  // Retrieve all users, or any specific data as needed
-        // ログインユーザーの欲しいキーワード一覧を取得
+        $all_user           = $this->user->all();
+
         $wanted_keywords = auth()->user()
             ->wantedItems()
             ->pluck('keyword')
             ->toArray();
 
         // 投稿取得 + マッチ判定 + ソート
-        $all_posts = Post::where('category_id', 3)
+        $all_posts = $this->post->where('category_id', 3)
             ->get()
             ->map(function ($post) use ($wanted_keywords) {
-                $post->is_recommended = false;
+                $post->is_recommended  = false;
                 $post->matched_keyword = null;
 
                 foreach ($wanted_keywords as $keyword) {
@@ -50,13 +52,6 @@ class ItemController extends Controller
         return view('posts.categories.items.index', compact('all_posts', 'all_report_reasons', 'all_user'));
     }
 
-
-
-    // public function show($id)
-    // {
-    //     return view('posts.categories.items.show');
-    // }
-
     public function search(Request $request){
         $all_report_reasons = $this->reportReason->all();
 
@@ -69,9 +64,9 @@ class ItemController extends Controller
             ->where('user_id', '!=', Auth::id())
             ->get();
 
-        return view('posts.categories.items.search')
-                ->with('all_report_reasons', $all_report_reasons)
-                ->with('posts', $posts)
-                ->with('search', $request->search);
+            return view('posts.categories.items.search')
+            ->with('all_report_reasons', $all_report_reasons)
+            ->with('posts', $posts)
+            ->with('search', $request->search);
     }
 }

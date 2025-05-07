@@ -119,7 +119,7 @@
 
             <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-info text-white fw-bold">Save</button>
-                <a href="{{ route('profile.index') }}" class="btn btn-outline-dark fw-bold">Back</a>
+                <a href="{{ route('profile.index', Auth::user()->id) }}" class="btn btn-outline-dark fw-bold">Back</a>
             </div>
         </form>
     </div>

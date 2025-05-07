@@ -17,15 +17,15 @@ class PostController extends Controller
 
     public function __construct(Post $post, Category $category, TransCategory $trans_category)
     {
-        $this->post = $post;
-        $this->category = $category;
+        $this->post           = $post;
+        $this->category       = $category;
         $this->trans_category = $trans_category;
     }
 
     public function store(Request $request){
         $commonRules = [//other
             'description' => 'required|min:1|max:1000',
-            'image' => 'nullable|mimes:jpeg,jpg,png,gif|max:1048',
+            'image'       => 'nullable|mimes:jpeg,jpg,png,gif|max:1048',
             'category_id' => 'required|exists:categories,id',
         ];
 
@@ -34,7 +34,7 @@ class PostController extends Controller
 
         if ($categoryId == 1 || $categoryId == 3) { // event,item
             $extraRules = [
-                'max' => 'required|numeric|min:1',
+                'max'       => 'required|numeric|min:1',
                 'startdate' => 'required|date',
                 'enddate'   => 'date|after_or_equal:startdate',
             ];
@@ -42,15 +42,15 @@ class PostController extends Controller
         } elseif ($categoryId == 2 || $categoryId == 4) { // food,travel
             $extraRules = [
                 'location'  => 'required|string|max:50',
-                'latitude' => 'required|numeric',
+                'latitude'  => 'required|numeric',
                 'longitude' => 'required|numeric',
             ];
             $modalId = 'post-form-' . $categoryId;
         } elseif ($categoryId == 5) { // transportation
             $extraRules = [
-                'departure' => 'required|string|max:50',
-                'destination' => 'required|string|max:50',
-                'fee' => 'required|numeric|min:1',
+                'departure'      => 'required|string|max:50',
+                'destination'    => 'required|string|max:50',
+                'fee'            => 'required|numeric|min:1',
                 'trans_category' => 'required|exists:trans_categories,id',
             ];
             $modalId = 'post-form-' . $categoryId;
@@ -73,8 +73,8 @@ class PostController extends Controller
                 ->with('open_modal', $modalId);  // モーダルIDをセッションに保存
         }
 
-        $this->post->user_id = Auth::id();
-        $this->post->title = $request->title;
+        $this->post->user_id     = Auth::user()->id;
+        $this->post->title       = $request->title;
         $this->post->description = $request->description;
 
         if ($request->hasFile('image')) {
@@ -82,16 +82,16 @@ class PostController extends Controller
                 ';base64,' . base64_encode(file_get_contents($request->image));
         }
 
-        $this->post->location = $request->location;
-        $this->post->latitude = $request->latitude;
-        $this->post->longitude = $request->longitude;
-        $this->post->departure = $request->departure;
-        $this->post->destination = $request->destination;
-        $this->post->fee = $request->fee;
-        $this->post->max = $request->max;
-        $this->post->startdatetime = $request->startdate;
-        $this->post->enddatetime = $request->enddate;
-        $this->post->category_id = $request->category_id;
+        $this->post->location          = $request->location;
+        $this->post->latitude          = $request->latitude;
+        $this->post->longitude         = $request->longitude;
+        $this->post->departure         = $request->departure;
+        $this->post->destination       = $request->destination;
+        $this->post->fee               = $request->fee;
+        $this->post->max               = $request->max;
+        $this->post->startdatetime     = $request->startdate;
+        $this->post->enddatetime       = $request->enddate;
+        $this->post->category_id       = $request->category_id;
         $this->post->trans_category_id = $request->trans_category;
         $this->post->save();
 
@@ -124,7 +124,7 @@ class PostController extends Controller
     public function update($id, Request $request){
         $commonRules = [//other
             'description' => 'required|min:1|max:1000',
-            'image' => 'nullable|mimes:jpeg,jpg,png,gif|max:1048',
+            'image'       => 'nullable|mimes:jpeg,jpg,png,gif|max:1048',
             'category_id' => 'required|exists:categories,id',
         ];
 
@@ -133,7 +133,7 @@ class PostController extends Controller
 
         if ($categoryId == 1 || $categoryId == 3) { // event,item
             $extraRules = [
-                'max' => 'required|numeric|min:1',
+                'max'       => 'required|numeric|min:1',
                 'startdate' => 'required|date',
                 'enddate'   => 'date|after_or_equal:startdate',
             ];
@@ -141,15 +141,15 @@ class PostController extends Controller
         } elseif ($categoryId == 2 || $categoryId == 4) { // food,travel
             $extraRules = [
                 'location'  => 'required|string|max:50',
-                'latitude' => 'required|numeric',
+                'latitude'  => 'required|numeric',
                 'longitude' => 'required|numeric',
             ];
             $modalId = 'edit-form-' . $categoryId;
         } elseif ($categoryId == 5) { // transportation
             $extraRules = [
-                'departure' => 'required|string|max:50',
-                'destination' => 'required|string|max:50',
-                'fee' => 'required|numeric|min:1',
+                'departure'      => 'required|string|max:50',
+                'destination'    => 'required|string|max:50',
+                'fee'            => 'required|numeric|min:1',
                 'trans_category' => 'required|exists:trans_categories,id',
             ];
             $modalId = 'edit-form-' . $categoryId;
@@ -173,8 +173,9 @@ class PostController extends Controller
         }
 
         $post = $this->post->findOrFail($id);
+
         $post->user_id     = Auth::user()->id;
-        $post->title = $request->title;
+        $post->title       = $request->title;
         $post->description = $request->description;
         if ($request->hasFile('image')) {
 
@@ -184,16 +185,16 @@ class PostController extends Controller
             $post->image = null;
         }
 
-        $post->location = $request->location;
-        $post->latitude = $request->latitude;
-        $post->longitude = $request->longitude;
-        $post->departure = $request->departure;
-        $post->destination = $request->destination;
-        $post->fee = $request->fee;
-        $post->max = $request->max;
-        $post->startdatetime = $request->startdate;
-        $post->enddatetime = $request->enddate;
-        $post->category_id = $request->category_id;
+        $post->location          = $request->location;
+        $post->latitude          = $request->latitude;
+        $post->longitude         = $request->longitude;
+        $post->departure         = $request->departure;
+        $post->destination       = $request->destination;
+        $post->fee               = $request->fee;
+        $post->max               = $request->max;
+        $post->startdatetime     = $request->startdate;
+        $post->enddatetime       = $request->enddate;
+        $post->category_id       = $request->category_id;
         $post->trans_category_id = $request->trans_category;
         $post->save();
 
@@ -206,16 +207,4 @@ class PostController extends Controller
         $post->delete();
         return redirect()->back();
     }
-
-    public function index()
-    {
-        // 自分（ログインしてる人）の投稿だけ取得する
-        $all_posts = $this->post->where('user_id', Auth::id())
-                                ->latest()
-                                ->get();
-
-        return view('users.profile.index', compact('all_posts'));
-    }
-
-
 }

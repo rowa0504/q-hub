@@ -17,22 +17,19 @@ class User extends Authenticatable
     const USER_ROLE_ID = 2;   // the regular user
 
     // 投稿とのリレーション
-    public function posts()
-    {
+    public function posts(){
         return $this->hasMany(Post::class);
     }
 
     // ユーザーが参加しているチャットルーム
-    public function chatRooms()
-    {
+    public function chatRooms(){
         return $this->belongsToMany(ChatRoom::class, 'chat_room_user')
             ->withPivot('joined_at', 'left_at')
             ->withTimestamps();
     }
 
     // ユーザーが送信したメッセージ
-    public function chatMessages()
-    {
+    public function chatMessages(){
         return $this->hasMany(ChatMessage::class);
     }
 
@@ -68,14 +65,7 @@ class User extends Authenticatable
         ];
     }
 
-    // 通報した投稿との関係
-    public function reportedPosts()
-    {
-        return $this->belongsToMany(Post::class, 'post_user_reports')->withTimestamps();
-    }
-
-    protected static function booted()
-    {
+    protected static function booted(){
         static::deleting(function ($user) {
             if (! $user->isForceDeleting()) {
                 $user->posts()->delete(); // ← 論理削除

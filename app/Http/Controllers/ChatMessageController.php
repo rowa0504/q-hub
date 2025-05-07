@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ChatRoom;
 use App\Models\ChatMessage;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,16 +13,15 @@ class ChatMessageController extends Controller
     public function __construct(ChatMessage $chatMessage){
         $this->chatMessage = $chatMessage;
     }
-    // メッセージ送信
-    public function store(Request $request, $id)
-    {
-        // $validated = $request->validate([
-        //     'body' => 'required|string',
-        // ]);
 
-        $this->chatMessage->user_id     = Auth::user()->id;
+    public function store(Request $request, $id){
+        $validated = $request->validate([
+            'body' => 'required|string',
+        ]);
+
+        $this->chatMessage->user_id      = Auth::user()->id;
         $this->chatMessage->chat_room_id = $id;
-        $this->chatMessage->body = $request->body;
+        $this->chatMessage->body         = $request->body;
         $this->chatMessage->save();
 
         return redirect()->back();

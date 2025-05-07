@@ -17,14 +17,12 @@ class Answer extends Model
     ];
 
     // Answerが持つUser（回答者）
-    public function user()
-    {
+    public function user(){
         return $this->belongsTo(User::class);
     }
 
     // App\Models\Answer.php
-public function post()
-{
-    return $this->belongsTo(Post::class);
-}
+    public function post(){
+        return $this->belongsTo(Post::class);
+    }
 }
