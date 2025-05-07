@@ -12,7 +12,7 @@
                         @if($user->id === $participation->user_id)
                             <div class="row align-items-center mb-3">
                                 <div class="col-auto">
-                                    <a href="{{ route('profile.show',$user->id) }}">
+                                    <a href="{{ route('profile.index',$user->id) }}">
                                         @if($user->avatar)
                                             <img src="{{ $user->avatar }}" alt="{{ $user->name }}" class="rounded-circle avatar-md">
                                         @else
@@ -21,7 +21,7 @@
                                     </a>
                                 </div>
                                 <div class="col ps-0 text-truncate">
-                                    <a href="{{ route('profile.show',$user->id) }}" class="text-decoration-none text-dark fw-bold">{{ $user->name }}</a>
+                                    <a href="{{ route('profile.index',$user->id) }}" class="text-decoration-none text-dark fw-bold">{{ $user->name }}</a>
                                     <p class="text-muted mb-0">{{ $user->email }}</p>
                                 </div>
                             </div>
