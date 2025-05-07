@@ -12,18 +12,15 @@ class ReportReasonReport extends Model
 
     public $timestamps = false;
 
-    public function reportReason()
-    {
+    public function reportReason(){
         return $this->belongsTo(ReportReason::class);
     }
 
-    public function reason()
-    {
+    public function reason(){
         return $this->belongsTo(ReportReason::class, 'report_reason_id');
     }
 
-    public function report()
-    {
-        return $this->belongsTo(\App\Models\Report::class);
+    public function report(){
+        return $this->belongsTo(Report::class);
     }
 }

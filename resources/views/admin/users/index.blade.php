@@ -37,7 +37,7 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('profile.show', $user->id) }}" class="text-decoration-none">
+                            <a href="{{ route('profile.index', $user->id) }}" class="text-decoration-none">
                                 {{ $user->name }}
                             </a>
                         </td>

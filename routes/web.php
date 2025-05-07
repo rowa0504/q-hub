@@ -63,10 +63,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Profile route
     Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
-        Route::get('/', [ProfileController::class, 'index'])->name('index');
+        Route::get('/{id}/index', [ProfileController::class, 'index'])->name('index');
         Route::get('/edit', [ProfileController::class, 'edit'])->name('edit');
-        Route::patch('/{id}', [ProfileController::class, 'update'])->name('update');
-        Route::get('/{id}', [ProfileController::class, 'show'])->name('show');
+        Route::patch('/{id}/update', [ProfileController::class, 'update'])->name('update');
     });
 
     // カテゴリー別のroute
@@ -84,13 +83,11 @@ Route::group(['middleware' => 'auth'], function () {
     // Food route
     Route::group(['prefix' => 'food', 'as' => 'food.'], function () {
         Route::get('/', [FoodController::class, 'index'])->name('index');
-        Route::get('/{id}', [FoodController::class, 'show'])->name('show');
     });
 
     // Item route
     Route::group(['prefix' => 'item', 'as' => 'item.'], function () {
         Route::get('/', [ItemController::class, 'index'])->name('index');
-        // Route::get('/{id}', [ItemController::class, 'show'])->name('show');
         Route::get('/search', [ItemController::class, 'search'])->name('search');
     });
 
@@ -107,26 +104,21 @@ Route::group(['middleware' => 'auth'], function () {
 
         //Chat Message route
         Route::post('/{id}/messages/store', [ChatMessageController::class, 'store'])->name('messages.store');
-        Route::get('/{id}/messages/index', [ChatMessageController::class, 'index'])->name('messages.index');
     });
-
 
     // Travel route
     Route::group(['prefix' => 'travel', 'as' => 'travel.'], function () {
         Route::get('/', [TravelController::class, 'index'])->name('index');
-        Route::get('/{id}', [TravelController::class, 'show'])->name('show');
     });
 
     // Transportation route
     Route::group(['prefix' => 'transportation', 'as' => 'transportation.'], function () {
         Route::get('/', [TransportationController::class, 'index'])->name('index');
-        Route::get('/{id}', [TransportationController::class, 'show'])->name('show');
     });
 
     // Question route
     Route::group(['prefix' => 'question', 'as' => 'question.'], function () {
         Route::get('/', [QuestionController::class, 'index'])->name('index');
-        Route::get('/{id}', [QuestionController::class, 'show'])->name('show');
     });
 
 
@@ -167,8 +159,5 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/admin/posts/{post}/warn', [AdminController::class, 'warnPost'])->name('posts.warn');
 
         Route::get('/report-sent', [AdminController::class, 'reportSentIndex'])->name('report_sent');
-
-
-
     });
 });

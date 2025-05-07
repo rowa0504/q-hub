@@ -13,31 +13,15 @@ class ChatRoom extends Model
         return $this->belongsTo(Post::class);
     }
 
-    // // このチャットルームに属するユーザー
-    // public function users(){
-    //     return $this->belongsToMany(User::class, 'chat_room_user')
-    //                 ->withPivot('joined_at', 'left_at')
-    //                 ->withTimestamps();
-    // }
+    public function users(){
+        return $this->belongsToMany(User::class)->withPivot('joined_at');
+    }
 
-    // このチャットルームのメッセージ
-    // public function chatMessages(){
-    //     return $this->hasMany(ChatMessage::class);
-    // }
+    public function chatMessages(){
+        return $this->hasMany(ChatMessage::class);
+    }
 
-    public function users()
-{
-    return $this->belongsToMany(User::class)->withPivot('joined_at');
-}
-
-public function chatMessages()
-{
-    return $this->hasMany(ChatMessage::class);
-}
-
-public function chatdate()
-{
-    return $this->hasOne(ChatRoom::class); // または hasMany の場合は first() を使う
-}
-
+    public function chatdate(){
+        return $this->hasOne(ChatRoom::class); // または hasMany の場合は first() を使う
+    }
 }

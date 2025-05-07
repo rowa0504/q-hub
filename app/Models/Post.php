@@ -10,45 +10,37 @@ use Carbon\Carbon;
 
 class Post extends Model
 {
-
     use SoftDeletes;
-    public function user()
-    {
+
+    public function user(){
         return $this->belongsTo(User::class);
     }
 
-    public function category()
-    {
+    public function category(){
         return $this->belongsTo(Category::class);
     }
 
-    public function transCategory()
-    {
+    public function transCategory(){
         return $this->belongsTo(TransCategory::class);
     }
 
-    public function comments()
-    {
+    public function comments(){
         return $this->hasMany(Comment::class);
     }
 
-    public function answers()
-    {
+    public function answers(){
         return $this->hasMany(Answer::class);
     }
 
-    public function likes()
-    {
+    public function likes(){
         return $this->hasMany(Like::class);
     }
 
-    public function isLiked()
-    {
+    public function isLiked(){
         return $this->likes()->where('user_id', Auth::user()->id)->exists();
     }
 
-    public function getCategoryRoute()
-    {
+    public function getCategoryRoute(){
         switch ($this->category_id) {
             case 1:
                 return route('event.index', ['id' => $this->id]);
@@ -88,6 +80,6 @@ class Post extends Model
     }
 
     public function reports(){
-    return $this->hasMany(\App\Models\Report::class);
+        return $this->hasMany(\App\Models\Report::class);
     }
 }
