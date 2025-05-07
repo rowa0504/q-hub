@@ -10,9 +10,20 @@ use App\Models\Answer;
 
 class AdminController extends Controller
 {
-    public function users()
-    {
-        $all_users = User::withTrashed()->paginate(10);
+    private $user;
+    private $post;
+    private $comment;
+    private $answer;
+
+    public function __construct(User $user, Post $post, Comment $comment, Answer $answer){
+        $this->user = $user;
+        $this->post = $post;
+        $this->comments = $comment;
+        $this->answer = $answer;
+    }
+
+    public function users(){
+        $all_users = $this->user->withTrashed()->paginate(10);
         return view('admin.users.index', compact('all_users'));
     }
 

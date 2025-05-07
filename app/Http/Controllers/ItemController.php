@@ -64,6 +64,9 @@ class ItemController extends Controller
             ->where('user_id', '!=', Auth::id())
             ->get();
 
-        return view('posts.categories.items.search', compact('all_report_reasons', 'posts', 'search'));
+            return view('posts.categories.items.search')
+            ->with('all_report_reasons', $all_report_reasons)
+            ->with('posts', $posts)
+            ->with('search', $request->search);
     }
 }

@@ -10,14 +10,12 @@ use Illuminate\Support\Facades\Auth;
 class SocialLoginController extends Controller
 {
     // リダイレクト処理
-    public function redirectToProvider($provider)
-    {
+    public function redirectToProvider($provider){
         return Socialite::driver($provider)->redirect();
     }
 
     // コールバック処理
-    public function handleProviderCallback($provider)
-    {
+    public function handleProviderCallback($provider){
         $user = Socialite::driver($provider)->user();
 
         // 既存ユーザーを確認、もしくは新規登録
@@ -30,8 +28,7 @@ class SocialLoginController extends Controller
     }
 
     // ユーザー情報の処理
-    private function findOrCreateUser($socialUser, $provider)
-    {
+    private function findOrCreateUser($socialUser, $provider){
         $user = User::where('email', $socialUser->getEmail())->first();
 
         if ($user) {
@@ -39,8 +36,8 @@ class SocialLoginController extends Controller
         }
 
         return User::create([
-            'name' => $socialUser->getName(),
-            'email' => $socialUser->getEmail(),
+            'name'     => $socialUser->getName(),
+            'email'    => $socialUser->getEmail(),
             'provider' => $provider,
             'password' => bcrypt(Str::random(16)),  // ソーシャルログインには必要ないのでダミーパスワードを設定
         ]);
