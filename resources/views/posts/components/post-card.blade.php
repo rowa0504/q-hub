@@ -184,24 +184,81 @@
             @break
 
             @case(3)
-                <div class="mt-2 fw-bold">
+                    {{-- RECOMMENDED バッジ --}}
                     @if ($post->is_recommended)
-                        <span class="inline-block text-warning text-xs px-2 py-1 rounded-full mb-2">
-                            ★ RECOMMENDED: 「{{ $post->matched_keyword }}」！
-                        </span>
+                        <div class="mb-2">
+                            <span class="badge bg-warning text-dark">
+                                <i class="fa-solid fa-star me-1"></i>
+                                RECOMMENDED: 「{{ $post->matched_keyword }}」！
+                            </span>
+                        </div>
                     @endif
 
-                    <p class="mb-1">Max participants: {{ $post->max ?? 'TBD' }}</p>
-                    <a href="{{ route('chatRoom.start', $post->id) }}">
-                        <i class="fa-brands fa-rocketchat"></i>
-                    </a>
+                    {{-- 参加者数と参加ボタン --}}
+                    <div class="d-flex align-items-center gap-3 my-2">
+                        {{-- 参加ボタン --}}
+                        @if ($post->participations->count() >= $post->max)
+                            @if ($post->isParticipanted())
+                                <form action="{{ route('participation.delete', $post->id) }}" method="post"
+                                    class="d-flex align-items-center">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm shadow-none p-0">
+                                        <i class="fa-solid fa-hand text-primary fa-lg"></i>
+                                    </button>
+                                </form>
+                            @else
+                                <button class="btn btn-sm shadow-none p-0" disabled>
+                                    <i class="fa-solid fa-hand text-danger fa-lg"></i>
+                                </button>
+                            @endif
+                        @else
+                            @if ($post->isParticipanted())
+                                <form action="{{ route('participation.delete', $post->id) }}" method="post"
+                                    class="d-flex align-items-center">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm shadow-none p-0">
+                                        <i class="fa-solid fa-hand text-primary fa-lg"></i>
+                                    </button>
+                                </form>
+                            @else
+                                <form action="{{ route('participation.store', $post->id) }}" method="post"
+                                    class="d-flex align-items-center">
+                                    @csrf
+                                    <button class="btn btn-sm shadow-none p-0">
+                                        <i class="fa-regular fa-hand fa-lg"></i>
+                                    </button>
+                                </form>
+                            @endif
+                        @endif
+
+                        {{-- 現在の参加者数 --}}
+                        <div class="d-flex align-items-center">
+                            <button class="btn btn-link text-decoration-none p-0 m-0" data-bs-toggle="modal"
+                                data-bs-target="#participant-user-{{ $post->id }}">
+                                <i class="fa-solid fa-users text-muted me-1"></i>
+                                <span class="fw-bold fs-5 text-dark">{{ $post->participations->count() }}</span>
+                            </button>
+                            <span class="mx-2 text-muted">/</span>
+                            <span class="text-muted small">Max: {{ $post->max ?? 'TBD' }}</span>
+                        </div>
+                    </div>
+                    @include('posts.components.modals.participation-modal')
+
+                    {{-- チャット開始リンク --}}
+                    <div class="mb-2">
+                        <a href="{{ route('chatRoom.start', $post->id) }}" class="btn btn-outline-primary btn-sm">
+                            <i class="fa-brands fa-rocketchat me-1"></i> Join Chat
+                        </a>
+                    </div>
+
+                    {{-- エラーメッセージ --}}
                     @if (session('error'))
                         <div class="alert alert-danger">
                             {{ session('error') }}
                         </div>
                     @endif
-                    <p class="mb-1 text-muted small">Max participants: {{ $post->max ?? 'TBD' }}</p>
-                </div>
             @break
 
             @case(4)
@@ -260,7 +317,7 @@
 
         {{-- ▼▼ 質問カテゴリー専用：アンサー入力・一覧表示 ▼▼ --}}
         @if ($post->category_id == 6)
-             @include('posts.categories.questions.modal', ['post' => $post])
+            @include('posts.categories.questions.modal', ['post' => $post])
         @endif
 
         {{-- スクロール保持 --}}
