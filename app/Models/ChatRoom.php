@@ -34,4 +34,10 @@ public function chatMessages()
 {
     return $this->hasMany(ChatMessage::class);
 }
+
+public function chatdate()
+{
+    return $this->hasOne(ChatRoom::class); // または hasMany の場合は first() を使う
+}
+
 }

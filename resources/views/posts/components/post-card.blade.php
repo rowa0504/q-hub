@@ -184,24 +184,39 @@
             @break
 
             @case(3)
-                <div class="mt-2 fw-bold">
-                    @if ($post->is_recommended)
-                        <span class="inline-block text-warning text-xs px-2 py-1 rounded-full mb-2">
-                            ★ RECOMMENDED: 「{{ $post->matched_keyword }}」！
+                {{-- RECOMMENDED バッジ --}}
+                @if ($post->is_recommended)
+                    <div class="mb-2">
+                        <span class="badge bg-warning text-dark">
+                            <i class="fa-solid fa-star me-1"></i>
+                            RECOMMENDED: 「{{ $post->matched_keyword }}」！
                         </span>
-                    @endif
+                    </div>
+                @endif
 
-                    <p class="mb-1">Max participants: {{ $post->max ?? 'TBD' }}</p>
-                    <a href="{{ route('chatRoom.start', $post->id) }}">
-                        <i class="fa-brands fa-rocketchat"></i>
+                {{-- 参加者数 --}}
+                @if ($post->chatRoom)
+                    <h5 class="mb-2">
+                        Participants ({{ $post->chatRoom->users->count() }} / {{ $post->max }})
+                    </h5>
+                @else
+                    <h5 class="mb-2">Participants: N/A</h5>
+                @endif
+
+
+                {{-- チャット開始リンク --}}
+                <div class="mb-2">
+                    <a href="{{ route('chatRoom.start', $post->id) }}" class="btn btn-outline-primary btn-sm">
+                        <i class="fa-brands fa-rocketchat me-1"></i> Join Chat
                     </a>
-                    @if (session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-                    <p class="mb-1 text-muted small">Max participants: {{ $post->max ?? 'TBD' }}</p>
                 </div>
+
+                {{-- エラーメッセージ --}}
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
             @break
 
             @case(4)

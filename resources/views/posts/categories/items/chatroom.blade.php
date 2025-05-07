@@ -1,44 +1,72 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto max-w-3xl p-4 bg-white rounded-lg shadow">
-    <h2 class="text-2xl font-bold mb-4">チャットルーム：{{ $chatdate->post->title }}</h2>
+    <div class="container my-5 p-4 bg-white rounded shadow-sm">
 
-    {{-- 参加者リスト --}}
-    <div class="mb-4">
-        <h3 class="text-lg font-semibold">参加者（{{ $chatdate->users->count() }} / {{ $chatdate->post->max }}）</h3>
-        <ul class="list-disc pl-5">
-            @foreach ($chatdate->users as $user)
-                <li>{{ $user->name }}</li>
-            @endforeach
-        </ul>
-    </div>
+        <h2 class="h4 fw-bold mb-4">Chat Room: {{ $chatdate->post->title }}</h2>
 
-    {{-- メッセージ一覧 --}}
-    <div class="border p-4 mb-4 h-64 overflow-y-scroll bg-gray-100 rounded">
-        @foreach ($all_message as $message)
-            <div class="mb-3">
-                <strong>{{ $message->user->name }}</strong>
-                <span class="text-sm text-gray-500">{{ $message->created_at->format('H:i') }}</span>
-                <p class="ml-2">{{ $message->body }}</p>
-            </div>
-        @endforeach
-    </div>
-
-    {{-- メッセージ送信フォーム --}}
-    <form action="{{ route('chatRoom.messages.store', $chatdate->id) }}" method="POST">
-        @csrf
-        <div class="flex">
-            <textarea name="body" class="flex-1 p-2 border rounded-l" rows="2" placeholder="メッセージを入力..."></textarea>
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600">送信</button>
+        {{-- Participants --}}
+        <div class="mb-4">
+            <h5 class="mb-2">Participants ({{ $chatdate->users->count() }} / {{ $chatdate->post->max }})</h5>
+            <ul class="ps-3">
+                @foreach ($chatdate->users as $user)
+                    <li>{{ $user->name }}</li>
+                @endforeach
+            </ul>
         </div>
-    </form>
 
-    {{-- チャットルーム退出ボタン --}}
-    <form action="{{ route('chatRoom.leave', $chatdate->id) }}" method="POST" class="mt-4">
-        @csrf
+        {{-- Flash Message --}}
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
 
-        <button type="submit" class="text-red-600 underline">チャットルームを退出する</button>
-    </form>
-</div>
+        {{-- Messages --}}
+        <div class="border rounded p-3 mb-4 bg-light" style="height: 300px; overflow-y: auto;">
+            @foreach ($all_message as $message)
+                @php
+                    $isMe = auth()->check() && auth()->id() === $message->user_id;
+                @endphp
+
+                <div class="d-flex mb-3 {{ $isMe ? 'flex-row-reverse text-end' : '' }}">
+                    {{-- Avatar --}}
+                    @if ($message->user->avatar)
+                        <img src="{{ $message->user->avatar }}" alt="avatar"
+                            class="rounded-circle {{ $isMe ? 'ms-2' : 'me-2' }}"
+                            style="width: 40px; height: 40px; object-fit: cover;">
+                    @else
+                        <i class="fa-solid fa-circle-user fa-2x text-secondary {{ $isMe ? 'ms-2' : 'me-2' }}"></i>
+                    @endif
+
+                    {{-- Message Bubble --}}
+                    <div class="p-2 {{ $isMe ? 'bg-primary text-white' : 'bg-white' }} border rounded"
+                        style="max-width: 75%;">
+                        <div class="d-flex justify-content-between mb-1">
+                            <strong>{{ $message->user->name }}</strong>
+                            <small class="text-muted ms-2">{{ $message->created_at->format('H:i') }}</small>
+                        </div>
+                        <p class="mb-0">{{ $message->body }}</p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        {{-- Message Form --}}
+        <form action="{{ route('chatRoom.messages.store', $chatdate->id) }}" method="POST" class="mb-3">
+            @csrf
+            <div class="input-group">
+                <textarea name="body" rows="2" class="form-control" placeholder="Enter your message..." required></textarea>
+                <button type="submit" class="btn btn-primary">Send</button>
+            </div>
+        </form>
+
+        {{-- Leave Button --}}
+        <form action="{{ route('chatRoom.leave', $chatdate->id) }}" method="POST">
+            @csrf
+            <button type="submit" class="btn btn-link text-danger p-0">Leave this chat room</button>
+        </form>
+
+    </div>
 @endsection

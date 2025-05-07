@@ -49,7 +49,10 @@ class ChatRoomController extends Controller
 
     public function show($chatRoom){
         $chatdate = $this->chatroom->findOrFail($chatRoom);
-        $all_message = $this->chatMessage->latest()->get();
+        $all_message = $this->chatMessage
+        ->where('chat_room_id', $chatRoom)
+        ->orderBy('created_at', 'asc')
+        ->get();
 
         return view('posts.categories.items.chatroom', compact('chatRoom', 'chatdate', 'all_message'));
     }

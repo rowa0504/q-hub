@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\ReportReason;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
@@ -19,7 +20,7 @@ class ItemController extends Controller
 
     public function index(){
         $all_report_reasons = $this->reportReason->all();
-
+        $all_user = User::all();  // Retrieve all users, or any specific data as needed
         // ログインユーザーの欲しいキーワード一覧を取得
         $wanted_keywords = auth()->user()
             ->wantedItems()
@@ -46,7 +47,7 @@ class ItemController extends Controller
             ->sortByDesc('is_recommended') // おすすめ投稿を上に
             ->values(); // キーをリセット（インデックス0から）
 
-        return view('posts.categories.items.index', compact('all_posts', 'all_report_reasons'));
+        return view('posts.categories.items.index', compact('all_posts', 'all_report_reasons', 'all_user'));
     }
 
 
