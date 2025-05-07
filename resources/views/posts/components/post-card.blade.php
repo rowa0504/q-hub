@@ -260,7 +260,7 @@
 
         {{-- ▼▼ 質問カテゴリー専用：アンサー入力・一覧表示 ▼▼ --}}
         @if ($post->category_id == 6)
-             @include('posts.categories.questions.modal', ['post' => $post])
+            @include('posts.categories.questions.modal', ['post' => $post])
         @endif
 
         {{-- スクロール保持 --}}
@@ -280,9 +280,7 @@
             });
 
             function toggleAnswer(postId) {
-                const section = document.getElementById(answer - section - $ {
-                    postId
-                });
+                const section = document.getElementById(`answer-section-${postId}`);
                 if (section.style.display === 'none' || section.style.display === '') {
                     section.style.display = 'block';
                 } else {
@@ -290,6 +288,7 @@
                 }
             }
         </script>
+
 
     </div>
 </div>

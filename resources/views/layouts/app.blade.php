@@ -30,7 +30,7 @@
 
     {{-- For Edit --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+
     <script src="//unpkg.com/alpinejs" defer></script>
 </head>
 
@@ -151,8 +151,14 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-white {{ request()->is('admin/reports') ? 'fw-bold' : '' }}"
-                                   href="{{ route('admin.reports.index') }}">
+                                   href="{{ route('admin.reports') }}">
                                     <i class="fa-solid fa-flag me-2"></i> Reports
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white {{ request()->is('admin/report-sent') ? 'fw-bold' : '' }}"
+                                   href="{{ route('admin.report_sent') }}">
+                                    <i class="fa-solid fa-envelope-circle-check me-2"></i> Reports Sent
                                 </a>
                             </li>
                         </ul>

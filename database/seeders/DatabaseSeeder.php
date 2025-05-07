@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
             TransCategorySeeder::class,
             ReportReasonSeeder::class,
             PostSeeder::class,
+            CommentSeeder::class,
+            AnswerSeeder::class,
         ]);
     }
 }
