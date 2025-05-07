@@ -58,17 +58,16 @@ class ChatRoomController extends Controller
                                 ->orderBy('created_at', 'asc')
                                 ->get();
 
-        return view('posts.categories.items.chatroom', compact('chat_room_id', 'chatdate', 'all_message'));
+        return view('posts.categories.items.chatroom', compact('chatdate', 'all_message'));
     }
 
-    // チャットルーム退出
     public function leave($id){
         // 対象のチャットルームを取得
-        $chatRoom = ChatRoom::findOrFail($id);
+        $chat_room = $this->chatRoom->findOrFail($id);
 
         // 認証済みユーザーをチャットルームから削除
-        $chatRoom->users()->detach(auth()->id());
+        $chat_room->users()->detach(auth()->id());
 
-        return redirect()->route('item.index')->with('status', 'チャットルームから退出しました');
+        return redirect()->route('item.index');
     }
 }
