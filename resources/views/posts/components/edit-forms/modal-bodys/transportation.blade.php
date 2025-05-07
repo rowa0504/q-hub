@@ -35,8 +35,9 @@
                     @foreach ($all_trans_categories as $trans_category)
                         @if ($trans_category->id == $post->transCategory->id)
                             <option value="{{ $trans_category->id }}" selected>{{ $trans_category->name }}</option>
+                        @else
+                            <option value="{{ $trans_category->id }}">{{ $trans_category->name }}</option>
                         @endif
-                        <option value="{{ $trans_category->id }}">{{ $trans_category->name }}</option>
                     @endforeach
                 </select>
             @endif
