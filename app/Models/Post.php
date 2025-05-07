@@ -86,4 +86,8 @@ class Post extends Model
     public function chatRoom(){
         return $this->hasOne(ChatRoom::class);
     }
+
+    public function reports(){
+    return $this->hasMany(\App\Models\Report::class);
+    }
 }

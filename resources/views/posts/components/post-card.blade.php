@@ -295,9 +295,7 @@
             });
 
             function toggleAnswer(postId) {
-                const section = document.getElementById(answer - section - $ {
-                    postId
-                });
+                const section = document.getElementById(`answer-section-${postId}`);
                 if (section.style.display === 'none' || section.style.display === '') {
                     section.style.display = 'block';
                 } else {
@@ -305,6 +303,7 @@
                 }
             }
         </script>
+
 
     </div>
 </div>

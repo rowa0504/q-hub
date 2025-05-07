@@ -11,7 +11,13 @@ class PostSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create();
-        $userIds = range(1, 10); // UserSeeder で事前に作成されたユーザーID
+        $userIds = range(1, 10); // UserSeederで作成されたユーザーID
+
+        // ランダムに使う画像（public/images に保存されている前提）
+        $images = [
+            'images/Zinnbei1.png',
+            'images/Zinnbei_button.png',
+        ];
 
         $posts = [
             // Event
@@ -23,25 +29,33 @@ class PostSeeder extends Seeder
                 'startdatetime' => now()->addDays(2),
                 'enddatetime' => now()->addDays(3),
             ],
-            // Travel
-            [
-                'title' => 'Island Hopping Tour',
-                'description' => 'Visit beautiful islands.',
-                'category_id' => 2,
-                'location' => 'Mactan',
-            ],
-            // Question
-            [
-                'title' => 'How to extend visa?',
-                'description' => 'Anyone know the latest rule?',
-                'category_id' => 3,
-            ],
             // Food
             [
                 'title' => 'Best Mango Float in Town',
                 'description' => 'Where can I find delicious mango float?',
-                'category_id' => 4,
+                'category_id' => 2,
                 'location' => 'SM Cebu',
+            ],
+            // Item
+            [
+                'title' => 'Selling Electric Fan',
+                'description' => 'Almost new, 3-speed fan.',
+                'category_id' => 3,
+                'max' => 3,
+            ],
+
+            [
+                'title' => 'Selling Electric Fan',
+                'description' => 'lets eat ballot for dinner',
+                'category_id' => 3,
+                'max' => 100,
+            ],
+            // Travel
+            [
+                'title' => 'Island Hopping Tour',
+                'description' => 'Visit beautiful islands.',
+                'category_id' => 4,
+                'location' => 'Mactan',
             ],
             // Transportation
             [
@@ -51,13 +65,14 @@ class PostSeeder extends Seeder
                 'departure' => 'IT Park',
                 'destination' => 'Mactan Airport',
                 'fee' => 200,
-                'trans_category_id' => 1, // TransCategorySeeder で ID:1 を作成している前提
+                'trans_category_id' => 1, // 事前にTransCategorySeederでID=1がある前提
             ],
-            // Item
+            // Question
             [
-                'title' => 'Selling Electric Fan',
-                'description' => 'Almost new, 3-speed fan.',
+                'title' => 'How to extend visa?',
+                'description' => 'Anyone know the latest rule?',
                 'category_id' => 6,
+                'max' => 30,
             ],
             // Other
             [
@@ -65,7 +80,7 @@ class PostSeeder extends Seeder
                 'description' => 'Looking for someone to practice speaking.',
                 'category_id' => 7,
             ],
-            // 追加のイベント
+            // 追加
             [
                 'title' => 'Dance Party Invitation',
                 'description' => 'Join us this weekend!',
@@ -74,18 +89,17 @@ class PostSeeder extends Seeder
                 'startdatetime' => now()->addDays(5),
                 'enddatetime' => now()->addDays(6),
             ],
-            // 食事
             [
                 'title' => 'Restaurant Recommendations?',
                 'description' => 'Where do locals eat?',
-                'category_id' => 4,
+                'category_id' => 2,
                 'location' => 'Ayala Center',
             ],
-            // 質問
             [
                 'title' => 'Bus to Moalboal',
                 'description' => 'Is there a direct bus?',
-                'category_id' => 3,
+                'category_id' => 6,
+                'max' => 25,
             ],
         ];
 
@@ -95,7 +109,7 @@ class PostSeeder extends Seeder
                 'title' => $post['title'],
                 'description' => $post['description'],
                 'category_id' => $post['category_id'],
-                'image' => null,
+                'image' => $faker->boolean(50) ? $faker->randomElement($images) : null,
                 'location' => $post['location'] ?? null,
                 'departure' => $post['departure'] ?? null,
                 'destination' => $post['destination'] ?? null,
