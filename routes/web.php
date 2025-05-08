@@ -157,6 +157,8 @@ Route::group(['middleware' => 'auth'], function () {
 
         // 報告の状態変更
         Route::post('/{id}/storeMessage', [ReportController::class, 'storeMessage'])->name('storeMessage');
+        Route::patch('/{id}/close', [ReportController::class, 'close'])->name('close');
+        Route::post('/{id}/dismissed', [ReportController::class, 'dismissed'])->name('dismissed');
 
         Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
         // Route::post('/admin/posts/{post}/warn', [AdminController::class, 'storeMessage'])->name('posts.warn');

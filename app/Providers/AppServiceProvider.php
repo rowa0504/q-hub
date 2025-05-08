@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\View;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\TransCategory;
+use App\Models\Report;
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,6 +28,16 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $view->with('all_categories', Category::all());
             $view->with('all_trans_categories', TransCategory::all());
+        });
+
+        View::composer('layouts.app', function ($view) {
+            $latestWarning = Report::whereHas('post.user', function ($query) {
+                $query->where('id', Auth::id());
+            })
+            ->latest()
+            ->first();
+
+            $view->with('latestWarning', $latestWarning);
         });
 
     }

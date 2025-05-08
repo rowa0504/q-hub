@@ -60,4 +60,23 @@ class ReportController extends Controller
 
         return redirect()->back();
     }
+
+    public function close($id){
+        $report = $this->report->findOrFail($id);
+
+        $report->status = 'resolved';
+        $report->active = false;
+        $report->save();
+
+        return redirect()->back();
+    }
+
+    public function dismissed($id){
+        $report = $this->report->findOrFail($id);
+
+        $report->status = 'dismissed';
+        $report->save();
+
+        return redirect()->back();
+    }
 }

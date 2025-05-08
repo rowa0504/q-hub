@@ -89,15 +89,15 @@
                                     @endif
 
                                     {{-- 通知バッジ --}}
-                                    {{-- @if (Auth::user()->latestWarning ?? false) --}}
-                                    <span
-                                    class="position-absolute top-0 start-75 translate-middle badge rounded-pill bg-danger"
-                                    style="font-size: 0.5rem; cursor: pointer;"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#warningModal">
-                                    !
-                                    </span>
-                                    {{-- @endif --}}
+                                    @if ($latestWarning?->message && $latestWarning?->active == true)
+                                        <span
+                                            class="position-absolute top-0 start-75 translate-middle badge rounded-pill bg-danger"
+                                            style="font-size: 0.5rem; cursor: pointer;"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#warningModal">
+                                            !
+                                        </span>
+                                    @endif
                                 </button>
 
 

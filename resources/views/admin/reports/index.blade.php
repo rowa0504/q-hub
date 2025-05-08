@@ -71,11 +71,17 @@
                             </div>
                         </td>
                         <td>
-                            @if (!$report->message)
+                            @if (!$report->message || $report->status == 'dismissed')
                                 <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#warnModal-{{ $post->id }}">
                                     <i class="fa-solid fa-triangle-exclamation"></i> Warn
                                 </button>
                                 @include('admin.reports.modal.warn', ['post' => $post])
+
+                                <form action="{{ route('admin.dismissed', $report->id) }}" method="post">
+                                    @csrf
+
+                                    <button class="btn btn-secondary">dismissed</button>
+                                </form>
                             @else
                                 <span class="text-success">Sent</span>
                             @endif
