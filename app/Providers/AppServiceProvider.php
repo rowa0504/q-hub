@@ -32,10 +32,13 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('layouts.app', function ($view) {
             $latestWarning = Report::whereHas('post.user', function ($query) {
-                $query->where('id', Auth::id());
-            })
-            ->latest()
-            ->first();
+                    $query->where('id', Auth::id());
+                })
+                ->whereNotNull('message') // messageがNULLでない
+                ->where('message', '!=', '') // 空文字でない
+                ->where('active', true) // activeがtrue
+                ->latest()
+                ->first();
 
             $view->with('latestWarning', $latestWarning);
         });
