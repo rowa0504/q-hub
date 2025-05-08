@@ -31,7 +31,7 @@
                         <td>{{ Str::limit($comment->body, 50) }}</td>
                         <td>
                             @if ($comment->user)
-                                <a href="{{ route('profile.show', $comment->user->id) }}" class="text-decoration-none text-dark">
+                                <a href="{{ route('comments', $comment->user->id) }}" class="text-decoration-none text-dark">
                                     {{ $comment->user->name }}
                                 </a>
                             @else
