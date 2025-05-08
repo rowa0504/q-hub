@@ -88,13 +88,16 @@
                                         <i class="fa-solid fa-circle-user text-info icon-sm"></i>
                                     @endif
 
-                                    {{-- 通知バッジ（テスト用に強制表示） --}}
+                                    {{-- 通知バッジ --}}
+                                    {{-- @if (Auth::user()->latestWarning ?? false) --}}
                                     <span
-                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                        style="font-size: 0.5rem;">
-                                        !
+                                    class="position-absolute top-0 start-75 translate-middle badge rounded-pill bg-danger"
+                                    style="font-size: 0.5rem; cursor: pointer;"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#warningModal">
+                                    !
                                     </span>
-
+                                    {{-- @endif --}}
                                 </button>
 
 
@@ -294,6 +297,8 @@
         @include('posts.components.forms.post-form-question-modal')
         @include('posts.components.forms.post-form-transportation-modal')
         @include('posts.components.forms.post-form-travel-modal')
+        @include('posts.components.modals.getreport')
+
         </div>
         @stack('scripts')
 </body>
