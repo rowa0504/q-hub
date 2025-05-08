@@ -45,4 +45,19 @@ class ReportController extends Controller
 
         return redirect()->back();
     }
+
+    public function storeMessage(Request $request, $id){
+        // $validator = Validator::make($request->all(), [
+        //     'reason' => 'required|array|min:1',
+        //     'reason.*' => 'exists:report_reasons,id',
+        // ]);
+
+        $report = $this->report->findOrFail($id);
+
+        $report->message = $request->message;
+        $report->status = 'warned';
+        $report->save();
+
+        return redirect()->back();
+    }
 }

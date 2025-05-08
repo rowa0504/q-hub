@@ -155,8 +155,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::patch('/answers/{answer}/activate', [AdminController::class, 'activateAnswer'])->name('answers.activate');
 
         // 報告の状態変更
+        Route::post('/{id}/storeMessage', [ReportController::class, 'storeMessage'])->name('storeMessage');
+
         Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
-        Route::post('/admin/posts/{post}/warn', [AdminController::class, 'warnPost'])->name('posts.warn');
+        // Route::post('/admin/posts/{post}/warn', [AdminController::class, 'storeMessage'])->name('posts.warn');
 
         Route::get('/report-sent', [AdminController::class, 'reportSentIndex'])->name('report_sent');
     });
