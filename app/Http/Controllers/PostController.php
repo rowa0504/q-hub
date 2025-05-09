@@ -23,6 +23,7 @@ class PostController extends Controller
     }
 
     public function store(Request $request){
+        dd($request->all()); // デバッグ用
         $commonRules = [//other
             'description' => 'required|min:1|max:1000',
             'image'       => 'nullable|mimes:jpeg,jpg,png,gif|max:1048',

@@ -60,7 +60,7 @@
 
 <!-- Google Maps JavaScript API -->
 <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFMuLHnV2h0BxRv9qXGV22-Z5rG3jG9Mc&libraries=places&callback=initAutocomplete">
+    src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.api_key') }}&libraries=places&callback=initAutocomplete">
 </script>
 
 <script>
