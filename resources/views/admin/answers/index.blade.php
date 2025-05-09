@@ -31,7 +31,7 @@
                         <td>{{ Str::limit($answer->body, 50) }}</td>
                         <td>
                             @if ($answer->user)
-                                <a href="{{ route('profile.show', $answer->user->id) }}" class="text-decoration-none text-dark">
+                                <a href="{{ route('profile.index', $answer->user->id) }}" class="text-decoration-none text-dark">
                                     {{ $answer->user->name }}
                                 </a>
                             @else

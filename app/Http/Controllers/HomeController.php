@@ -8,6 +8,7 @@ use App\Models\TransCategory;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\ReportReason;
+use App\Models\Report;
 
 class HomeController extends Controller
 {

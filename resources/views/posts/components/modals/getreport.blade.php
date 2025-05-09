@@ -1,11 +1,3 @@
-@php
-    // フロントエンド確認用の仮データ
-    $latestWarning = (object)[
-        'message' => 'This is a warning message from admin.',
-        'created_at' => now()
-    ];
-@endphp
-
 @if ($latestWarning)
     <div class="modal fade" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -21,7 +13,12 @@
                     <p class="text-muted small">Sent at: {{ $latestWarning->created_at->format('Y-m-d H:i') }}</p>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <form action="{{ route('admin.close', $latestWarning->id) }}" method="post">
+                        @csrf
+                        @method('PATCH')
+
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </form>
                 </div>
             </div>
         </div>

@@ -20,6 +20,7 @@
                     <th>Reported User</th>
                     <th>Status</th>
                     <th>Warn</th>
+                    <th>Message</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,32 +52,39 @@
                         <td>
                             <div>
                                 <strong>User:</strong>
-                                @if ($user && !$user->deleted_at)
-                                    <span class="text-success">Active</span>
-                                @elseif ($user && $user->deleted_at)
-                                    <span class="text-danger">Inactive</span>
+                                @if ($user && $user->deleted_at)
+                                    <span class="text-danger">Banned</span>
                                 @else
-                                    <span class="text-muted">Unknown</span>
+                                    <span>{{ $report->status }}</span>
                                 @endif
                             </div>
                             <div>
                                 <strong>Post:</strong>
                                 @if ($post && method_exists($post, 'trashed') && $post->trashed())
-                                    <span class="text-muted">Inactive</span>
+                                    <span class="text-danger">Banned</span>
                                 @else
-                                    <span class="text-success">Active</span>
+                                    <span>{{ $report->status }}</span>
                                 @endif
                             </div>
                         </td>
                         <td>
-                            @if ($post && !$post->warning_sent)
+                            @if ($report->status == 'pending')
                                 <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#warnModal-{{ $post->id }}">
                                     <i class="fa-solid fa-triangle-exclamation"></i> Warn
                                 </button>
                                 @include('admin.reports.modal.warn', ['post' => $post])
-                            @else
+
+                                <form action="{{ route('admin.dismissed', $report->id) }}" method="post">
+                                    @csrf
+
+                                    <button class="btn btn-secondary">dismissed</button>
+                                </form>
+                            @elseif ($report->status == 'warned' || $report->status == 'resolved')
                                 <span class="text-success">Sent</span>
                             @endif
+                        </td>
+                        <td>
+                            {{ $report->message }}
                         </td>
                     </tr>
                 @endforeach
