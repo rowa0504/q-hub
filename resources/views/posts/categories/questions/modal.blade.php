@@ -85,13 +85,13 @@
                             <span class="badge bg-success">Best Answer</span>
                         @endif
 
-                        {{-- 編集・削除ボタン（自分の回答のみ） --}}
-                        @if (Auth::id() === $answer->user_id)
-                            <div class="dropdown mt-1">
-                                <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown">
-                                    <i class="fa-solid fa-ellipsis-h"></i>
-                                </button>
-                                <ul class="dropdown-menu">
+                        {{-- 編集・削除・レポートボタン --}}
+                        <div class="dropdown mt-1">
+                            <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown">
+                                <i class="fa-solid fa-ellipsis-h"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                @if (Auth::id() === $answer->user_id)
                                     <li>
                                         <a href="#" class="dropdown-item text-warning"
                                             onclick="event.preventDefault(); editAnswer({{ $answer->id }})">
@@ -107,9 +107,16 @@
                                             </button>
                                         </form>
                                     </li>
-                                </ul>
-                            </div>
-                        @endif
+                                @else
+                                    <li>
+                                        <a class="dropdown-item text-danger" data-bs-toggle="modal"
+                                            data-bs-target="#reportModal-{{ $post->id }}">
+                                            <i class="fa-solid fa-flag me-1"></i> Report
+                                        </a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
                     </div>
                 </div>
             @endif

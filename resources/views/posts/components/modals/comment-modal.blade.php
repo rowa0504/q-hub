@@ -55,10 +55,10 @@
                                 </form>
                             </div>
 
-                            @if (Auth::id() === $comment->user_id)
-                                <div class="dropdown ms-2">
-                                    <i class="fas fa-ellipsis-h" data-bs-toggle="dropdown" style="cursor:pointer;"></i>
-                                    <ul class="dropdown-menu dropdown-menu-end">
+                            <div class="dropdown ms-2">
+                                <i class="fas fa-ellipsis-h" data-bs-toggle="dropdown" style="cursor:pointer;"></i>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    @if (Auth::id() === $comment->user_id)
                                         <li>
                                             <a href="#" class="dropdown-item text-warning"
                                                 onclick="event.preventDefault(); editComment({{ $comment->id }})">
@@ -74,9 +74,16 @@
                                                 </button>
                                             </form>
                                         </li>
-                                    </ul>
-                                </div>
-                            @endif
+                                    @else
+                                        <li>
+                                            <a href="#" class="dropdown-item text-danger" data-bs-toggle="modal"
+                                                data-bs-target="#reportCommentModal-{{ $comment->id }}">
+                                                <i class="fa-solid fa-flag"></i> Report
+                                            </a>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </div>
                         </div>
                     @endif
                 @endforeach
