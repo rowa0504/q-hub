@@ -3,10 +3,9 @@
     <div class="d-flex align-items-center border-bottom px-3 py-2 bg-light">
         <a href="{{ route('profile.index', $post->user->id ?? '#') }}" class="text-decoration-none">
             @if ($post->user && $post->user->avatar)
-                <img src="{{ $post->user->avatar }}" alt="{{ $post->user->name }}" class="rounded-circle" width="40"
-                    height="40">
+                <img src="{{ $post->user->avatar }}" alt="{{ $post->user->name }}" class="rounded-circle avatar-md">
             @else
-                <i class="fa-solid fa-circle-user text-secondary fs-3"></i>
+                <i class="fa-solid fa-circle-user text-secondary avatar-md"></i>
             @endif
         </a>
         <div class="ms-2">
@@ -15,6 +14,7 @@
                 <i class="fa-solid fa-tag me-1"></i>{{ $post->category->name }}
             </small>
         </div>
+
         <div class="ms-auto">
             <i class="fas fa-ellipsis-h text-muted" style="cursor:pointer;" data-bs-toggle="dropdown"></i>
 
@@ -200,16 +200,25 @@
                         Participants ({{ $post->chatRoom->users->count() }} / {{ $post->max }})
                     </h5>
                 @else
-                    <h5 class="mb-2">Participants: N/A</h5>
+                    <h5 class="mb-2">
+                        Participants (0 / {{ $post->max }})
+                    </h5>
                 @endif
 
 
                 {{-- チャット開始リンク --}}
+                @php
+                    $joined = $post->chatRoom && $post->chatRoom->users->contains(Auth::id());
+                @endphp
+
                 <div class="mb-2">
-                    <a href="{{ route('chatRoom.start', $post->id) }}" class="btn btn-outline-primary btn-sm">
-                        <i class="fa-brands fa-rocketchat me-1"></i> Join Chat
+                    <a href="{{ route('chatRoom.start', $post->id) }}"
+                        class="btn btn-sm {{ $joined ? 'btn-success' : 'btn-outline-primary' }}">
+                        <i class="fa-brands fa-rocketchat me-1"></i>
+                        {{ $joined ? 'Enter Chat' : 'Join Chat' }}
                     </a>
                 </div>
+
 
                 {{-- エラーメッセージ --}}
                 @if (session('error'))

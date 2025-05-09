@@ -37,7 +37,7 @@
 <body>
     <div id="app">
         {{-- Navbarをlogin・registerページでは非表示にする --}}
-        @if (!in_array(Route::currentRouteName(), ['login', 'register']))
+        @if (!in_array(Route::currentRouteName(), ['login', 'register', 'chatRoom.show']))
             <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
                 <div class="container-fluid d-flex justify-content-between align-items-center flex-nowrap">
                     <a class="navbar-brand ms-3" href="{{ url('/') }}">
@@ -300,7 +300,6 @@
         @include('posts.components.modals.getreport')
 
         </div>
-        @stack('scripts')
 </body>
 
 </html>
