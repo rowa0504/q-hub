@@ -134,24 +134,44 @@
             document.getElementById('edit-form-' + commentId).classList.add('d-none');
         }
 
-        function showReportModal(commentId) {
-            const parentModalElement = document.getElementById('commentsModal-{{ $post->id }}');
-            const parentModal = new bootstrap.Modal(parentModalElement);
+        // function showReportModal(commentId) {
+        //     const parentModalElement = document.getElementById('commentsModal-{{ $post->id }}');
+        //     const parentModal = new bootstrap.Modal(parentModalElement);
+
+        //     // 親モーダルを非表示にする
+        //     parentModal.hide();
+
+        //     // 親モーダルが非表示になったことを確認し、少し遅延して子モーダルを表示
+        //     setTimeout(() => {
+        //         // 子モーダルを表示
+        //         const modalElement = document.getElementById('reportCommentModal-' + commentId);
+        //         if (modalElement) {
+        //             const modal = new bootstrap.Modal(modalElement);
+        //             modal.show(); // 子モーダルを表示
+        //         } else {
+        //             console.error("子モーダルが見つかりません");
+        //         }
+        //     }, 300); // 親モーダルの閉じるアニメーション時間を待つために遅延（300ms）
+        // }
+
+        function openNestedReportModal(parentModalId, childModalId) {
+            const parentModalEl = document.getElementById(parentModalId);
+            const childModalEl = document.getElementById(childModalId);
+            console.log(childModalEl);
 
             // 親モーダルを非表示にする
+            const parentModal = bootstrap.Modal.getOrCreateInstance(parentModalEl);
             parentModal.hide();
 
-            // 親モーダルが非表示になったことを確認し、少し遅延して子モーダルを表示
-            setTimeout(() => {
-                // 子モーダルを表示
-                const modalElement = document.getElementById('reportCommentModal-' + commentId);
-                if (modalElement) {
-                    const modal = new bootstrap.Modal(modalElement);
-                    modal.show(); // 子モーダルを表示
-                } else {
-                    console.error("子モーダルが見つかりません");
-                }
-            }, 300); // 親モーダルの閉じるアニメーション時間を待つために遅延（300ms）
+            // 親モーダルが閉じた後に子モーダルを表示
+            parentModalEl.addEventListener('hidden.bs.modal', function () {
+                setTimeout(() => {
+                    const reportModal = new bootstrap.Modal(childModalEl);
+                    reportModal.show();
+                }, 300); // 300ミリ秒の遅延で子モーダルを表示
+            }, { once: true });
+
+            console.log(bootstrap.Modal);
         }
     </script>
 @endpush
