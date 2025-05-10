@@ -110,16 +110,26 @@
                                 @else
                                     <li>
                                         <a class="dropdown-item text-danger" data-bs-toggle="modal"
-                                            data-bs-target="#reportModal-{{ $post->id }}">
+                                            data-bs-target="#reportModal-answer-{{ $answer->id }}">
                                             <i class="fa-solid fa-flag me-1"></i> Report
                                         </a>
                                     </li>
                                 @endif
+                                @include('posts.components.modals.report-answer-modal')
                             </ul>
                         </div>
                     </div>
                 </div>
             @endif
+        @endforeach
+
+        {{-- モーダル本体はここで一括出力 --}}
+        @foreach ($post->answers as $answer)
+            @include('posts.components.modals.report-answer-modal', [
+                'answer' => $answer,
+                'post' => $post,
+                'all_report_reasons' => $all_report_reasons,
+            ])
         @endforeach
     </div>
 </div>
