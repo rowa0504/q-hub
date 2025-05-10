@@ -89,29 +89,33 @@
                         <div class="modal fade" id="reportCommentModal-{{ $comment->id }}" tabindex="-1"
                             aria-labelledby="reportCommentModalLabel-{{ $comment->id }}" aria-hidden="true">
                             <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="reportCommentModalLabel-{{ $comment->id }}">Report Comment</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                <div class="modal-content p-3">
+                                    <div class="modal-header border-0">
+                                        <h5 class="modal-title text-danger" id="reportModalLabel">Report this post?</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <div class="modal-body">
-                                        <p>Are you sure you want to report this comment?</p>
-                                        <!-- 仮のフォーム -->
-                                        <form action="#" method="POST">
-                                            @csrf
-                                            <input type="hidden" name="comment_id" value="{{ $comment->id }}">
-                                            <div class="mb-3">
-                                                <label for="reason-{{ $comment->id }}" class="form-label">Reason</label>
-                                                <textarea name="reason" id="reason-{{ $comment->id }}" class="form-control"
-                                                    rows="3" placeholder="Enter reason for reporting..." required></textarea>
+
+                                    <form action="#" method="POST">
+                                        @csrf
+                                        <div class="modal-body text-start">
+                                            @foreach($all_report_reasons as $report_reason )
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input me-3" type="checkbox" name="reason[]" value="{{ $report_reason->id }}" id="{{ $report_reason->name }}">
+                                                <label class="form-check-label" for="{{ $report_reason->name }}">{{ $report_reason->name }}</label>
                                             </div>
-                                            <div class="d-flex justify-content-end">
-                                                <button type="button" class="btn btn-secondary me-2"
-                                                    data-bs-dismiss="modal">Cancel</button>
-                                                <button type="submit" class="btn btn-danger">Report</button>
-                                            </div>
-                                        </form>
-                                    </div>
+                                            @endforeach
+
+                                            @error('reason')
+                                                <p class="text-danger small">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+
+
+                                        <div class="modal-footer border-0 d-flex justify-content-center">
+                                            <span class="text-muted text-start">* You can choose multiple options</span>
+                                            <button type="submit" class="btn btn-danger w-100">Report</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -134,44 +138,14 @@
             document.getElementById('edit-form-' + commentId).classList.add('d-none');
         }
 
-        // function showReportModal(commentId) {
-        //     const parentModalElement = document.getElementById('commentsModal-{{ $post->id }}');
-        //     const parentModal = new bootstrap.Modal(parentModalElement);
-
-        //     // 親モーダルを非表示にする
-        //     parentModal.hide();
-
-        //     // 親モーダルが非表示になったことを確認し、少し遅延して子モーダルを表示
-        //     setTimeout(() => {
-        //         // 子モーダルを表示
-        //         const modalElement = document.getElementById('reportCommentModal-' + commentId);
-        //         if (modalElement) {
-        //             const modal = new bootstrap.Modal(modalElement);
-        //             modal.show(); // 子モーダルを表示
-        //         } else {
-        //             console.error("子モーダルが見つかりません");
-        //         }
-        //     }, 300); // 親モーダルの閉じるアニメーション時間を待つために遅延（300ms）
-        // }
-
-        function openNestedReportModal(parentModalId, childModalId) {
-            const parentModalEl = document.getElementById(parentModalId);
-            const childModalEl = document.getElementById(childModalId);
-            console.log(childModalEl);
-
-            // 親モーダルを非表示にする
-            const parentModal = bootstrap.Modal.getOrCreateInstance(parentModalEl);
-            parentModal.hide();
-
-            // 親モーダルが閉じた後に子モーダルを表示
-            parentModalEl.addEventListener('hidden.bs.modal', function () {
-                setTimeout(() => {
-                    const reportModal = new bootstrap.Modal(childModalEl);
-                    reportModal.show();
-                }, 300); // 300ミリ秒の遅延で子モーダルを表示
-            }, { once: true });
-
-            console.log(bootstrap.Modal);
+        function showReportModal(commentId) {
+            const modalElement = document.getElementById('reportCommentModal-' + commentId);
+            if (modalElement) {
+                const modal = new bootstrap.Modal(modalElement);
+                modal.show(); // 子モーダルを表示
+            } else {
+                console.error("子モーダルが見つかりません");
+            }
         }
     </script>
 @endpush
