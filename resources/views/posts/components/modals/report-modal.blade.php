@@ -1,5 +1,5 @@
 {{-- Report モーダル --}}
-<div class="modal fade" id="reportModal-{{ $post->id }}" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+<div class="modal fade" id="reportPostModal-{{ $post->id }}" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content p-3">
             <div class="modal-header border-0">

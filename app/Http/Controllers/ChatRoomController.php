@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\ChatRoom;
 use App\Models\ChatMessage;
 use App\Models\User;
+use App\Models\ReportReason;
 
 class ChatRoomController extends Controller
 {
@@ -15,10 +16,11 @@ class ChatRoomController extends Controller
     private $chatMessage;
     private $post;
 
-    public function __construct(ChatRoom $chatRoom, ChatMessage $chatMessage, Post $post){
+    public function __construct(ChatRoom $chatRoom, ChatMessage $chatMessage, Post $post, ReportReason $reportReason){
         $this->chatRoom    = $chatRoom;
         $this->chatMessage = $chatMessage;
         $this->post        = $post;
+        $this->reportReason        = $reportReason;
     }
 
     public function start($post_id){
@@ -52,13 +54,15 @@ class ChatRoomController extends Controller
         //対象のchatroomをデータを取得
         $chatdate = $this->chatRoom->findOrFail($chat_room_id);
 
+        $all_report_reasons = $this->reportReason->all();
+
         //対象のchat_room_idのmessageのみ取得
         $all_message = $this->chatMessage
                                 ->where('chat_room_id', $chat_room_id)
                                 ->orderBy('created_at', 'asc')
                                 ->get();
 
-        return view('posts.categories.items.chatroom', compact('chatdate', 'all_message'));
+        return view('posts.categories.items.chatroom', compact('chatdate', 'all_message', 'all_report_reasons'));
     }
 
     public function leave($id){
