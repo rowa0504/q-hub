@@ -300,6 +300,11 @@
         @include('posts.components.modals.getreport')
 
         </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kQtW33rZJAHjgefvhyyzcGF6Y5GYe+U5zWkAOrj0XYN1MGcTIR+QKuwW5yI7U9n+" crossorigin="anonymous"></script>
+
+        @stack('scripts')
 </body>
 
 </html>
