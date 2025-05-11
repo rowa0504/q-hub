@@ -131,6 +131,7 @@ class AdminController extends Controller
                     App\Models\Comment::class => ['user' => fn($q) => $q->withTrashed(), 'reports.reportReasonReport.reason'],
                     App\Models\Answer::class => ['user' => fn($q) => $q->withTrashed(), 'reports.reportReasonReport.reason'],
                     App\Models\ChatMessage::class => ['user' => fn($q) => $q->withTrashed(), 'reports.reportReasonReport.reason'],
+                    App\Models\User::class => ['user' => fn($q) => $q->withTrashed(), 'reports.reportReasonReport.reason'],
                 ]);
             },
             'reportReasonReport.reason'
