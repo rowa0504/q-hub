@@ -76,7 +76,9 @@
 
                     {{-- Reported User --}}
                     <td>
-                        <a href="#">{{ $reportedUser->name ?? 'Deleted User' }}</a>
+                        <a href="{{ route('admin.reportedUser', $reportedUser->id) }}">
+                            {{ $reportedUser->name ?? 'Deleted User' }}
+                        </a>
                     </td>
 
                     {{-- Status --}}

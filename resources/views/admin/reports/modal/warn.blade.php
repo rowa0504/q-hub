@@ -12,25 +12,26 @@
         <form action="{{ route('admin.storeMessage', $report->id) }}" method="POST">
           @csrf
 
-          <div class="modal-body">
+        <div class="modal-body">
             <div class="mb-3">
-              <label class="form-label fw-bold">Reported Reasons</label>
-              <ul class="list-group">
-                @forelse ($postReportedReasons[$report->id] ?? [] as $reason)
-                    <li class="list-group-item">{{ $reason }}</li>
-                @empty
-                    <li class="list-group-item text-muted">No reasons reported.</li>
-                @endforelse
-            </ul>
-
+                <label class="form-label fw-bold">Reported Reasons</label>
+                <ul class="list-group">
+                    @php
+                        $reportableId = $report->reportable->id ?? null;
+                    @endphp
+                    @forelse ($postReportedReasons[$reportableId] ?? [] as $reason)
+                        <li class="list-group-item">{{ $reason }}</li>
+                    @empty
+                        <li class="list-group-item text-muted">No reasons reported.</li>
+                    @endforelse
+                </ul>
             </div>
 
-            {{-- メッセージ入力欄 --}}
             <div class="mb-3 mt-3">
-              <label class="form-label fw-bold">Message</label>
-              <textarea name="message" class="form-control" rows="4" required placeholder="Write a custom warning message..."></textarea>
+                <label class="form-label fw-bold">Message</label>
+                <textarea name="message" class="form-control" rows="4" required placeholder="Write a custom warning message..."></textarea>
             </div>
-          </div>
+        </div>
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

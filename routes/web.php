@@ -161,6 +161,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/{id}/dismissed', [ReportController::class, 'dismissed'])->name('dismissed');
 
         Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
+        
+        Route::get('/{id}/reportedUser', [AdminController::class, 'reportedUserContent'])->name('reportedUser');
         // Route::post('/admin/posts/{post}/warn', [AdminController::class, 'storeMessage'])->name('posts.warn');
 
         Route::get('/report-sent', [AdminController::class, 'reportSentIndex'])->name('report_sent');

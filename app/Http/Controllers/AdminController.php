@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\Comment;
 use App\Models\Answer;
 use App\Models\Report;
+use App\Models\ChatMessage;
 
 class AdminController extends Controller
 {
@@ -137,12 +138,42 @@ class AdminController extends Controller
             'reportReasonReport.reason'
         ])->latest()->get();
 
-        return view('admin.reports.index', compact('reports'));
+        // reportable IDごとに通報理由を集める（重複除去）
+        $postReportedReasons = [];
+
+        foreach ($reports as $report) {
+            $reportable = $report->reportable;
+            if (!$reportable) continue;
+
+            $reasons = collect();
+            foreach ($reportable->reports ?? [] as $relatedReport) {
+                foreach ($relatedReport->reportReasonReport ?? [] as $reasonReport) {
+                    if ($reasonReport->reason) {
+                        $reasons->push($reasonReport->reason->name);
+                    }
+                }
+            }
+
+            $postReportedReasons[$reportable->id] = $reasons->unique()->values();
+        }
+
+        return view('admin.reports.index', compact('reports', 'postReportedReasons'));
     }
 
     public function reportSentIndex()
     {
         $warned_posts = $this->post->where('warning_sent', true)->with(['user', 'category'])->get();
         return view('admin.report_sent.index', compact('warned_posts'));
+    }
+
+    public function reportedUserContent($userId){
+        $user = User::withTrashed()->findOrFail($userId);
+
+        $posts = Post::withTrashed()->where('user_id', $user->id)->get();
+        $comments = Comment::withTrashed()->where('user_id', $user->id)->get();
+        $answers = Answer::withTrashed()->where('user_id', $user->id)->get();
+        $chatMessages = ChatMessage::where('user_id', $user->id)->get();
+
+        return view('admin.reports.user_content', compact('user', 'posts', 'comments', 'answers', 'chatMessages'));
     }
 }
