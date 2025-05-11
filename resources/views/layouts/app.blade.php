@@ -89,7 +89,7 @@
                                     @endif
 
                                     {{-- 通知バッジ --}}
-                                    @if ($latestWarning)
+                                    {{-- @if ($latestWarning)
                                         <span
                                             class="position-absolute top-0 start-75 translate-middle badge rounded-pill bg-danger"
                                             style="font-size: 0.5rem; cursor: pointer;"
@@ -97,7 +97,7 @@
                                             data-bs-target="#warningModal">
                                             !
                                         </span>
-                                    @endif
+                                    @endif --}}
                                 </button>
 
 

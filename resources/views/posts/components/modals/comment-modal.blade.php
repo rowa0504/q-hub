@@ -95,8 +95,10 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
 
-                                    <form action="#" method="POST">
+                                    <form action="{{ route('report.store', $comment->id) }}" method="POST">
                                         @csrf
+
+                                        <input type="text" hidden name="reportable_type" value="App\Models\Comment">
                                         <div class="modal-body text-start">
                                             @foreach($all_report_reasons as $report_reason )
                                             <div class="form-check mb-2">

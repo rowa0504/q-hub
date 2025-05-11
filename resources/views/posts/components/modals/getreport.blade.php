@@ -1,4 +1,4 @@
-@if ($latestWarning)
+{{-- @if ($latestWarning)
     <div class="modal fade" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-warning">
@@ -23,4 +23,4 @@
             </div>
         </div>
     </div>
-@endif
+@endif --}}

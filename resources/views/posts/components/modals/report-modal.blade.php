@@ -9,6 +9,8 @@
 
             <form action="{{ route('report.store', $post->id) }}" method="POST">
                 @csrf
+
+                <input type="text" hidden name="reportable_type" value="App\Models\Post">
                 <div class="modal-body text-start">
                     @foreach($all_report_reasons as $report_reason )
                     <div class="form-check mb-2">
