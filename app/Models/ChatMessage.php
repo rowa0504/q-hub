@@ -17,4 +17,8 @@ class ChatMessage extends Model
     public function chatRoom(){
         return $this->belongsTo(ChatRoom::class);
     }
+
+    public function reports(){
+        return $this->morphMany(Report::class, 'reportable');
+    }
 }
