@@ -124,8 +124,11 @@ class AdminController extends Controller
         return view('admin.chatMessage.index', compact('all_chatMessages'));
     }
 
-    public function deactivateChatMessage(ChatMessage $chatMessage){
+    public function deactivateChatMessage($id){
+        $chatMessage = $this->chatMessage->withTrashed()->findOrFail($id);
+
         $chatMessage->delete();
+
         return back()->with('success', 'Answer has been deactivated.');
     }
 
