@@ -120,37 +120,23 @@ class AdminController extends Controller
         return back()->with('success', "Warning has been sent for post: {$post->title}");
     }
 
-
     public function reports(){
         $reports = Report::with([
             'user' => fn($query) => $query->withTrashed(),
-            'post' => fn($query) => $query->withTrashed()->with([
-                'user' => fn($q) => $q->withTrashed(),
-                'reports.reportReasonReport.reason'
-            ]),
+            'reportable' => function ($morphTo) {
+                $morphTo->morphWith([
+                    // 例: 投稿に対する通報
+                    App\Models\Post::class => ['user' => fn($q) => $q->withTrashed(), 'reports.reportReasonReport.reason'],
+                    // 他にコメントなどがある場合
+                    App\Models\Comment::class => ['user' => fn($q) => $q->withTrashed(), 'reports.reportReasonReport.reason'],
+                    App\Models\Answer::class => ['user' => fn($q) => $q->withTrashed(), 'reports.reportReasonReport.reason'],
+                    App\Models\ChatMessage::class => ['user' => fn($q) => $q->withTrashed(), 'reports.reportReasonReport.reason'],
+                ]);
+            },
             'reportReasonReport.reason'
         ])->latest()->get();
 
-        // 投稿IDごとに通報理由を集める（重複除去）
-        $postReportedReasons = [];
-
-        foreach ($reports as $report) {
-            $post = $report->post;
-            if (!$post) continue;
-
-            $reasons = collect();
-            foreach ($post->reports ?? [] as $pReport) {
-                foreach ($pReport->reportReasonReport ?? [] as $rrr) {
-                    if ($rrr->reason) {
-                        $reasons->push($rrr->reason->name);
-                    }
-                }
-            }
-
-            $postReportedReasons[$post->id] = $reasons->unique()->values();
-        }
-
-        return view('admin.reports.index', compact('reports', 'postReportedReasons'));
+        return view('admin.reports.index', compact('reports'));
     }
 
     public function reportSentIndex()

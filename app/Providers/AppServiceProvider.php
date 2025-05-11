@@ -6,6 +6,9 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Comment;
+use App\Models\Answer;
+use App\Models\ChatMessage;
 use App\Models\TransCategory;
 use App\Models\Report;
 use Illuminate\Support\Facades\Auth;
@@ -42,6 +45,25 @@ class AppServiceProvider extends ServiceProvider
 
         //     $view->with('latestWarning', $latestWarning);
         // });
+
+        View::composer('layouts.app', function ($view) {
+            $latestWarning = Report::with('reportable')
+                ->whereHasMorph('reportable', [
+                    Post::class,
+                    Comment::class,
+                    Answer::class,
+                    ChatMessage::class,
+                ], function ($query) {
+                    $query->where('user_id', Auth::id());
+                })
+                ->whereNotNull('message') // メッセージが null でない
+                ->where('message', '!=', '') // 空文字でない
+                ->where('active', true)
+                ->latest()
+                ->first();
+
+            $view->with('latestWarning', $latestWarning);
+        });
 
     }
 }
