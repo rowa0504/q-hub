@@ -168,15 +168,15 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white {{ request()->is('admin/reports') ? 'fw-bold' : '' }}"
-                                    href="{{ route('admin.reports') }}">
-                                    <i class="fa-solid fa-flag me-2"></i> Reports
+                                <a class="nav-link text-white {{ request()->is('admin/chatMessages') ? 'fw-bold' : '' }}"
+                                    href="{{ route('admin.chatMessages') }}">
+                                    <i class="fa-brands fa-rocketchat me-2"></i> ChatMessage
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white {{ request()->is('admin/report-sent') ? 'fw-bold' : '' }}"
-                                    href="{{ route('admin.report_sent') }}">
-                                    <i class="fa-solid fa-envelope-circle-check me-2"></i> Reports Sent
+                                <a class="nav-link text-white {{ request()->is('admin/reports') ? 'fw-bold' : '' }}"
+                                    href="{{ route('admin.reports') }}">
+                                    <i class="fa-solid fa-flag me-2"></i> Reports
                                 </a>
                             </li>
                         </ul>

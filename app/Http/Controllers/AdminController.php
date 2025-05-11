@@ -16,12 +16,14 @@ class AdminController extends Controller
     private $post;
     private $comment;
     private $answer;
+    private $chatMessage;
 
-    public function __construct(User $user, Post $post, Comment $comment, Answer $answer){
+    public function __construct(User $user, Post $post, Comment $comment, Answer $answer, ChatMessage $chatMessage){
         $this->user = $user;
         $this->post = $post;
         $this->comments = $comment;
         $this->answer = $answer;
+        $this->chatMessage = $chatMessage;
     }
 
     public function users(){
@@ -110,6 +112,29 @@ class AdminController extends Controller
         return back()->with('success', 'Answer has been restored.');
     }
 
+    public function chatMessages(){
+        $all_chatMessages = ChatMessage::with([
+            'user' => fn($q) => $q->withTrashed(), // ユーザーが削除されていても取得
+            'chatRoom.post' => fn($q) => $q->withTrashed(), // チャットルームに紐づく投稿を取得（削除含む）
+        ])
+        ->withTrashed() // コメント自体がソフトデリートされていても含める
+        ->latest()
+        ->paginate(20);
+
+        return view('admin.chatMessage.index', compact('all_chatMessages'));
+    }
+
+    public function deactivateChatMessage(ChatMessage $chatMessage){
+        $chatMessage->delete();
+        return back()->with('success', 'Answer has been deactivated.');
+    }
+
+    public function activateChatMessage($id){
+        $chatMessage = $this->chatMessage->withTrashed()->findOrFail($id);
+        $chatMessage->restore();
+        return back()->with('success', 'Answer has been restored.');
+    }
+
     public function warnPost(Post $post){
         if ($post->warning_sent) {
             return back()->with('message', 'Warning has already been sent to this post.');
@@ -172,7 +197,7 @@ class AdminController extends Controller
         $posts = Post::withTrashed()->where('user_id', $user->id)->get();
         $comments = Comment::withTrashed()->where('user_id', $user->id)->get();
         $answers = Answer::withTrashed()->where('user_id', $user->id)->get();
-        $chatMessages = ChatMessage::where('user_id', $user->id)->get();
+        $chatMessages = ChatMessage::withTrashed()->where('user_id', $user->id)->get();
 
         return view('admin.reports.user_content', compact('user', 'posts', 'comments', 'answers', 'chatMessages'));
     }
