@@ -22,7 +22,7 @@ class AdminController extends Controller
     public function __construct(User $user, Post $post, Comment $comment, Answer $answer, ChatMessage $chatMessage, Report $report){
         $this->user = $user;
         $this->post = $post;
-        $this->comments = $comment;
+        $this->comment = $comment;
         $this->answer = $answer;
         $this->chatMessage = $chatMessage;
         $this->report = $report;
@@ -45,7 +45,7 @@ class AdminController extends Controller
             'comments_count'     => Comment::count(),
             'answers_count'      => Answer::count(),
             'reports_count'      => Report::count(),
-            'reports_sent_count' => Post::where('warning_sent', true)->count(),
+            'chatMessage_count'  => ChatMessage::count()
         ]);
     }
 
@@ -206,6 +206,8 @@ class AdminController extends Controller
         $report = $this->report->findOrFail($id);
 
         $report->message = $request->message;
+        $report->active = true;
+        $report->status = 'warned';
         $report->save();
 
         return redirect()->back();
