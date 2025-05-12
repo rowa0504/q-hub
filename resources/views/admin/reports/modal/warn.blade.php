@@ -9,7 +9,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
 
-        <form action="{{ route('admin.posts.warn', $post->id) }}" method="POST">
+        <form action="{{ route('admin.storeMessage', $post->id) }}" method="POST">
           @csrf
 
           <div class="modal-body">

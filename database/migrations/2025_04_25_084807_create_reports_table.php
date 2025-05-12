@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('post_id');
+            $table->string('status',50)->default('pending');
+            $table->text('message')->nullable(); // 警告メッセージ
+            $table->boolean('active')->default(true); // 有効な警告かどうか
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

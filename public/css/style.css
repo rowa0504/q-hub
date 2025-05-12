@@ -72,6 +72,7 @@ body {
     width: 3.5rem;
     height: 3.5rem;
     object-fit: cover;
+    font-size: 3.5rem;
 }
 
 .image-md {
@@ -226,3 +227,5 @@ body {
     padding: 0.25rem 0.5rem !important;
     border-radius: 0.375rem !important;
 }
+
+
