@@ -11,6 +11,7 @@ use App\Models\Answer;
 use App\Models\ChatMessage;
 use App\Models\TransCategory;
 use App\Models\Report;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
@@ -50,20 +51,24 @@ class AppServiceProvider extends ServiceProvider
             $latestWarning = Report::with('reportable')
                 ->whereHasMorph('reportable', [
                     Post::class,
+                    User::class,
                     Comment::class,
                     Answer::class,
                     ChatMessage::class,
-                ], function ($query) {
-                    $query->where('user_id', Auth::id());
+                ], function ($query, $type) {
+                    if ($type === User::class) {
+                        $query->where('id', Auth::id());
+                    } else {
+                        $query->where('user_id', Auth::id());
+                    }
                 })
-                ->whereNotNull('message') // メッセージが null でない
-                ->where('message', '!=', '') // 空文字でない
+                ->whereNotNull('message')
+                ->where('message', '!=', '')
                 ->where('active', true)
                 ->latest()
                 ->first();
 
             $view->with('latestWarning', $latestWarning);
         });
-
     }
 }
