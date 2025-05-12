@@ -20,7 +20,6 @@
                     <th>Reported User</th>
                     <th>Status</th>
                     <th>Warn</th>
-                    <th>Message</th>
                 </tr>
             </thead>
             <tbody>
@@ -76,7 +75,7 @@
 
                     {{-- Reported User --}}
                     <td>
-                        <a href="{{ route('admin.reportedUser', $reportedUser->id) }}">
+                        <a href="{{ route('admin.reportedUser', $reportedUser->id) }}" class="text-decoration-none">
                             {{ $reportedUser->name ?? 'Deleted User' }}
                         </a>
                     </td>
@@ -114,12 +113,12 @@
                                 <button class="btn btn-secondary btn-sm">Dismiss</button>
                             </form>
                         @elseif ($report->status == 'warned' || $report->status == 'resolved')
-                            <span class="text-success">Sent</span>
+                            <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#warnMessage-{{ $report->id }}">
+                                Sent
+                            </button>
+                            @include('admin.reports.modal.warnMessage-modal', ['report' => $report])
                         @endif
                     </td>
-
-                    {{-- 管理者メッセージ --}}
-                    <td>{{ $report->message }}</td>
                 </tr>
                 @endforeach
             </tbody>

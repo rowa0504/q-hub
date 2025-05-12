@@ -17,13 +17,15 @@ class AdminController extends Controller
     private $comment;
     private $answer;
     private $chatMessage;
+    private $report;
 
-    public function __construct(User $user, Post $post, Comment $comment, Answer $answer, ChatMessage $chatMessage){
+    public function __construct(User $user, Post $post, Comment $comment, Answer $answer, ChatMessage $chatMessage, Report $report){
         $this->user = $user;
         $this->post = $post;
         $this->comments = $comment;
         $this->answer = $answer;
         $this->chatMessage = $chatMessage;
+        $this->report = $report;
     }
 
     public function users(){
@@ -166,23 +168,18 @@ class AdminController extends Controller
             'reportReasonReport.reason'
         ])->latest()->get();
 
-        // reportable IDごとに通報理由を集める（重複除去）
         $postReportedReasons = [];
 
         foreach ($reports as $report) {
-            $reportable = $report->reportable;
-            if (!$reportable) continue;
-
             $reasons = collect();
-            foreach ($reportable->reports ?? [] as $relatedReport) {
-                foreach ($relatedReport->reportReasonReport ?? [] as $reasonReport) {
-                    if ($reasonReport->reason) {
-                        $reasons->push($reasonReport->reason->name);
-                    }
+
+            foreach ($report->reportReasonReport ?? [] as $reasonReport) {
+                if ($reasonReport->reason) {
+                    $reasons->push($reasonReport->reason->name);
                 }
             }
 
-            $postReportedReasons[$reportable->id] = $reasons->unique()->values();
+            $postReportedReasons[$report->id] = $reasons; // 重複排除しない
         }
 
         return view('admin.reports.index', compact('reports', 'postReportedReasons'));
@@ -197,11 +194,20 @@ class AdminController extends Controller
     public function reportedUserContent($userId){
         $user = User::withTrashed()->findOrFail($userId);
 
-        $posts = Post::withTrashed()->where('user_id', $user->id)->get();
-        $comments = Comment::withTrashed()->where('user_id', $user->id)->get();
-        $answers = Answer::withTrashed()->where('user_id', $user->id)->get();
-        $chatMessages = ChatMessage::withTrashed()->where('user_id', $user->id)->get();
+        $posts = Post::withTrashed()->where('user_id', $user->id)->paginate(10);
+        $comments = Comment::withTrashed()->where('user_id', $user->id)->paginate(10);
+        $answers = Answer::withTrashed()->where('user_id', $user->id)->paginate(10);
+        $chatMessages = ChatMessage::withTrashed()->where('user_id', $user->id)->paginate(10);
 
         return view('admin.reports.user_content', compact('user', 'posts', 'comments', 'answers', 'chatMessages'));
+    }
+
+    public function updateReportMessage(Request $request, $id){
+        $report = $this->report->findOrFail($id);
+
+        $report->message = $request->message;
+        $report->save();
+
+        return redirect()->back();
     }
 }

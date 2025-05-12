@@ -16,10 +16,7 @@
             <div class="mb-3">
                 <label class="form-label fw-bold">Reported Reasons</label>
                 <ul class="list-group">
-                    @php
-                        $reportableId = $report->reportable->id ?? null;
-                    @endphp
-                    @forelse ($postReportedReasons[$reportableId] ?? [] as $reason)
+                    @forelse ($postReportedReasons[$report->id] ?? [] as $reason)
                         <li class="list-group-item">{{ $reason }}</li>
                     @empty
                         <li class="list-group-item text-muted">No reasons reported.</li>

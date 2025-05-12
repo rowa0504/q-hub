@@ -165,6 +165,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/chatMessages/{id}/deactivate', [AdminController::class, 'deactivateChatMessage'])->name('chatMessages.deactivate');
 
         Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
+        Route::patch('/reports/{id}/update', [AdminController::class, 'updateReportMessage'])->name('updateReportMessage');
 
         Route::get('/{id}/reportedUser', [AdminController::class, 'reportedUserContent'])->name('reportedUser');
         // Route::post('/admin/posts/{post}/warn', [AdminController::class, 'storeMessage'])->name('posts.warn');
