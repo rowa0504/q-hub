@@ -131,7 +131,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Admin route
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 
-        Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+        Route::get('/adashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
         // ユーザーの状態変更
         Route::get('/users', [AdminController::class, 'users'])->name('users');
@@ -160,5 +160,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/admin/posts/{post}/warn', [AdminController::class, 'warnPost'])->name('posts.warn');
 
         Route::get('/report-sent', [AdminController::class, 'reportSentIndex'])->name('report_sent');
+
+        // routes/web.php
+        Route::get('/admin/reports/reported', [AdminController::class, 'reportedPosts'])->name('reported_posts');
+
+
+
+
     });
 });

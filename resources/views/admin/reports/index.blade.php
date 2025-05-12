@@ -7,6 +7,9 @@
 
     <div class="d-flex justify-content-between align-items-center bg-dark text-white p-3 rounded-top">
         <h4 class="mb-0"><i class="fa-solid fa-flag"></i> Report Management</h4>
+        <a href="{{ route('admin.reported_posts') }}" class="btn btn-outline-light btn-sm">
+            View Reported Posts
+        </a>
     </div>
 
     <div class="bg-white p-3 border rounded-bottom table-responsive">
@@ -32,14 +35,15 @@
                         <td>{{ $report->id }}</td>
                         <td>{{ $report->user->name ?? 'Unknown' }}</td>
                         <td>
-                            @if ($post && $post->getCategoryRoute())
-                                <a href="{{ $post->getCategoryRoute() }}" class="text-decoration-none">
+                            @if ($post)
+                                <a href="{{ route('admin.reported_posts', $post->id) }}" class="text-decoration-none">
                                     {{ $post->title }}
                                 </a>
                             @else
-                                <span class="text-muted">No route</span>
+                                <span class="text-muted">No post</span>
                             @endif
                         </td>
+
                         <td>
                             <ul class="mb-0">
                                 @foreach ($report->reportReasonReport as $reasonReport)
