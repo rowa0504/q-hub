@@ -66,10 +66,12 @@
                     @else
                         <div class="mt-3">
                             <a class="btn btn-sm btn-outline-danger w-100" data-bs-toggle="modal"
-                                data-bs-target="#reportModal-{{ $post->id }}">
+                                data-bs-target="#reportUserModal-{{ $user->id }}">
                                 <i class="fa-solid fa-flag me-1"></i> Report this user?
                             </a>
                         </div>
+
+                        @include('posts.components.modals.report-user-modal', ['user' => $user])
                     @endif
 
                 </div>

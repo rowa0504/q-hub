@@ -168,15 +168,15 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white {{ request()->is('admin/reports') ? 'fw-bold' : '' }}"
-                                    href="{{ route('admin.reports') }}">
-                                    <i class="fa-solid fa-flag me-2"></i> Reports
+                                <a class="nav-link text-white {{ request()->is('admin/chatMessages') ? 'fw-bold' : '' }}"
+                                    href="{{ route('admin.chatMessages') }}">
+                                    <i class="fa-brands fa-rocketchat me-2"></i> ChatMessage
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white {{ request()->is('admin/report-sent') ? 'fw-bold' : '' }}"
-                                    href="{{ route('admin.report_sent') }}">
-                                    <i class="fa-solid fa-envelope-circle-check me-2"></i> Reports Sent
+                                <a class="nav-link text-white {{ request()->is('admin/reports') ? 'fw-bold' : '' }}"
+                                    href="{{ route('admin.reports') }}">
+                                    <i class="fa-solid fa-flag me-2"></i> Reports
                                 </a>
                             </li>
                         </ul>
@@ -300,6 +300,11 @@
         @include('posts.components.modals.getreport')
 
         </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kQtW33rZJAHjgefvhyyzcGF6Y5GYe+U5zWkAOrj0XYN1MGcTIR+QKuwW5yI7U9n+" crossorigin="anonymous"></script>
+
+        @stack('scripts')
 </body>
 
 </html>
