@@ -156,7 +156,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white {{ request()->is('admin/coments') ? 'fw-bold' : '' }}"
+                                <a class="nav-link text-white {{ request()->is('admin/comments') ? 'fw-bold' : '' }}"
                                     href="{{ route('admin.comments') }}">
                                     <i class="fa-solid fa-tags me-2"></i> Comments
                                 </a>

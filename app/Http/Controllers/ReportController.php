@@ -15,20 +15,30 @@ class ReportController extends Controller
     }
 
     public function store(Request $request, $reportable_id){
-        // $modalId = 'reportModal-' . $reportable_id;
+        // バリデーション処理
+        $validator = Validator::make($request->all(), [
+            'reason' => 'required|array|min:1',
+            'reason.*' => 'exists:report_reasons,id',
+            'reportable_type' => 'required|string|in:post,user,answer,chat,comment', // 追加
+        ]);
 
-        // // バリデーション処理
-        // $validator = Validator::make($request->all(), [
-        //     'reason' => 'required|array|min:1',
-        //     'reason.*' => 'exists:report_reasons,id',
-        // ]);
+        if ($validator->fails()) {
+            $prefix = match ($request->input('reportable_type')) {
+                'App\Models\Post' => 'reportPostModal-',
+                'App\Models\User' => 'reportUserModal-',
+                'App\Models\Answer' => 'reportAnswerModal-',
+                'App\Models\Comment' => 'reportCommentModal-',
+                'App\Models\ChatMessage' => 'reportChatModal-',
+                default => 'reportModal-',
+            };
 
-        // if ($validator->fails()) {
-        //     return redirect()->back()
-        //         ->withErrors($validator)
-        //         ->withInput()
-        //         ->with('open_modal', $modalId); // モーダル再表示用ID
-        // }
+            $modalId = $prefix . $reportable_id;
+
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('open_modal', $modalId); // モーダル再表示用ID
+        }
 
         // Report 登録
         $report          = new Report();
