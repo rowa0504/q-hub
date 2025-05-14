@@ -9,6 +9,7 @@ use App\Models\Comment;
 use App\Models\Answer;
 use App\Models\Report;
 use App\Models\ChatMessage;
+use App\Models\ReportReason;
 
 class AdminController extends Controller
 {
@@ -194,6 +195,8 @@ class AdminController extends Controller
 
             $postReportedReasons[$report->id] = $reasons; // 重複排除しない
         }
+
+        $all_report_reasons = ReportReason::all();
 
         return view('admin.reports.index', compact('reports', 'postReportedReasons'));
     }
