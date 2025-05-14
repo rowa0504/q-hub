@@ -50,7 +50,7 @@
                     {{-- Report Button --}}
                     @if (!$isMe)
                         <button class="btn btn-sm btn-link position-absolute bottom-0 end-0 me-2 mb-1 p-0 text-danger"
-                                data-bs-toggle="modal" data-bs-target="#reportModal" data-message-id="{{ $message->id }}">
+                                data-bs-toggle="modal" data-bs-target="#reportChatModal-{{ $message->id }}" data-message-id="{{ $message->id }}">
                             <i class="fa-solid fa-flag"></i>
                         </button>
                     @endif
@@ -86,31 +86,43 @@
     </a>
 </div>
 
-{{-- Report Modal --}}
-<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <form method="POST" action="#">
-            @csrf
-            <input type="hidden" name="message_id" id="reportMessageId">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="reportModalLabel">
-                        <i class="fa-solid fa-flag me-2 text-danger"></i>Report Message
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+@foreach ($all_message as $message)
+<!-- Report Comment Modal -->
+    <div class="modal fade" id="reportChatModal-{{ $message->id }}" tabindex="-1" aria-labelledby="reportCommentModalLabel-{{ $message->id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content p-3">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-danger" id="reportModalLabel">Report this post?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <label for="reason" class="form-label">Reason for reporting:</label>
-                    <textarea name="reason" id="reason" rows="3" class="form-control" required></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Submit Report</button>
-                </div>
+
+                <form action="{{ route('report.store', $message->id) }}" method="POST">
+                    @csrf
+
+                    <input type="text" hidden name="reportable_type" value="App\Models\ChatMessage">
+                    <div class="modal-body text-start">
+                        @foreach($all_report_reasons as $report_reason )
+                        <div class="form-check mb-2">
+                            <input class="form-check-input me-3" type="checkbox" name="reason[]" value="{{ $report_reason->id }}" id="{{ $report_reason->name }}">
+                            <label class="form-check-label" for="{{ $report_reason->name }}">{{ $report_reason->name }}</label>
+                        </div>
+                        @endforeach
+
+                        @error('reason')
+                            <p class="text-danger small">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+
+                    <div class="modal-footer border-0 d-flex justify-content-center">
+                        <span class="text-muted text-start">* You can choose multiple options</span>
+                        <button type="submit" class="btn btn-danger w-100">Report</button>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
-</div>
+@endforeach
 
 {{-- Scripts --}}
 <script>

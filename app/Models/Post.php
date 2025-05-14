@@ -79,7 +79,11 @@ class Post extends Model
         return $this->hasOne(ChatRoom::class);
     }
 
+    // public function reports(){
+    //     return $this->hasMany(\App\Models\Report::class);
+    // }
+
     public function reports(){
-        return $this->hasMany(\App\Models\Report::class);
+        return $this->morphMany(Report::class, 'reportable');
     }
 }
