@@ -212,4 +212,15 @@ class AdminController extends Controller
 
         return redirect()->back();
     }
+
+    public function deleteReportMessage($id){
+        $report = $this->report->findOrFail($id);
+
+        $report->message = null;
+        $report->active = true;
+        $report->status = 'pending';
+        $report->save();
+
+        return redirect()->back();
+    }
 }

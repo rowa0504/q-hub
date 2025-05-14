@@ -139,3 +139,16 @@
     });
 </script>
 @endsection
+
+@if (session('open_modal'))
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            const modalId = '{{ session('open_modal') }}';
+            const targetModal = document.getElementById(modalId);
+            if (targetModal) {
+                const bsModal = new bootstrap.Modal(targetModal);
+                bsModal.show();
+            }
+        });
+    </script>
+@endif
