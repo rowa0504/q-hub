@@ -29,6 +29,11 @@
                 placeholder="Enter a location...">
             <input type="hidden" id="latitude-{{ $post->id }}" name="latitude">
             <input type="hidden" id="longitude-{{ $post->id }}" name="longitude">
+
+            <!-- 地図を表示する要素 -->
+            <div id="map-travel-{{ $post->id }}" style="height: 300px; width: 100%;" class="mt-2 rounded shadow-sm">
+            </div>
+
             @error('location')
                 <p class="text-danger small">{{ $message }}</p>
             @enderror
@@ -39,6 +44,7 @@
                 <p class="text-danger small">{{ $message }}</p>
             @enderror
         </div>
+
 
         <!-- Description input -->
         <div class="mb-3">
@@ -75,32 +81,65 @@
         const postId = $(this).data('id');
 
         $.get(`/posts/${postId}/edit`, function(data) {
-            $('#travel-location-' + postId).val(data.location || '');
-            $('#travel-description-' + postId).val(data.description || '');
+            $('#travel-location-{{ $post->id }}').val(data.location || '');
+            $('#travel-description-{{ $post->id }}').val(data.description || '');
 
+            // 緯度・経度のセットを追加
+            $('#latitude-{{ $post->id }}').val(data.latitude || '');
+            $('#longitude-{{ $post->id }}').val(data.longitude || '');
+
+            // 画像プレビュー
             if (data.image && data.image.startsWith('data:image')) {
-                $('#travel-imagePreview-' + postId).attr('src', data.image);
+                $('#travel-imagePreview-{{ $post->id }}').attr('src', data.image);
             } else {
-                $('#travel-imagePreview-' + postId).attr('src', 'https://via.placeholder.com/300x200');
+                $('#travel-imagePreview-{{ $post->id }}').attr('src', 'https://via.placeholder.com/300x200');
             }
+
+            // 緯度経度を設定してからマップ初期化（重要）
+            initAutocompleteTravel(postId);
         });
     });
 
     // Google Maps Autocomplete
     function initAutocompleteTravel(postId) {
         const input = document.getElementById('travel-location-' + postId);
-        if (!input) return;
+        const mapElement = document.getElementById('map-travel-' + postId);
+        if (!input || !mapElement) return;
+
+        const defaultLocation = {
+            lat: 13.41,
+            lng: 122.56
+        }; // フィリピン中央あたり
+
+        const map = new google.maps.Map(mapElement, {
+            center: defaultLocation,
+            zoom: 6
+        });
+
+        const marker = new google.maps.Marker({
+            map: map,
+            position: defaultLocation,
+            draggable: false
+        });
 
         const autocomplete = new google.maps.places.Autocomplete(input, {
             types: ['geocode'],
-            componentRestrictions: { country: 'ph' }
+            componentRestrictions: {
+                country: 'ph'
+            }
         });
 
         autocomplete.addListener('place_changed', function() {
             const place = autocomplete.getPlace();
             if (!place.geometry) return;
-            document.getElementById('latitude-' + postId).value = place.geometry.location.lat();
-            document.getElementById('longitude-' + postId).value = place.geometry.location.lng();
+
+            const location = place.geometry.location;
+            map.setCenter(location);
+            map.setZoom(15);
+            marker.setPosition(location);
+
+            document.getElementById('latitude-' + postId).value = location.lat();
+            document.getElementById('longitude-' + postId).value = location.lng();
         });
     }
 
@@ -114,3 +153,4 @@
         }
     });
 </script>
+

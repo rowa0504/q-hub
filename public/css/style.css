@@ -117,14 +117,14 @@ body {
 
 /* sidebar */
 .sidebar {
-    position: fixed;
+    position: sticky;
     top: 0;
     right: 0;
     background-color: #ffffff;
     height: 100vh;
     width: 100%;
     max-width: 300px;
-    z-index: 1055;
+    z-index: 2000;
     display: none;
     flex-direction: column;
     padding: 1.5rem;
@@ -142,7 +142,7 @@ body {
 .hamburger-menu {
     top: 150px;
     right: 20px;
-    z-index: 1300;
+    z-index: 1000;
 }
 
 .sidebar-mobile {
@@ -154,7 +154,7 @@ body {
     background-color: white;
     box-shadow: -2px 0 6px rgba(0, 0, 0, 0.2);
     transition: right 0.3s ease;
-    z-index: 1200;
+    z-index: 2000;
 }
 
 .sidebar-mobile.show {
@@ -189,6 +189,29 @@ body {
     transition: all 0.3s ease;
 }
 
+
+/* ドロップダウンメニューを絶対位置にして、浮かせる */
+.navbar .dropdown-menu
+{
+    position: absolute !important;
+    top: 100%; /* ボタンの下に表示 */
+    left: auto;
+    right: 0;
+    z-index: 2100;
+    display: none; /* 初期状態は非表示（Bootstrapが制御） */
+}
+
+.navbar .dropdown.show .dropdown-menu
+{
+    display: block;
+}
+
+.sticky-sidebar {
+    position: sticky;
+    top: 126px; /* ←ナビバーの高さに合わせる */
+}
+
+
 /* modal for post */
 .modal-content {
     border-radius: 1rem;
@@ -218,7 +241,8 @@ body {
 }
 
 .my-pagination a,
-.my-pagination span {
+.my-pagination span
+{
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
