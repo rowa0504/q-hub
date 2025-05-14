@@ -205,28 +205,6 @@
             @endif
         </main>
     </div>
-    {{-- スマホ用ハンバーガー --}}
-    <button class="btn d-md-none position-fixed hamburger-menu" onclick="toggleSidebar()">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    {{-- スマホ用オーバーレイ（背景を暗くする） --}}
-    <div id="sidebarOverlay" class="sidebar-overlay d-md-none" onclick="toggleSidebar()"></div>
-
-    {{-- スマホ用サイドバー --}}<a href="#">
-        <div class="sidebar-mobile d-md-none" id="mobileSidebar">
-            <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    <img src="{{ asset('images/Zinnbei1.png') }}" alt="icon" style="height: 60px;">
-                </a>
-                <button class="btn btn-outline-secondary btn-sm" onclick="toggleSidebar()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="p-3">
-                @include('posts.components.sidebar-menu')
-            </div>
-        </div>
 
         {{-- スマホ用サイドバーのスタイル --}}
         <script>
@@ -265,7 +243,7 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="p-3">
+            <div class="d-none d-md-block" style="position: sticky; top: 70px;">
                 @include('posts.components.sidebar-menu')
             </div>
         </div>
@@ -300,11 +278,6 @@
         @include('posts.components.modals.getreport')
 
         </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kQtW33rZJAHjgefvhyyzcGF6Y5GYe+U5zWkAOrj0XYN1MGcTIR+QKuwW5yI7U9n+" crossorigin="anonymous"></script>
-
-        @stack('scripts')
 </body>
 
 </html>

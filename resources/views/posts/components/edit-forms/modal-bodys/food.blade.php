@@ -28,6 +28,8 @@
                 placeholder="Enter a location...">
             <input type="hidden" id="latitude-{{ $post->id }}" name="latitude">
             <input type="hidden" id="longitude-{{ $post->id }}" name="longitude">
+            <!-- Map Display -->
+            <div id="map-{{ $post->id }}" style="height: 300px;" class="mb-3 rounded"></div>
             @error('latitude')
                 <p class="text-danger small">{{ $message }}</p>
             @enderror
@@ -68,36 +70,65 @@
             reader.readAsDataURL(file);
         }
     });
-
     $('.btn-edit').on('click', function() {
         const postId = $(this).data('id');
         const categoryId = $(this).data('category-id');
 
-        // サーバーから投稿データを取得
         $.get(`/posts/${postId}/edit`, function(data) {
-
-            // フォームへのデータの流し込み
             $('#food-location-{{ $post->id }}').val(data.location || '');
             $('#food-description-{{ $post->id }}').val(data.description || '');
 
-            // 画像プレビュー（Base64データを使って表示）
+            // 緯度・経度のセットを追加
+            $('#latitude-{{ $post->id }}').val(data.latitude || '');
+            $('#longitude-{{ $post->id }}').val(data.longitude || '');
+
+            // 画像プレビュー
             if (data.image && data.image.startsWith('data:image')) {
                 $('#food-imagePreview-{{ $post->id }}').attr('src', data.image);
             } else {
                 $('#food-imagePreview-{{ $post->id }}').attr('src',
                     'https://via.placeholder.com/300x200');
             }
+
+            // 緯度経度を設定してからマップ初期化（重要）
+            initAutocomplete();
         });
     });
+
 
     // Google Maps Autocomplete（Food用）
     function initAutocomplete() {
         const input = document.getElementById('food-location-{{ $post->id }}');
-        if (!input) return;
+        const mapElement = document.getElementById('map-{{ $post->id }}');
+        const lat = parseFloat(document.getElementById('latitude-{{ $post->id }}').value);
+        const lng = parseFloat(document.getElementById('longitude-{{ $post->id }}').value);
+
+        if (!input || !mapElement) return;
 
         const autocomplete = new google.maps.places.Autocomplete(input, {
             types: ['geocode'],
-            componentRestrictions: { country: 'ph' }
+            componentRestrictions: {
+                country: 'ph'
+            }
+        });
+
+        const defaultLocation = (!isNaN(lat) && !isNaN(lng)) ? {
+            lat: lat,
+            lng: lng
+        } : {
+            lat: 13.41,
+            lng: 122.56
+        };
+
+        const map = new google.maps.Map(mapElement, {
+            center: defaultLocation,
+            zoom: (!isNaN(lat) && !isNaN(lng)) ? 15 : 6
+        });
+
+        const marker = new google.maps.Marker({
+            map: map,
+            position: (!isNaN(lat) && !isNaN(lng)) ? defaultLocation : null,
+            visible: (!isNaN(lat) && !isNaN(lng))
         });
 
         autocomplete.addListener('place_changed', function() {
@@ -106,16 +137,12 @@
 
             document.getElementById('latitude-{{ $post->id }}').value = place.geometry.location.lat();
             document.getElementById('longitude-{{ $post->id }}').value = place.geometry.location.lng();
+
+            map.setCenter(place.geometry.location);
+            map.setZoom(15);
+
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
         });
     }
-
-    // モーダル表示時にオートコンプリートを初期化
-    document.addEventListener('DOMContentLoaded', function() {
-        const modal = document.getElementById('edit-form-{{ $post->id }}');
-        if (modal) {
-            modal.addEventListener('shown.bs.modal', function() {
-                initAutocomplete();
-            });
-        }
-    });
 </script>
