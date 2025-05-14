@@ -20,4 +20,8 @@ class Report extends Model
     public function post(){
         return $this->belongsTo(Post::class);
     }
+
+    public function reportable(){
+        return $this->morphTo();
+    }
 }

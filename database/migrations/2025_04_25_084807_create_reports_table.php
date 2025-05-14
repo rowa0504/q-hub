@@ -13,15 +13,14 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('post_id');
-            $table->string('status',50)->default('pending');
-            $table->text('message')->nullable(); // 警告メッセージ
-            $table->boolean('active')->default(true); // 有効な警告かどうか
+            $table->unsignedBigInteger('user_id'); // 通報したユーザー
+            $table->morphs('reportable'); // reportable_id + reportable_type のセットを作成
+            $table->string('status', 50)->default('pending');
+            $table->text('message')->nullable(); // 通報の理由や説明
+            $table->boolean('active')->default(true); // 現在有効な通報かどうか
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
         });
     }
 

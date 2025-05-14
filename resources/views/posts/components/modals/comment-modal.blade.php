@@ -19,6 +19,7 @@
                         <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
                 </form>
+
                 <!-- コメント一覧 -->
                 @foreach ($post->comments as $comment)
                     @if ($comment->user && !$comment->user->trashed())
@@ -35,11 +36,9 @@
                                 </div>
 
                                 {{-- 表示用 --}}
-                                <p class="text-start mb-0" id="comment-body-{{ $comment->id }}">{{ $comment->body }}
-                                </p>
+                                <p class="text-start mb-0" id="comment-body-{{ $comment->id }}">{{ $comment->body }}</p>
 
                                 {{-- 編集用フォーム（初期は非表示） --}}
-                                <!-- 編集フォーム（非表示で最初は隠す） -->
                                 <form class="d-none" id="edit-form-{{ $comment->id }}"
                                     action="{{ route('comment.update', ['post_id' => $comment->post_id, 'id' => $comment->id]) }}"
                                     method="POST">
@@ -76,13 +75,50 @@
                                         </li>
                                     @else
                                         <li>
-                                            <a href="#" class="dropdown-item text-danger" data-bs-toggle="modal"
-                                                data-bs-target="#reportCommentModal-{{ $comment->id }}">
+                                            <button class="dropdown-item text-danger"
+                                                onclick="showReportModal({{ $comment->id }})">
                                                 <i class="fa-solid fa-flag"></i> Report
-                                            </a>
+                                            </button>
                                         </li>
                                     @endif
                                 </ul>
+                            </div>
+                        </div>
+
+                        <!-- Report Comment Modal -->
+                        <div class="modal fade" id="reportCommentModal-{{ $comment->id }}" tabindex="-1"
+                            aria-labelledby="reportCommentModalLabel-{{ $comment->id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content p-3">
+                                    <div class="modal-header border-0">
+                                        <h5 class="modal-title text-danger" id="reportModalLabel">Report this post?</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+
+                                    <form action="{{ route('report.store', $comment->id) }}" method="POST">
+                                        @csrf
+
+                                        <input type="text" hidden name="reportable_type" value="App\Models\Comment">
+                                        <div class="modal-body text-start">
+                                            @foreach($all_report_reasons as $report_reason )
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input me-3" type="checkbox" name="reason[]" value="{{ $report_reason->id }}" id="{{ $report_reason->name }}">
+                                                <label class="form-check-label" for="{{ $report_reason->name }}">{{ $report_reason->name }}</label>
+                                            </div>
+                                            @endforeach
+
+                                            @error('reason')
+                                                <p class="text-danger small">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+
+
+                                        <div class="modal-footer border-0 d-flex justify-content-center">
+                                            <span class="text-muted text-start">* You can choose multiple options</span>
+                                            <button type="submit" class="btn btn-danger w-100">Report</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     @endif
@@ -91,6 +127,7 @@
         </div>
     </div>
 </div>
+
 @push('scripts')
     <script>
         function editComment(commentId) {
@@ -102,5 +139,16 @@
             document.getElementById('comment-body-' + commentId).classList.remove('d-none');
             document.getElementById('edit-form-' + commentId).classList.add('d-none');
         }
+
+        function showReportModal(commentId) {
+            const modalElement = document.getElementById('reportCommentModal-' + commentId);
+            if (modalElement) {
+                const modal = new bootstrap.Modal(modalElement);
+                modal.show(); // 子モーダルを表示
+            } else {
+                console.error("子モーダルが見つかりません");
+            }
+        }
     </script>
 @endpush
+

@@ -1,5 +1,5 @@
 {{-- Report モーダル --}}
-<div class="modal fade" id="reportPostModal-{{ $post->id }}" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+<div class="modal fade" id="reportUserModal-{{ $user->id }}" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content p-3">
             <div class="modal-header border-0">
@@ -7,10 +7,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <form action="{{ route('report.store', $post->id) }}" method="POST">
+            <form action="{{ route('report.store', $user->id) }}" method="POST">
                 @csrf
 
-                <input type="text" hidden name="reportable_type" value="App\Models\Post">
+                <input type="text" hidden name="reportable_type" value="App\Models\User">
                 <div class="modal-body text-start">
                     @foreach($all_report_reasons as $report_reason )
                     <div class="form-check mb-2">

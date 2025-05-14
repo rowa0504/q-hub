@@ -52,6 +52,18 @@
             </div>
         </div>
 
+        {{-- ChatMessages --}}
+        <div class="col">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <i class="fa-brands fa-rocketchat fa-2x mb-2 text-primary"></i>
+                    <h5 class="card-title">ChatMessages</h5>
+                    <p class="h4">{{ $chatMessage_count ?? '-' }}</p>
+                    <a href="{{ route('admin.chatMessages') }}" class="btn btn-outline-primary btn-sm mt-2">View</a>
+                </div>
+            </div>
+        </div>
+
         {{-- Reports --}}
         <div class="col">
             <div class="card text-center shadow-sm">
@@ -63,18 +75,5 @@
                 </div>
             </div>
         </div>
-
-        {{-- Reports Sent --}}
-        <div class="col">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <i class="fa-solid fa-paper-plane fa-2x mb-2 text-primary"></i>
-                    <h5 class="card-title">Warnings Sent</h5>
-                    <p class="h4">{{ $reports_sent_count ?? '-' }}</p>
-                    <a href="{{ route('admin.report_sent') }}" class="btn btn-outline-primary btn-sm mt-2">View</a>
-                </div>
-            </div>
-        </div>
-
     </div>
 @endsection

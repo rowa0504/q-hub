@@ -77,5 +77,7 @@ class User extends Authenticatable
         return $this->hasMany(WantedItem::class);
     }
 
-    
+    public function reports(){
+        return $this->morphMany(Report::class, 'reportable');
+    }
 }

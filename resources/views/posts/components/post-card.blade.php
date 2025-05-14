@@ -35,7 +35,7 @@
                 @else
                     <li>
                         <a class="dropdown-item text-danger" data-bs-toggle="modal"
-                            data-bs-target="#reportModal-{{ $post->id }}">
+                            data-bs-target="#reportPostModal-{{ $post->id }}">
                             <i class="fa-solid fa-flag me-1"></i> Report
                         </a>
                     </li>

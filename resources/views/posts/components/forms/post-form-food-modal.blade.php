@@ -12,7 +12,8 @@
                 <div class="modal-body">
                     <!-- Image preview -->
                     <div class="mb-3 text-center">
-                        <img id="imagePreview2" src="https://via.placeholder.com/300x200" alt="Image Preview" class="img-fluid rounded">
+                        <img id="imagePreview2" src="https://via.placeholder.com/300x200" alt="Image Preview"
+                            class="img-fluid rounded">
                     </div>
 
                     <!-- File input -->
@@ -25,9 +26,11 @@
 
                     <!-- Location input -->
                     <div class="mb-3">
-                        <input type="text" class="form-control" name="location" id="location-2" placeholder="Location">
+                        <input type="text" class="form-control" name="location" id="location-2"
+                            placeholder="Location">
                         <input type="hidden" id="latitude-2" name="latitude">
                         <input type="hidden" id="longitude-2" name="longitude">
+                        <div id="map-2" style="height: 300px;" class="mt-3 rounded border"></div>
                         @error('latitude')
                             <p class="text-danger small">{{ $message }}</p>
                         @enderror
@@ -39,9 +42,11 @@
                         @enderror
                     </div>
 
+
                     <!-- Description input -->
                     <div class="mb-3">
-                        <textarea class="form-control" name="description" id="description-2" placeholder="Enter your post description..." rows="3"></textarea>
+                        <textarea class="form-control" name="description" id="description-2" placeholder="Enter your post description..."
+                            rows="3"></textarea>
                         @error('description')
                             <p class="text-danger small">{{ $message }}</p>
                         @enderror
@@ -60,8 +65,7 @@
 
 <!-- Google Maps JavaScript API -->
 <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.api_key') }}&libraries=places&callback=initAutocomplete">
-</script>
+    src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.api_key') }}&libraries=places"></script>
 
 <script>
     // プレビュー画像表示処理
@@ -76,32 +80,54 @@
         }
     });
 
-    // Google Maps Autocomplete（Food用）
-    function initAutocomplete() {
+    let map2;
+    let marker2;
+
+    function initAutocomplete2() {
+        console.log("initAutocomplete2() called");
         const input = document.getElementById('location-2');
-        if (!input) return;
+        const mapElement = document.getElementById('map-2');
+
+        if (!mapElement) {
+            console.error("map-2 element not found");
+            return;
+        }
+
+        const defaultLocation = {
+            lat: 13.41,
+            lng: 122.56
+        };
+
+        map2 = new google.maps.Map(mapElement, {
+            center: defaultLocation,
+            zoom: 6,
+        });
+
+        marker2 = new google.maps.Marker({
+            map: map2,
+            position: defaultLocation,
+            draggable: false
+        });
 
         const autocomplete = new google.maps.places.Autocomplete(input, {
             types: ['geocode'],
-            componentRestrictions: { country: 'ph' }
+            componentRestrictions: {
+                country: 'ph'
+            }
         });
 
         autocomplete.addListener('place_changed', function() {
             const place = autocomplete.getPlace();
             if (!place.geometry) return;
 
-            document.getElementById('latitude-2').value = place.geometry.location.lat();
-            document.getElementById('longitude-2').value = place.geometry.location.lng();
+            const location = place.geometry.location;
+
+            map2.setCenter(location);
+            map2.setZoom(15);
+            marker2.setPosition(location);
+
+            document.getElementById('latitude-2').value = location.lat();
+            document.getElementById('longitude-2').value = location.lng();
         });
     }
-
-    // モーダル表示時にオートコンプリートを初期化
-    document.addEventListener('DOMContentLoaded', function() {
-        const modal = document.getElementById('post-form-2');
-        if (modal) {
-            modal.addEventListener('shown.bs.modal', function() {
-                initAutocomplete();
-            });
-        }
-    });
 </script>
