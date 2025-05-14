@@ -131,7 +131,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Admin route
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 
-        Route::get('/adashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
         // ユーザーの状態変更
         Route::get('/users', [AdminController::class, 'users'])->name('users');
@@ -166,6 +166,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
         Route::patch('/reports/{id}/update', [AdminController::class, 'updateReportMessage'])->name('updateReportMessage');
+        Route::patch('/reports/{id}/delete', [AdminController::class, 'deleteReportMessage'])->name('deleteReportMessage');
 
         Route::get('/{id}/reportedUser', [AdminController::class, 'reportedUserContent'])->name('reportedUser');
         // Route::post('/admin/posts/{post}/warn', [AdminController::class, 'storeMessage'])->name('posts.warn');
