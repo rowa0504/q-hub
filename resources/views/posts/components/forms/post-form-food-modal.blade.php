@@ -12,14 +12,16 @@
                 <div class="modal-body">
                     <!-- Image preview -->
                     <div class="mb-3 text-center">
-                        <img id="imagePreview2" src="https://via.placeholder.com/300x200" alt="Image Preview"
-                            class="img-fluid rounded">
+                        <div class="image-scroll-wrapper">
+                            <div class="image-scroll-container" id="imagePreviewContainer2"></div>
+                            <div class="scroll-indicators" id="imagePreviewIndicators2"></div>
+                        </div>
                     </div>
 
                     <!-- File input -->
                     <div class="mb-3">
-                        <input class="form-control" type="file" name="image" id="imageInput2" accept="image/*">
-                        @error('image')
+                        <input class="form-control" type="file" name="images[]" id="imageInput2" accept="image/*" value="{{ old('image') }}" multiple>
+                        @error('images')
                             <p class="text-danger small">{{ $message }}</p>
                         @enderror
                     </div>
@@ -68,17 +70,6 @@
     src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.api_key') }}&libraries=places"></script>
 
 <script>
-    // プレビュー画像表示処理
-    document.getElementById('imageInput2').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                document.getElementById('imagePreview2').src = event.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-    });
 
     let map2;
     let marker2;
@@ -130,4 +121,54 @@
             document.getElementById('longitude-2').value = location.lng();
         });
     }
+
+document.getElementById('imageInput2').addEventListener('change', function(e) {
+    const previewContainer = document.getElementById('imagePreviewContainer2');
+    const indicatorsContainer = document.getElementById('imagePreviewIndicators2');
+    previewContainer.innerHTML = '';
+    indicatorsContainer.innerHTML = '';
+
+    const files = e.target.files;
+    if (!files.length) return;
+
+    Array.from(files).forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const img = document.createElement('img');
+            img.src = event.target.result;
+            img.alt = `Preview Image ${index + 1}`;
+            previewContainer.appendChild(img);
+
+            const dot = document.createElement('span');
+            dot.classList.add('indicator-dot');
+            if(index === 0) dot.classList.add('active');
+            indicatorsContainer.appendChild(dot);
+
+            dot.addEventListener('click', () => {
+                previewContainer.scrollTo({
+                    left: img.offsetLeft,
+                    behavior: 'smooth'
+                });
+            });
+        };
+        reader.readAsDataURL(file);
+    });
+
+    previewContainer.addEventListener('scroll', () => {
+        const scrollLeft = previewContainer.scrollLeft;
+        let closestIndex = 0;
+        let minDistance = Infinity;
+        previewContainer.querySelectorAll('img').forEach((img, i) => {
+            const distance = Math.abs(img.offsetLeft - scrollLeft);
+            if(distance < minDistance){
+                minDistance = distance;
+                closestIndex = i;
+            }
+        });
+
+        indicatorsContainer.querySelectorAll('.indicator-dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === closestIndex);
+        });
+    });
+});
 </script>

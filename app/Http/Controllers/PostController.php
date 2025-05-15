@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\TransCategory;
+use App\Models\PostImage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,17 +16,18 @@ class PostController extends Controller
     private $category;
     private $trans_category;
 
-    public function __construct(Post $post, Category $category, TransCategory $trans_category)
+    public function __construct(Post $post, Category $category, TransCategory $trans_category, PostImage $postImage)
     {
         $this->post           = $post;
         $this->category       = $category;
         $this->trans_category = $trans_category;
+        $this->postImage = $postImage;
     }
 
     public function store(Request $request){
         $commonRules = [//other
             'description' => 'required|min:1|max:1000',
-            'image'       => 'nullable|mimes:jpeg,jpg,png,gif|max:1048',
+            'images.*' => 'image|mimes:jpeg,jpg,png,gif|max:2048',
             'category_id' => 'required|exists:categories,id',
         ];
 
@@ -77,10 +79,10 @@ class PostController extends Controller
         $this->post->title       = $request->title;
         $this->post->description = $request->description;
 
-        if ($request->hasFile('image')) {
-            $this->post->image = 'data:image/' . $request->image->extension() .
-                ';base64,' . base64_encode(file_get_contents($request->image));
-        }
+        // if ($request->hasFile('image')) {
+        //     $this->post->image = 'data:image/' . $request->image->extension() .
+        //         ';base64,' . base64_encode(file_get_contents($request->image));
+        // }
 
         $this->post->location          = $request->location;
         $this->post->latitude          = $request->latitude;
@@ -94,6 +96,16 @@ class PostController extends Controller
         $this->post->category_id       = $request->category_id;
         $this->post->trans_category_id = $request->trans_category;
         $this->post->save();
+
+        // base64形式で画像を保存
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $imageBase64 = 'data:image/' . $image->extension() . ';base64,' . base64_encode(file_get_contents($image));
+                $this->post->images()->create([
+                    'path' => $imageBase64, // DBにbase64文字列を保存
+                ]);
+            }
+        }
 
         return redirect()->back();
     }
@@ -204,7 +216,7 @@ class PostController extends Controller
     public function delete($id){
         $post = $this->post->findOrFail($id);
 
-        $post->delete();
+        $post->forceDelete(); // ← これで完全に削除される
         return redirect()->back();
     }
 }

@@ -60,11 +60,61 @@
     </div>
 
     {{-- 投稿画像 --}}
-    @if ($post->image)
+    {{-- @if ($post->image)
         <a href="{{ $post->getCategoryRoute() }}">
             <img src="{{ $post->image }}" class="img-fluid w-100" alt="Post Image">
         </a>
+    @endif --}}
+
+
+    @if ($post->images->isNotEmpty())
+        <div class="card-image-scroll-wrapper">
+            <a href="{{ $post->getCategoryRoute() }}" class="card-image-scroll-container" id="imageScrollContainer">
+                @foreach ($post->images as $image)
+                    <img src="{{ $image->path }}" alt="Post Image" class="card-scroll-image">
+                @endforeach
+            </a>
+            <div class="card-scroll-indicators" id="scrollIndicators">
+                @foreach ($post->images as $index => $image)
+                    <span class="card-indicator-dot {{ $index === 0 ? 'active' : '' }}"></span>
+                @endforeach
+            </div>
+        </div>
     @endif
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 複数の画像スライダーに対応
+            document.querySelectorAll('.card-image-scroll-wrapper').forEach((wrapper, index) => {
+                const container = wrapper.querySelector('.card-image-scroll-container');
+                const dots = wrapper.querySelectorAll('.card-indicator-dot');
+
+                function updateActiveDot() {
+                    const scrollLeft = container.scrollLeft;
+                    const containerWidth = container.clientWidth;
+                    const activeIndex = Math.round(scrollLeft / containerWidth);
+
+                    dots.forEach((dot, i) => {
+                        dot.classList.toggle('active', i === activeIndex);
+                    });
+                }
+
+                // スクロール時にドットを更新
+                container.addEventListener('scroll', updateActiveDot);
+
+                // ドットクリックでスクロール移動
+                dots.forEach((dot, i) => {
+                    dot.addEventListener('click', () => {
+                        container.scrollTo({
+                            left: container.clientWidth * i,
+                            behavior: 'smooth'
+                        });
+                    });
+                });
+            });
+        });
+    </script>
+
 
     <div class="card-body">
         {{-- いいね・コメント --}}
