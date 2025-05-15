@@ -42,14 +42,17 @@
                             {{-- Reported Action --}}
                             <td>
                                 @if ($reportable instanceof App\Models\Post)
-                                    {{-- モーダル起動リンク --}}
                                     <a href="#" class="text-decoration-none" data-bs-toggle="modal"
                                         data-bs-target="#postDetailModal-{{ $report->id }}">
                                         [Post] {{ $reportable->title }}
                                     </a>
                                     @include('admin.reports.modal.posts', ['report' => $report])
                                 @elseif ($reportable instanceof App\Models\Comment)
-                                    <span>[Comment] {{ Str::limit($reportable->body, 50) }}</span>
+                                    <a href="#" class="text-decoration-none" data-bs-toggle="modal"
+                                        data-bs-target="#commentDetailModal-{{ $report->id }}">
+                                        [Comment] {{ Str::limit($reportable->body, 50) }}
+                                    </a>
+                                    @include('admin.reports.modal.comments', ['report' => $report])
                                 @elseif ($reportable instanceof App\Models\Answer)
                                     <span>[Answer] {{ Str::limit($reportable->body, 50) }}</span>
                                 @elseif ($reportable instanceof App\Models\ChatMessage)
@@ -82,7 +85,6 @@
                                 @endif
                             </td>
 
-
                             {{-- Status --}}
                             <td>
                                 <div>
@@ -103,7 +105,6 @@
                                 </div>
                             </td>
 
-
                             {{-- Warn ボタン・Dismiss・表示 --}}
                             <td>
                                 @if ($report->status == 'pending')
@@ -113,8 +114,7 @@
                                     </button>
                                     @include('admin.reports.modal.warn', ['report' => $report])
 
-                                    <form action="{{ route('admin.dismissed', $report->id) }}" method="post"
-                                        class="mt-1">
+                                    <form action="{{ route('admin.dismissed', $report->id) }}" method="post" class="mt-1">
                                         @csrf
                                         <button class="btn btn-secondary btn-sm">Dismiss</button>
                                     </form>
@@ -123,9 +123,7 @@
                                         data-bs-target="#warnMessage-{{ $report->id }}">
                                         Sent
                                     </button>
-                                    @include('admin.reports.modal.warnMessage-modal', [
-                                        'report' => $report,
-                                    ])
+                                    @include('admin.reports.modal.warnMessage-modal', ['report' => $report])
                                 @endif
                             </td>
                         </tr>
@@ -135,3 +133,5 @@
         </div>
     </div>
 @endsection
+
+

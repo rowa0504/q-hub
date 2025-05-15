@@ -278,6 +278,7 @@
         @include('posts.components.modals.getreport')
 
         </div>
+        @stack('scripts')
 </body>
 
 </html>

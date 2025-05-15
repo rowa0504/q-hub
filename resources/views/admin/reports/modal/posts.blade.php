@@ -22,25 +22,26 @@
                         <small class="text-muted">Post ID: {{ $report->reportable->id }}</small>
                     </div>
                     <div>
-                        @if ($report->reportable->deleted_at)
-                            {{-- Restore ボタン --}}
-                            <form action="{{ route('admin.posts.activate', $report->reportable->id) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" class="btn btn-success">
-                                    <i class="fa-solid fa-rotate-left me-1"></i> Restore Post
-                                </button>
-                            </form>
-                        @else
-                            {{-- Delete ボタン --}}
-                            <form action="{{ route('admin.posts.deactivate', $report->reportable->id) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">
-                                    <i class="fa-solid fa-trash-can me-1"></i> Delete Post
-                                </button>
-                            </form>
+                        <!-- モーダル下部の footer 内 -->
+                        @if ($report->reportable instanceof App\Models\Post)
+                            <div class="modal-footer bg-white d-flex justify-content-between">
+                                <div>
+                                    <small class="text-muted">Post ID: {{ $report->reportable->id }}</small>
+                                </div>
+                                <div>
+                                    {{-- Delete ボタン --}}
+                                    <form action="{{ route('admin.posts.deactivate', $report->reportable->id) }}"
+                                        method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fa-solid fa-trash-can me-1"></i> Delete Post
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         @endif
+
                     </div>
                 </div>
             @endif
