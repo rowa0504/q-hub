@@ -205,25 +205,6 @@
         </main>
     </div>
 
-    {{-- スマホ用サイドバーのスタイル --}}
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('mobileSidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            const hamburger = document.querySelector('.hamburger-menu');
-
-            sidebar.classList.toggle('show');
-            overlay.classList.toggle('show');
-
-            // サイドバーが表示されたらハンバーガーを非表示に、非表示なら表示に
-            if (sidebar.classList.contains('show')) {
-                hamburger.style.display = 'none';
-            } else {
-                hamburger.style.display = 'block';
-            }
-        }
-    </script>
-
     {{-- スマホ用ハンバーガー --}}
     <button class="btn d-md-none position-fixed hamburger-menu" onclick="toggleSidebar()">
         <i class="fas fa-bars"></i>
@@ -243,7 +224,7 @@
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        <div>
+        <div class="sidebar-stickey">
             @include('posts.components.sidebar-menu')
         </div>
     </div>

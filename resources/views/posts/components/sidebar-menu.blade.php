@@ -1,5 +1,5 @@
 <!-- ユーザー -->
-<div class="sidebar-menu p-2">
+<div class="sidebar-sticky p-2">
     <div class="d-flex align-items-center mb-3 text-dark">
         @if (Auth::check())
             <a href="{{ route('profile.index', Auth::user()->id) }}"
