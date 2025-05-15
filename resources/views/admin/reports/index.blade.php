@@ -58,11 +58,16 @@
                                 @elseif ($reportable instanceof App\Models\ChatMessage)
                                     <span>[Chat] {{ Str::limit($reportable->body, 50) }}</span>
                                 @elseif ($reportable instanceof App\Models\User)
-                                    <span>[User] ー</span>
+                                    <a href="#" class="text-decoration-none" data-bs-toggle="modal"
+                                        data-bs-target="#userDetailModal-{{ $report->id }}">
+                                        [User] {{ $reportable->name ?? 'Unknown User' }}
+                                    </a>
+                                    @include('admin.reports.modal.users', ['report' => $report])
                                 @else
                                     <span class="text-muted">Unknown Content</span>
                                 @endif
                             </td>
+                            
 
                             {{-- Reasons --}}
                             <td>
@@ -114,7 +119,8 @@
                                     </button>
                                     @include('admin.reports.modal.warn', ['report' => $report])
 
-                                    <form action="{{ route('admin.dismissed', $report->id) }}" method="post" class="mt-1">
+                                    <form action="{{ route('admin.dismissed', $report->id) }}" method="post"
+                                        class="mt-1">
                                         @csrf
                                         <button class="btn btn-secondary btn-sm">Dismiss</button>
                                     </form>
@@ -123,7 +129,9 @@
                                         data-bs-target="#warnMessage-{{ $report->id }}">
                                         Sent
                                     </button>
-                                    @include('admin.reports.modal.warnMessage-modal', ['report' => $report])
+                                    @include('admin.reports.modal.warnMessage-modal', [
+                                        'report' => $report,
+                                    ])
                                 @endif
                             </td>
                         </tr>
@@ -133,5 +141,3 @@
         </div>
     </div>
 @endsection
-
-

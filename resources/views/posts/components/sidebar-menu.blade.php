@@ -1,26 +1,22 @@
 <!-- ユーザー -->
-<div class="sticky-sidebar">
+<div class="sidebar-menu p-2">
     <div class="d-flex align-items-center mb-3 text-dark">
         @if (Auth::check())
             <a href="{{ route('profile.index', Auth::user()->id) }}"
                 class="text-decoration-none d-flex align-items-center">
                 @if (Auth::user()->avatar)
-                    <img src="{{ Auth::user()->avatar }}" class="rounded-circle me-2 avatar-sm" alt="Avatar"
-                        style="width: 40px; height: 40px; object-fit: cover;">
+                    <img src="{{ Auth::user()->avatar }}" class="rounded-circle me-2 avatar-sm" alt="Avatar">
                 @else
-                    <div class="rounded-circle bg-light d-flex justify-content-center align-items-center me-2"
-                        style="width: 40px; height: 40px;">
-                        <i class="fa-solid fa-circle-user fa-3x text-secondary"></i>
+                    <div class="rounded-circle bg-light d-flex justify-content-center align-items-center me-2">
+                        <i class="fa-solid fa-circle-user fa-3x text-secondary rounded-circle me-2 avatar-sm"></i>
                     </div>
                 @endif
                 <span class="text-dark">{{ Auth::user()->name }}</span>
             </a>
         @else
             <!-- ゲストの場合 -->
-            <div class="rounded-circle bg-light d-flex justify-content-center align-items-center me-2"
-                style="width: 40px; height: 40px;">
-                <i class="fa-solid fa-circle-user fa-3x text-secondary"></i>
-            </div>
+            <div class="rounded-circle bg-light d-flex justify-content-center align-items-center me-2">
+                        <i class="fa-solid fa-circle-user fa-3x text-secondary rounded-circle me-2 avatar-sm"></i>
             <span>Guest</span>
         @endif
     </div>
