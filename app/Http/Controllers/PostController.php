@@ -35,7 +35,7 @@ class PostController extends Controller
         if ($categoryId == 1 || $categoryId == 3) { // event,item
             $extraRules = [
                 'max'       => 'required|numeric|min:1',
-                'startdate' => 'required|date',
+                'startdate' => 'required|date|after_or_equal:today',
                 'enddate'   => 'date|after_or_equal:startdate',
             ];
             $modalId = 'post-form-' . $categoryId;
@@ -134,7 +134,7 @@ class PostController extends Controller
         if ($categoryId == 1 || $categoryId == 3) { // event,item
             $extraRules = [
                 'max'       => 'required|numeric|min:1',
-                'startdate' => 'required|date',
+                'startdate' => 'required|date|after_or_equal:today',
                 'enddate'   => 'date|after_or_equal:startdate',
             ];
             $modalId = 'edit-form-' . $categoryId;
