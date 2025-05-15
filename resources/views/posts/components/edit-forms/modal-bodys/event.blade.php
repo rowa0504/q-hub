@@ -15,10 +15,10 @@
 
         <!-- File input -->
         <div class="mb-3">
-            <input class="form-control" type="file" name="image" id="event-imageInput-{{ $post->id }}" accept="image/*">
-            @error('image')
-                <p class="text-danger small">{{ $message }}</p>
-            @enderror
+            <input class="form-control" type="file" name="images[]" id="imageInput1" accept="image/*" value="{{ old('image') }}" multiple>
+                @error('images')
+                    <p class="text-danger small">{{ $message }}</p>
+                @enderror
         </div>
 
         {{-- Max input --}}

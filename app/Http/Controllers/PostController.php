@@ -115,18 +115,18 @@ class PostController extends Controller
         $post = $this->post->findOrFail($id);
 
         // 画像データがBase64形式で保存されている場合、そのまま返す
-        if ($post->image && strpos($post->image, 'data:image') === false) {
+        if ($post->images && strpos($post->images, 'data:image') === false) {
             // 画像ファイルのパスが保存されている場合
-            $imagePath = storage_path('app/public/' . $post->image);
+            $imagePath = storage_path('app/public/' . $post->images->path);
 
             // 画像が存在する場合、Base64に変換して返す
             if (file_exists($imagePath)) {
                 $imageData = base64_encode(file_get_contents($imagePath));
                 $mimeType = mime_content_type($imagePath); // MIMEタイプを取得
-                $post->image = 'data:' . $mimeType . ';base64,' . $imageData;
+                $post->image->path = 'data:' . $mimeType . ';base64,' . $imageData;
             } else {
                 // 画像が存在しない場合、nullを設定
-                $post->image = null;
+                $post->images = null;
             }
         }
 
