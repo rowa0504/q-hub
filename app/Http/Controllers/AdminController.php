@@ -9,6 +9,7 @@ use App\Models\Comment;
 use App\Models\Answer;
 use App\Models\Report;
 use App\Models\ChatMessage;
+use App\Models\ReportReason;
 
 class AdminController extends Controller
 {
@@ -28,17 +29,20 @@ class AdminController extends Controller
         $this->report = $report;
     }
 
-    public function users(){
+    public function users()
+    {
         $all_users = $this->user->withTrashed()->paginate(10);
         return view('admin.users.index', compact('all_users'));
     }
 
-    public function posts(){
+    public function posts()
+    {
         $all_posts = $this->post->with(['user', 'category'])->withTrashed()->paginate(10);
         return view('admin.posts.index', compact('all_posts'));
     }
 
-    public function dashboard(){
+    public function dashboard()
+    {
         return view('admin.dashboard', [
             'user_count'         => User::count(),
             'post_count'         => Post::count(),
@@ -49,7 +53,8 @@ class AdminController extends Controller
         ]);
     }
 
-    public function deactivate(User $user){
+    public function deactivate(User $user)
+    {
         // 投稿も論理削除
         $user->posts()->delete(); // ←★これを追加！
 
@@ -59,7 +64,8 @@ class AdminController extends Controller
         return back()->with('success', "{$user->name} has been deactivated along with their posts.");
     }
 
-    public function activate($id){
+    public function activate($id)
+    {
         $user = $this->user->withTrashed()->findOrFail($id);
         $user->restore(); // ソフトデリート解除
 
@@ -68,47 +74,55 @@ class AdminController extends Controller
         return back()->with('success', "{$user->name} has been reactivated.");
     }
 
-    public function deactivatePost($id){
+    public function deactivatePost($id)
+    {
         $post = $this->post->findOrFail($id);
         $post->delete();
 
         return back()->with('success', "Post ID {$id} has been deactivated.");
     }
 
-    public function activatePost($id){
+    public function activatePost($id)
+    {
         $post = $this->post->withTrashed()->findOrFail($id);
         $post->restore();
 
         return back()->with('success', "Post ID {$id} has been reactivated.");
     }
 
-    public function comments(){
+    public function comments()
+    {
         $all_comments = Comment::with(['user', 'post'])->withTrashed()->paginate(10);
         return view('admin.comments.index', compact('all_comments'));
     }
 
-    public function deactivateComment(Comment $comment){
+    public function deactivateComment(Comment $comment)
+    {
         $comment->delete();
         return back()->with('success', 'Comment has been deactivated.');
     }
 
-    public function activateComment($id){
+    public function activateComment($id)
+    {
         $comment = $this->comment->withTrashed()->findOrFail($id);
         $comment->restore();
         return back()->with('success', 'Comment has been restored.');
     }
 
-    public function answers(){
+    public function answers()
+    {
         $all_answers = $this->answer->with(['user', 'post'])->withTrashed()->paginate(10);
         return view('admin.answers.index', compact('all_answers'));
     }
 
-    public function deactivateAnswer(Answer $answer){
+    public function deactivateAnswer(Answer $answer)
+    {
         $answer->delete();
         return back()->with('success', 'Answer has been deactivated.');
     }
 
-    public function activateAnswer($id){
+    public function activateAnswer($id)
+    {
         $answer = $this->answer->withTrashed()->findOrFail($id);
         $answer->restore();
         return back()->with('success', 'Answer has been restored.');
@@ -182,6 +196,8 @@ class AdminController extends Controller
             $postReportedReasons[$report->id] = $reasons; // 重複排除しない
         }
 
+        $all_report_reasons = ReportReason::all();
+
         return view('admin.reports.index', compact('reports', 'postReportedReasons'));
     }
 
@@ -189,6 +205,15 @@ class AdminController extends Controller
     {
         $warned_posts = $this->post->where('warning_sent', true)->with(['user', 'category'])->get();
         return view('admin.report_sent.index', compact('warned_posts'));
+    }
+
+
+    public function reportedPosts()
+    {
+        // 通報された投稿だけ取得
+        $reportedPosts = Post::whereHas('reports')->with(['user', 'category'])->get();
+
+        return view('admin.reports.reported', compact('reportedPosts'));
     }
 
     public function reportedUserContent($userId){
