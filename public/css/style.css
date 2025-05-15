@@ -43,7 +43,7 @@ body {
     margin-bottom: 1rem;
 }
 
-/* icon */
+/* icon, image size */
 .icon-xsm {
     font-size: 1.5rem;
 }
@@ -125,7 +125,6 @@ body {
     width: 100%;
     max-width: 300px;
     z-index: 2000;
-    display: none;
     flex-direction: column;
     padding: 1.5rem;
 }
