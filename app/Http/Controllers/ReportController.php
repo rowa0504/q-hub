@@ -19,7 +19,7 @@ class ReportController extends Controller
         $validator = Validator::make($request->all(), [
             'reason' => 'required|array|min:1',
             'reason.*' => 'exists:report_reasons,id',
-            'reportable_type' => 'required|string|in:post,user,answer,chat,comment', // 追加
+            'reportable_type' => 'required|string|in:App\Models\Post,App\Models\User,App\Models\Answer,App\Models\ChatMessage,App\Models\Comment',
         ]);
 
         if ($validator->fails()) {

@@ -1,67 +1,62 @@
-# QHub - 学校掲示板アプリ
+# QHub - School Bulletin Board App
 
-QHub（キューハブ）は、QQEnglishの生徒と先生が情報共有できる掲示板アプリです。  
-授業の情報、アナウンス、質問や相談などを投稿・閲覧できます。
+**QHub** is a bulletin board web application designed for students and teachers of QQEnglish to share information.  
+Users can post and browse class updates, announcements, questions, and more.
 
 ---
 
-## 🔧 使用技術
+## 🔧 Technologies Used
 
-- Laravel 10
-- MySQL
-- PHP 8.2
-- Tailwind CSS
+- Laravel 10  
+- MySQL  
+- PHP 8.2  
+- Tailwind CSS  
 - Git / GitHub
 
 ---
 
-## ✨ 主な機能
+## ✨ Key Features
 
-- 📝 投稿の作成・編集・削除
-- 🧑‍🤝‍🧑 ユーザー登録・ログイン（認証機能）
-- 🔍 投稿のカテゴリ検索・キーワード検索
-- 📌 重要なお知らせをピン留め
-- 💬 コメント機能（返信）
-- 🖼️ 画像アップロード（任意）
-
----
-
-## 🚀 セットアップ方法
-
-1. このリポジトリをクローン
-
-2. `.env` の作成とキー生成
-
-
-3. 必要なパッケージをインストール
-
-
-4. データベースを作成し、マイグレーションを実行
-
-
-5. ローカルサーバーを起動
-
-
-
+- 📝 Create, edit, and delete posts  
+- 🧑‍🤝‍🧑 User registration and login (authentication)  
+- 🔍 Category-based and keyword search for posts  
+- 📌 Pin important announcements to the top  
+- 💬 Comment and reply system  
+- 🖼️ Optional image uploads for posts
 
 ---
 
-## 🤝 コントリビューション
+## 🚀 Setup Guide
 
-Pull Request 大歓迎です！  
-ブランチ運用ルールや命名規則は `/docs/CONTRIBUTING.md` に記載予定です。
+1. Clone this repository
+
+2. Create a `.env` file and generate application key
+
+3. Install necessary packages via Composer and npm
+
+4. Create a database and run migrations
+
+5. Start the local development server
 
 ---
 
-## 📮 開発メンバー
+## 🤝 Contributing
 
-- Egami Jun（PM / Backend）
-- Sample User A（Frontend）
-- Sample User B（QA）
+Pull requests are welcome!  
+Branching strategy and naming conventions will be documented in `/docs/CONTRIBUTING.md` soon.
 
 ---
 
-## 📌 ライセンス
+## 👨‍💻 Development Team
+
+- **Jun Egami** (Frontend / UI)  
+- **Masahiro Mikoshiba** (Project Manager / Backend)   
+- **Shun Rowa** (Frontend / UI)  
+- **Yuki Takashima** (Quality Assurance)
+
+---
+
+## 📌 License
 
 MIT License  
-このアプリはオープンソースプロジェクトです。
+This project is open source and free to use.

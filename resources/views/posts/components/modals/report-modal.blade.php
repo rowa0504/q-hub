@@ -9,7 +9,6 @@
 
             <form action="{{ route('report.store', $post->id) }}" method="POST">
                 @csrf
-
                 <input type="text" hidden name="reportable_type" value="App\Models\Post">
                 <div class="modal-body text-start">
                     @foreach($all_report_reasons as $report_reason )
@@ -23,8 +22,6 @@
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
                 </div>
-
-
                 <div class="modal-footer border-0 d-flex justify-content-center">
                     <span class="text-muted text-start">* You can choose multiple options</span>
                     <button type="submit" class="btn btn-danger w-100">Report</button>

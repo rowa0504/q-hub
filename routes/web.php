@@ -172,5 +172,12 @@ Route::group(['middleware' => 'auth'], function () {
         // Route::post('/admin/posts/{post}/warn', [AdminController::class, 'storeMessage'])->name('posts.warn');
 
         Route::get('/report-sent', [AdminController::class, 'reportSentIndex'])->name('report_sent');
+
+        // routes/web.php
+        Route::get('/admin/reports/reported', [AdminController::class, 'reportedPosts'])->name('reported_posts');
+
+
+
+
     });
 });
