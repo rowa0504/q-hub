@@ -9,7 +9,7 @@ body {
 
 /* btn for register and login */
 .btn-qhub {
-    background-color: #00B7D6;
+    background-color: #00b7d6;
     color: #fff;
     border: none;
     padding: 0.5rem 1rem;
@@ -116,7 +116,7 @@ body {
 }
 
 /* sidebar */
-.sidebar-sticky{
+.sidebar-sticky {
     position: sticky;
     top: 24px;
 }
@@ -180,8 +180,7 @@ body {
     transition: all 0.3s ease;
 }
 
-.navbar .dropdown-menu
-{
+.navbar .dropdown-menu {
     position: absolute !important;
     top: 100%;
     left: auto;
@@ -190,8 +189,7 @@ body {
     display: none;
 }
 
-.navbar .dropdown.show .dropdown-menu
-{
+.navbar .dropdown.show .dropdown-menu {
     display: block;
 }
 
@@ -202,7 +200,7 @@ body {
 }
 
 .modal .btn-info {
-    background-color: #00B7D6;
+    background-color: #00b7d6;
     color: #fff;
     font-weight: bold;
     border-radius: 0.5rem;
@@ -210,16 +208,15 @@ body {
 }
 
 .modal .btn-outline-info {
-    border: 2px solid #00B7D6;
-    color: #00B7D6;
+    border: 2px solid #00b7d6;
+    color: #00b7d6;
     background-color: #fff;
     font-weight: bold;
     border-radius: 0.5rem;
     font-size: 1rem;
 }
 
-.pac-container
-{
+.pac-container {
     z-index: 1055 !important; /* Bootstrap modalより前面に */
 }
 
@@ -227,55 +224,55 @@ body {
     padding-right: 1rem;
 }
 
-<<<<<<< HEAD
-    .card-image-scroll-wrapper {
-        position: relative;
-        width: 100%;
+/* card image */
+.card-image-scroll-wrapper {
+    position: relative;
+    width: 100%;
 
-        margin: 0 auto;
-    }
+    margin: 0 auto;
+}
 
-    .card-image-scroll-container {
-        display: flex;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        gap: 10px;
-        scroll-behavior: smooth;
-        padding-bottom: 10px;
-    }
+.card-image-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 10px;
+    scroll-behavior: smooth;
+    padding-bottom: 10px;
+}
 
-    .card-scroll-image {
-        flex: 0 0 100%;
-        max-width: 100%;
-        height: auto;
-        scroll-snap-align: start;
-        border-radius: 10px;
-        object-fit: cover;
-    }
+.card-scroll-image {
+    flex: 0 0 100%;
+    max-width: 100%;
+    height: auto;
+    scroll-snap-align: start;
+    border-radius: 10px;
+    object-fit: cover;
+}
 
-    /* インジケーターのドット */
-    .card-scroll-indicators {
-        text-align: center;
-        padding-bottom: 10px;
-    }
+/* インジケーターのドット */
+.card-scroll-indicators {
+    text-align: center;
+    padding-bottom: 10px;
+}
 
-    .card-indicator-dot {
-        display: inline-block;
-        width: 10px;
-        height: 10px;
-        margin: 0 5px;
-        background-color: #ccc;
-        border-radius: 50%;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
+.card-indicator-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    background-color: #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
-    .card-indicator-dot.active {
-        background-color: #007bff; /* 強調色 */
-    }
+.card-indicator-dot.active {
+    background-color: #007bff; /* 強調色 */
+}
 
-    .image-scroll-container {
+.image-scroll-container {
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
@@ -291,7 +288,7 @@ body {
 
 .image-scroll-container img {
     flex: 0 0 300px; /* 横幅固定（1枚分） */
-    height: 300px;    /* 高さも固定 */
+    height: 300px; /* 高さも固定 */
     object-fit: cover;
     scroll-snap-align: start;
     border-radius: 8px;
@@ -318,5 +315,3 @@ body {
 .scroll-indicators .indicator-dot.active {
     background-color: #007bff;
 }
-=======
->>>>>>> master

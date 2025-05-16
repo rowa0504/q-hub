@@ -59,14 +59,6 @@
         </div>
     </div>
 
-    {{-- 投稿画像 --}}
-    {{-- @if ($post->image)
-        <a href="{{ $post->getCategoryRoute() }}">
-            <img src="{{ $post->image }}" class="img-fluid w-100" alt="Post Image">
-        </a>
-    @endif --}}
-
-
     @if ($post->images->isNotEmpty())
         <div class="card-image-scroll-wrapper">
             <a href="{{ $post->getCategoryRoute() }}" class="card-image-scroll-container" id="imageScrollContainer">
