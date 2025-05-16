@@ -31,7 +31,7 @@
                         <td>{{ $user->id }}</td>
                         <td class="text-center">
                             @if ($user->avatar)
-                                <img src="{{ $user->avatar }}" alt="{{ $user->name }}" class="rounded-circle" width="40" height="40">
+                                <img src="{{ $user->avatar }}" alt="{{ $user->name }}" class="rounded-circle avatar-sm">
                             @else
                                 <i class="fa-solid fa-circle-user fa-2x text-muted"></i>
                             @endif
@@ -93,7 +93,7 @@
 
         <!-- Pagination -->
         <div class="d-flex justify-content-center my-pagination">
-            {{ $all_users->links() }}
+            {{ $all_users->onEachSide(1)->links('pagination::bootstrap-5') }}
         </div>
     </div>
 </div>

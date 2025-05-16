@@ -16,7 +16,7 @@
         <div class="col-12 col-md-9">
             @include('posts.components.post-card', ['post' => $post])
         </div>
-        <div class="col-md-3 d-none d-md-block ps-md-4">
+        <div class="col-md-3 d-none d-md-block ps-md-4 sidebar-sticky">
             @include("posts.components.sidebar-menu")
         </div>
     </div>

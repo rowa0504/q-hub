@@ -31,13 +31,13 @@ class AdminController extends Controller
 
     public function users()
     {
-        $all_users = $this->user->withTrashed()->paginate(10);
+        $all_users = $this->user->withTrashed()->paginate(8);
         return view('admin.users.index', compact('all_users'));
     }
 
     public function posts()
     {
-        $all_posts = $this->post->with(['user', 'category'])->withTrashed()->paginate(10);
+        $all_posts = $this->post->with(['user', 'category'])->withTrashed()->paginate(8);
         return view('admin.posts.index', compact('all_posts'));
     }
 
@@ -92,7 +92,7 @@ class AdminController extends Controller
 
     public function comments()
     {
-        $all_comments = Comment::with(['user', 'post'])->withTrashed()->paginate(10);
+        $all_comments = Comment::with(['user', 'post'])->withTrashed()->paginate(8);
         return view('admin.comments.index', compact('all_comments'));
     }
 
@@ -111,7 +111,7 @@ class AdminController extends Controller
 
     public function answers()
     {
-        $all_answers = $this->answer->with(['user', 'post'])->withTrashed()->paginate(10);
+        $all_answers = $this->answer->with(['user', 'post'])->withTrashed()->paginate(8);
         return view('admin.answers.index', compact('all_answers'));
     }
 
@@ -219,10 +219,10 @@ class AdminController extends Controller
     public function reportedUserContent($userId){
         $user = User::withTrashed()->findOrFail($userId);
 
-        $posts = Post::withTrashed()->where('user_id', $user->id)->paginate(10);
-        $comments = Comment::withTrashed()->where('user_id', $user->id)->paginate(10);
-        $answers = Answer::withTrashed()->where('user_id', $user->id)->paginate(10);
-        $chatMessages = ChatMessage::withTrashed()->where('user_id', $user->id)->paginate(10);
+        $posts = Post::withTrashed()->where('user_id', $user->id)->paginate(8);
+        $comments = Comment::withTrashed()->where('user_id', $user->id)->paginate(8);
+        $answers = Answer::withTrashed()->where('user_id', $user->id)->paginate(8);
+        $chatMessages = ChatMessage::withTrashed()->where('user_id', $user->id)->paginate(8);
 
         return view('admin.reports.user_content', compact('user', 'posts', 'comments', 'answers', 'chatMessages'));
     }

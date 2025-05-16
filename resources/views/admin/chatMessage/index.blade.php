@@ -85,7 +85,7 @@
 
         <!-- Pagination -->
         <div class="d-flex justify-content-center my-pagination">
-            {{ $all_chatMessages->links() }}
+            {{ $all_chatMessages->onEachSide(1)->links('pagination::bootstrap-5') }}
         </div>
     </div>
 </div>
