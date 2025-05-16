@@ -54,9 +54,17 @@
                                     </a>
                                     @include('admin.reports.modal.comments', ['report' => $report])
                                 @elseif ($reportable instanceof App\Models\Answer)
-                                    <span>[Answer] {{ Str::limit($reportable->body, 50) }}</span>
+                                    <a href="#" class="text-decoration-none" data-bs-toggle="modal"
+                                        data-bs-target="#answerDetailModal-{{ $report->id }}">
+                                        [Answer] {{ Str::limit($reportable->body, 50) }}
+                                    </a>
+                                    @include('admin.reports.modal.answers', ['report' => $report])
                                 @elseif ($reportable instanceof App\Models\ChatMessage)
-                                    <span>[Chat] {{ Str::limit($reportable->body, 50) }}</span>
+                                    <a href="#" class="text-decoration-none" data-bs-toggle="modal"
+                                        data-bs-target="#chatDetailModal-{{ $report->id }}">
+                                        [Chat] {{ Str::limit($reportable->body, 50) }}
+                                    </a>
+                                    @include('admin.reports.modal.chat', ['report' => $report])
                                 @elseif ($reportable instanceof App\Models\User)
                                     <a href="#" class="text-decoration-none" data-bs-toggle="modal"
                                         data-bs-target="#userDetailModal-{{ $report->id }}">
@@ -67,7 +75,7 @@
                                     <span class="text-muted">Unknown Content</span>
                                 @endif
                             </td>
-                            
+
 
                             {{-- Reasons --}}
                             <td>
@@ -125,10 +133,11 @@
                                         <button class="btn btn-secondary btn-sm">Dismiss</button>
                                     </form>
                                 @elseif ($report->status == 'warned' || $report->status == 'resolved')
-                                    <button class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                    <button class="btn btn-success btn-sm w-100 text-start" data-bs-toggle="modal"
                                         data-bs-target="#warnMessage-{{ $report->id }}">
-                                        Sent
+                                        <i class="fa-solid fa-envelope-open-text"></i> Sent
                                     </button>
+
                                     @include('admin.reports.modal.warnMessage-modal', [
                                         'report' => $report,
                                     ])
