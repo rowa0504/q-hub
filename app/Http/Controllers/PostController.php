@@ -115,44 +115,59 @@ class PostController extends Controller
         // $post = $this->post->findOrFail($id);
 
         // // 画像データがBase64形式で保存されている場合、そのまま返す
-        // if ($post->images && strpos($post->images, 'data:image') === false) {
+        // if ($post->image && strpos($post->image, 'data:image') === false) {
         //     // 画像ファイルのパスが保存されている場合
-        //     $imagePath = storage_path('app/public/' . $post->images->path);
+        //     $imagePath = storage_path('app/public/' . $post->image);
 
         //     // 画像が存在する場合、Base64に変換して返す
         //     if (file_exists($imagePath)) {
         //         $imageData = base64_encode(file_get_contents($imagePath));
         //         $mimeType = mime_content_type($imagePath); // MIMEタイプを取得
-        //         $post->image->path = 'data:' . $mimeType . ';base64,' . $imageData;
+        //         $post->image = 'data:' . $mimeType . ';base64,' . $imageData;
         //     } else {
         //         // 画像が存在しない場合、nullを設定
-        //         $post->images = null;
+        //         $post->image = null;
         //     }
         // }
 
         // return response()->json($post);
 
         $post = Post::with('images')->findOrFail($id);
-        $base64Images = [];
 
+        $images = [];
         foreach ($post->images as $image) {
-            $imagePath = storage_path('app/public/' . $image->path);
-            if (file_exists($imagePath)) {
-                $mimeType = mime_content_type($imagePath);
-                $base64 = base64_encode(file_get_contents($imagePath));
-                $base64Images[] = 'data:' . $mimeType . ';base64,' . $base64;
+            // 既にBase64ならそのまま使う
+            if (strpos($image->path, 'data:image') === 0) {
+                $images[] = $image->path;
+            } else {
+                // 万が一Base64でない場合の対応（不要なら削除可）
+                $images[] = null; // または適宜処理
             }
         }
 
         return response()->json([
-            'images' => $base64Images,
+            'post' => [
+                'id' => $post->id,
+                'title' => $post->title,
+                'description' => $post->description,
+                'location' => $post->location,
+                'latitude' => $post->latitude,
+                'longitude' => $post->longitude,
+                'departure' => $post->departure,
+                'destination' => $post->destination,
+                'fee' => $post->fee,
+                'max' => $post->max,
+                'startdatetime' => $post->startdatetime,
+                'enddatetime' => $post->enddatetime,
+            ],
+            'images' => $images,
         ]);
     }
 
     public function update($id, Request $request){
         $commonRules = [//other
             'description' => 'required|min:1|max:1000',
-            'image'       => 'nullable|mimes:jpeg,jpg,png,gif|max:1048',
+            'images.*' => 'image|mimes:jpeg,jpg,png,gif|max:2048',
             'category_id' => 'required|exists:categories,id',
         ];
 
@@ -205,14 +220,13 @@ class PostController extends Controller
         $post->user_id     = Auth::user()->id;
         $post->title       = $request->title;
         $post->description = $request->description;
-        if ($request->hasFile('image')) {
+        // if ($request->hasFile('image')) {
 
-            $post->image = 'data:image/' . $request->image->extension() .
-                                 ';base64,' . base64_encode(file_get_contents($request->image));
-        } else {
-            $post->image = null;
-        }
-
+        //     $post->image = 'data:image/' . $request->image->extension() .
+        //                          ';base64,' . base64_encode(file_get_contents($request->image));
+        // } else {
+        //     $post->image = null;
+        // }
         $post->location          = $request->location;
         $post->latitude          = $request->latitude;
         $post->longitude         = $request->longitude;
@@ -225,6 +239,20 @@ class PostController extends Controller
         $post->category_id       = $request->category_id;
         $post->trans_category_id = $request->trans_category;
         $post->save();
+
+        // 3. 画像がアップロードされていれば
+        if ($request->hasFile('images')) {
+            // 既存画像を削除（物理ファイルを扱っていないならDBのみ）
+            $post->images()->delete();
+
+            // 画像の保存
+            foreach ($request->file('images') as $image) {
+                $imageBase64 = 'data:image/' . $image->extension() . ';base64,' . base64_encode(file_get_contents($image));
+                $post->images()->create([
+                    'path' => $imageBase64, // DBにbase64文字列を保存
+                ]);
+            }
+        }
 
         return redirect()->back();
     }
