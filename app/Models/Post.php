@@ -86,4 +86,8 @@ class Post extends Model
     public function reports(){
         return $this->morphMany(Report::class, 'reportable');
     }
+
+    public function images(){
+        return $this->hasMany(PostImage::class);
+    }
 }
