@@ -1,4 +1,4 @@
-<!-- postFormModal を追加 -->
+<!-- Travel Post Modal -->
 <div class="modal fade" id="post-form-2" tabindex="-1" aria-labelledby="otherPostModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content p-4">
@@ -28,27 +28,24 @@
 
                     <!-- Location input -->
                     <div class="mb-3">
-                        <input type="text" class="form-control" name="location" id="location-2"
-                            placeholder="Location">
+                        <input type="text" class="form-control" name="location" id="location-2" placeholder="Location">
                         <input type="hidden" id="latitude-2" name="latitude">
                         <input type="hidden" id="longitude-2" name="longitude">
-                        <div id="map-2" style="height: 300px;" class="mt-3 rounded border"></div>
+                        <div id="map-2" style="height: 300px;" class="mb-3 rounded"></div>
+                        @error('location')
+                            <p class="text-danger small">{{ $message }}</p>
+                        @enderror
                         @error('latitude')
                             <p class="text-danger small">{{ $message }}</p>
                         @enderror
                         @error('longitude')
                             <p class="text-danger small">{{ $message }}</p>
                         @enderror
-                        @error('location')
-                            <p class="text-danger small">{{ $message }}</p>
-                        @enderror
                     </div>
-
 
                     <!-- Description input -->
                     <div class="mb-3">
-                        <textarea class="form-control" name="description" id="description-2" placeholder="Enter your post description..."
-                            rows="3"></textarea>
+                        <textarea class="form-control" name="description" placeholder="Enter your post description..." rows="3"></textarea>
                         @error('description')
                             <p class="text-danger small">{{ $message }}</p>
                         @enderror
@@ -70,24 +67,27 @@
     src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.api_key') }}&libraries=places"></script>
 
 <script>
+    // 画像プレビュー
+    // document.getElementById('imageInput2').addEventListener('change', function (e) {
+    //     const file = e.target.files[0];
+    //     if (file) {
+    //         const reader = new FileReader();
+    //         reader.onload = function (event) {
+    //             document.getElementById('imagePreview2').src = event.target.result;
+    //         };
+    //         reader.readAsDataURL(file);
+    //     }
+    // });
 
+    // map2とmarker2を外に出す
     let map2;
     let marker2;
 
     function initAutocomplete2() {
-        console.log("initAutocomplete2() called");
         const input = document.getElementById('location-2');
         const mapElement = document.getElementById('map-2');
 
-        if (!mapElement) {
-            console.error("map-2 element not found");
-            return;
-        }
-
-        const defaultLocation = {
-            lat: 13.41,
-            lng: 122.56
-        };
+        const defaultLocation = { lat: 13.41, lng: 122.56 }; // フィリピン中央
 
         map2 = new google.maps.Map(mapElement, {
             center: defaultLocation,
@@ -102,12 +102,10 @@
 
         const autocomplete = new google.maps.places.Autocomplete(input, {
             types: ['geocode'],
-            componentRestrictions: {
-                country: 'ph'
-            }
+            componentRestrictions: { country: 'ph' }
         });
 
-        autocomplete.addListener('place_changed', function() {
+        autocomplete.addListener('place_changed', function () {
             const place = autocomplete.getPlace();
             if (!place.geometry) return;
 
@@ -171,4 +169,16 @@ document.getElementById('imageInput2').addEventListener('change', function(e) {
         });
     });
 });
+    // モーダルが開いたときに地図を初期化
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     const modal = document.getElementById('post-form-2');
+    //     if (modal) {
+    //         modal.addEventListener('shown.bs.modal', function () {
+    //             setTimeout(() => {
+    //                 initAutocomplete2();
+    //             }, 500); // 少し待つことで描画不具合を防ぐ
+    //         });
+    //     }
+    // });
+
 </script>
