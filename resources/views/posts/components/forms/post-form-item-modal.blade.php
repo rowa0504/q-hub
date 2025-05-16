@@ -11,16 +11,18 @@ aria-hidden="true">
             @csrf
 
             <div class="modal-body">
-                <!-- Image preview -->
+                <!-- 画像プレビュー部分 -->
                 <div class="mb-3 text-center">
-                    <img id="imagePreview3" src="https://via.placeholder.com/300x200" alt="Image Preview"
-                        class="img-fluid rounded">
+                    <div class="image-scroll-wrapper">
+                        <div class="image-scroll-container" id="imagePreviewContainer3"></div>
+                        <div class="scroll-indicators" id="imagePreviewIndicators3"></div>
+                    </div>
                 </div>
 
                 <!-- File input -->
                 <div class="mb-3">
-                    <input class="form-control" type="file" name="image" id="imageInput3" accept="image/*" value="{{ old('image') }}">
-                    @error('image')
+                    <input class="form-control" type="file" name="images[]" id="imageInput3" accept="image/*" value="{{ old('image') }}" multiple>
+                    @error('images')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
                 </div>
@@ -71,13 +73,52 @@ aria-hidden="true">
 
 <script>
 document.getElementById('imageInput3').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
+    const previewContainer = document.getElementById('imagePreviewContainer3');
+    const indicatorsContainer = document.getElementById('imagePreviewIndicators3');
+    previewContainer.innerHTML = '';
+    indicatorsContainer.innerHTML = '';
+
+    const files = e.target.files;
+    if (!files.length) return;
+
+    Array.from(files).forEach((file, index) => {
         const reader = new FileReader();
         reader.onload = function(event) {
-            document.getElementById('imagePreview3').src = event.target.result;
+            const img = document.createElement('img');
+            img.src = event.target.result;
+            img.alt = `Preview Image ${index + 1}`;
+            previewContainer.appendChild(img);
+
+            const dot = document.createElement('span');
+            dot.classList.add('indicator-dot');
+            if(index === 0) dot.classList.add('active');
+            indicatorsContainer.appendChild(dot);
+
+            dot.addEventListener('click', () => {
+                previewContainer.scrollTo({
+                    left: img.offsetLeft,
+                    behavior: 'smooth'
+                });
+            });
         };
         reader.readAsDataURL(file);
-    }
+    });
+
+    previewContainer.addEventListener('scroll', () => {
+        const scrollLeft = previewContainer.scrollLeft;
+        let closestIndex = 0;
+        let minDistance = Infinity;
+        previewContainer.querySelectorAll('img').forEach((img, i) => {
+            const distance = Math.abs(img.offsetLeft - scrollLeft);
+            if(distance < minDistance){
+                minDistance = distance;
+                closestIndex = i;
+            }
+        });
+
+        indicatorsContainer.querySelectorAll('.indicator-dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === closestIndex);
+        });
+    });
 });
 </script>
