@@ -112,25 +112,41 @@ class PostController extends Controller
 
 
     public function edit($id){
-        $post = $this->post->findOrFail($id);
+        // $post = $this->post->findOrFail($id);
 
-        // 画像データがBase64形式で保存されている場合、そのまま返す
-        if ($post->images && strpos($post->images, 'data:image') === false) {
-            // 画像ファイルのパスが保存されている場合
-            $imagePath = storage_path('app/public/' . $post->images->path);
+        // // 画像データがBase64形式で保存されている場合、そのまま返す
+        // if ($post->images && strpos($post->images, 'data:image') === false) {
+        //     // 画像ファイルのパスが保存されている場合
+        //     $imagePath = storage_path('app/public/' . $post->images->path);
 
-            // 画像が存在する場合、Base64に変換して返す
+        //     // 画像が存在する場合、Base64に変換して返す
+        //     if (file_exists($imagePath)) {
+        //         $imageData = base64_encode(file_get_contents($imagePath));
+        //         $mimeType = mime_content_type($imagePath); // MIMEタイプを取得
+        //         $post->image->path = 'data:' . $mimeType . ';base64,' . $imageData;
+        //     } else {
+        //         // 画像が存在しない場合、nullを設定
+        //         $post->images = null;
+        //     }
+        // }
+
+        // return response()->json($post);
+
+        $post = Post::with('images')->findOrFail($id);
+        $base64Images = [];
+
+        foreach ($post->images as $image) {
+            $imagePath = storage_path('app/public/' . $image->path);
             if (file_exists($imagePath)) {
-                $imageData = base64_encode(file_get_contents($imagePath));
-                $mimeType = mime_content_type($imagePath); // MIMEタイプを取得
-                $post->image->path = 'data:' . $mimeType . ';base64,' . $imageData;
-            } else {
-                // 画像が存在しない場合、nullを設定
-                $post->images = null;
+                $mimeType = mime_content_type($imagePath);
+                $base64 = base64_encode(file_get_contents($imagePath));
+                $base64Images[] = 'data:' . $mimeType . ';base64,' . $base64;
             }
         }
 
-        return response()->json($post);
+        return response()->json([
+            'images' => $base64Images,
+        ]);
     }
 
     public function update($id, Request $request){
