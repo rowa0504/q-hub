@@ -226,8 +226,6 @@ body {
 .my-pagination p {
     padding-right: 1rem;
 }
-
-<<<<<<< HEAD
     .card-image-scroll-wrapper {
         position: relative;
         width: 100%;
@@ -318,5 +316,3 @@ body {
 .scroll-indicators .indicator-dot.active {
     background-color: #007bff;
 }
-=======
->>>>>>> master
