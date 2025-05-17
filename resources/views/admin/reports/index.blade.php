@@ -26,8 +26,7 @@
                     @foreach ($reports as $report)
                         @php
                             $reportable = $report->reportable;
-                            $reportedUser =
-                                $reportable instanceof App\Models\User ? $reportable : $reportable?->user ?? null;
+                            $reportedUser = $reportable instanceof App\Models\User ? $reportable : ($reportable?->user ?? null);
                             $reportableTitle = $reportable->title ?? '[No Title]';
                             $reportableLink =
                                 $reportable && method_exists($reportable, 'getCategoryRoute')

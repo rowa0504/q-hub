@@ -29,18 +29,6 @@ class AdminController extends Controller
         $this->report = $report;
     }
 
-    public function users()
-    {
-        $all_users = $this->user->withTrashed()->paginate(8);
-        return view('admin.users.index', compact('all_users'));
-    }
-
-    public function posts()
-    {
-        $all_posts = $this->post->with(['user', 'category'])->withTrashed()->paginate(8);
-        return view('admin.posts.index', compact('all_posts'));
-    }
-
     public function dashboard()
     {
         return view('admin.dashboard', [
@@ -53,83 +41,99 @@ class AdminController extends Controller
         ]);
     }
 
-    public function deactivate(User $user)
-    {
-        // 投稿も論理削除
-        $user->posts()->delete(); // ←★これを追加！
+    // ************ Users ************
+    public function users(){
+        $all_users = $this->user->withTrashed()->paginate(8);
+        return view('admin.users.index', compact('all_users'));
+    }
 
-        // ユーザーをソフトデリート
+    public function deactivate($id){
+        $user = $this->user->findOrFail($id);
+
+        //対象のユーザーの行動を全てsoftdelete
         $user->delete();
+        $user->posts()->delete();
+        $user->comments()->delete();
+        $user->answers()->delete();
+        $user->chatMessages()->delete();
 
-        return back()->with('success', "{$user->name} has been deactivated along with their posts.");
+        return redirect()->back();
     }
 
-    public function activate($id)
-    {
+    public function activate($id){
         $user = $this->user->withTrashed()->findOrFail($id);
-        $user->restore(); // ソフトデリート解除
 
-        // 関連する投稿も復元
+        //対象のユーザーの行動を全て復元
+        $user->restore();
         $user->posts()->withTrashed()->restore();
-        return back()->with('success', "{$user->name} has been reactivated.");
+        $user->comments()->withTrashed()->restore();
+        $user->answers()->withTrashed()->restore();
+        $user->chatMessages()->withTrashed()->restore();
+
+        return redirect()->back();
     }
 
-    public function deactivatePost($id)
-    {
-        $post = $this->post->findOrFail($id);
-        $post->delete();
 
-        return back()->with('success', "Post ID {$id} has been deactivated.");
+    // ************ Posts ************
+    public function posts(){
+        $all_posts = $this->post->with(['user', 'category'])->withTrashed()->paginate(8);
+        return view('admin.posts.index', compact('all_posts'));
     }
 
-    public function activatePost($id)
-    {
-        $post = $this->post->withTrashed()->findOrFail($id);
-        $post->restore();
+    public function deactivatePost($id){
+        $this->post->destroy($id);
 
-        return back()->with('success', "Post ID {$id} has been reactivated.");
+        return redirect()->back();
     }
 
-    public function comments()
-    {
-        $all_comments = Comment::with(['user', 'post'])->withTrashed()->paginate(8);
+    public function activatePost($id){
+        $this->post->onlyTrashed()->findOrFail($id)->restore();
+
+        return redirect()->back();
+    }
+
+
+    // ************ Comments ************
+    public function comments(){
+        $all_comments = $this->comment->with(['user', 'post'])->withTrashed()->paginate(8);
         return view('admin.comments.index', compact('all_comments'));
     }
 
-    public function deactivateComment(Comment $comment)
-    {
-        $comment->delete();
-        return back()->with('success', 'Comment has been deactivated.');
+    public function deactivateComment($id){
+        $this->comment->destroy($id);
+
+        return redirect()->back();
     }
 
-    public function activateComment($id)
-    {
-        $comment = $this->comment->withTrashed()->findOrFail($id);
-        $comment->restore();
-        return back()->with('success', 'Comment has been restored.');
+    public function activateComment($id){
+        $this->comment->onlyTrashed()->findOrFail($id)->restore();
+
+        return redirect()->back();
     }
 
-    public function answers()
-    {
+
+    // ************ Answers ************
+    public function answers(){
         $all_answers = $this->answer->with(['user', 'post'])->withTrashed()->paginate(8);
         return view('admin.answers.index', compact('all_answers'));
     }
 
-    public function deactivateAnswer(Answer $answer)
-    {
-        $answer->delete();
-        return back()->with('success', 'Answer has been deactivated.');
+    public function deactivateAnswer($id){
+        $this->answer->destroy($id);
+
+        return redirect()->back();
     }
 
-    public function activateAnswer($id)
-    {
-        $answer = $this->answer->withTrashed()->findOrFail($id);
-        $answer->restore();
-        return back()->with('success', 'Answer has been restored.');
+    public function activateAnswer($id){
+        $this->answer->onlyTrashed()->findOrFail($id)->restore();
+
+        return redirect()->back();
     }
 
+
+    // ************ ChatMessages ************
     public function chatMessages(){
-        $all_chatMessages = ChatMessage::with([
+        $all_chatMessages = $this->chatMessage->with([
             'user' => fn($q) => $q->withTrashed(), // ユーザーが削除されていても取得
             'chatRoom.post' => fn($q) => $q->withTrashed(), // チャットルームに紐づく投稿を取得（削除含む）
         ])
@@ -141,48 +145,47 @@ class AdminController extends Controller
     }
 
     public function deactivateChatMessage($id){
-        $chatMessage = $this->chatMessage->withTrashed()->findOrFail($id);
+        $this->chatMessage->destroy($id);
 
-        $chatMessage->delete();
-
-        return back()->with('success', 'Answer has been deactivated.');
+        return redirect()->back();
     }
 
     public function activateChatMessage($id){
-        $chatMessage = $this->chatMessage->withTrashed()->findOrFail($id);
-        $chatMessage->restore();
-        return back()->with('success', 'Answer has been restored.');
+        $this->chatMessage->onlyTrashed()->findOrFail($id)->restore();
+
+        return redirect()->back();
     }
 
-    public function warnPost(Post $post){
-        if ($post->warning_sent) {
-            return back()->with('message', 'Warning has already been sent to this post.');
-        }
 
-        $post->warning_sent = true;
-        $post->save();
-
-        return back()->with('success', "Warning has been sent for post: {$post->title}");
-    }
-
+    // ************ Reports ************
     public function reports(){
-        $reports = Report::with([
-            'user' => fn($query) => $query->withTrashed(),
-            'reportable' => function ($morphTo) {
-                $morphTo->morphWith([
-                    // 例: 投稿に対する通報
-                    App\Models\Post::class => ['user' => fn($q) => $q->withTrashed(), 'reports.reportReasonReport.reason'],
-                    // 他にコメントなどがある場合
-                    App\Models\Comment::class => ['user' => fn($q) => $q->withTrashed(), 'reports.reportReasonReport.reason'],
-                    App\Models\Answer::class => ['user' => fn($q) => $q->withTrashed(), 'reports.reportReasonReport.reason'],
-                    App\Models\ChatMessage::class => ['user' => fn($q) => $q->withTrashed(), 'reports.reportReasonReport.reason'],
-                    App\Models\User::class => ['user' => fn($q) => $q->withTrashed(), 'reports.reportReasonReport.reason'],
-                ]);
-            },
-            'reportReasonReport.reason'
-        ])->latest()->get();
+        $reports = $this->report->with([
+        'user' => fn($query) => $query->withTrashed(),
 
-        $postReportedReasons = [];
+        'reportable' => function ($morphTo) {
+            $morphTo->morphWith([
+                App\Models\Post::class => function ($query) {
+                    $query->withTrashed()->with(['user' => fn($q) => $q->withTrashed(), 'reports.reportReasonReport.reason']);
+                },
+                App\Models\Comment::class => function ($query) {
+                    $query->withTrashed()->with(['user' => fn($q) => $q->withTrashed(), 'reports.reportReasonReport.reason']);
+                },
+                App\Models\Answer::class => function ($query) {
+                    $query->withTrashed()->with(['user' => fn($q) => $q->withTrashed(), 'reports.reportReasonReport.reason']);
+                },
+                App\Models\ChatMessage::class => function ($query) {
+                    $query->withTrashed()->with(['user' => fn($q) => $q->withTrashed(), 'reports.reportReasonReport.reason']);
+                },
+                App\Models\User::class => function ($query) {
+                    $query->withTrashed()->with(['user' => fn($q) => $q->withTrashed(), 'reports.reportReasonReport.reason']);
+                },
+            ]);
+        },
+
+            'reportReasonReport.reason'
+        ])->oldest()->get();
+
+        $reportedReasons = [];
 
         foreach ($reports as $report) {
             $reasons = collect();
@@ -192,28 +195,10 @@ class AdminController extends Controller
                     $reasons->push($reasonReport->reason->name);
                 }
             }
-
-            $postReportedReasons[$report->id] = $reasons; // 重複排除しない
+            $reportedReasons[$report->id] = $reasons;
         }
 
-        $all_report_reasons = ReportReason::all();
-
-        return view('admin.reports.index', compact('reports', 'postReportedReasons'));
-    }
-
-    public function reportSentIndex()
-    {
-        $warned_posts = $this->post->where('warning_sent', true)->with(['user', 'category'])->get();
-        return view('admin.report_sent.index', compact('warned_posts'));
-    }
-
-
-    public function reportedPosts()
-    {
-        // 通報された投稿だけ取得
-        $reportedPosts = Post::whereHas('reports')->with(['user', 'category'])->get();
-
-        return view('admin.reports.reported', compact('reportedPosts'));
+        return view('admin.reports.index', compact('reports', 'reportedReasons'));
     }
 
     public function reportedUserContent($userId){
@@ -225,27 +210,5 @@ class AdminController extends Controller
         $chatMessages = ChatMessage::withTrashed()->where('user_id', $user->id)->paginate(8);
 
         return view('admin.reports.user_content', compact('user', 'posts', 'comments', 'answers', 'chatMessages'));
-    }
-
-    public function updateReportMessage(Request $request, $id){
-        $report = $this->report->findOrFail($id);
-
-        $report->message = $request->message;
-        $report->active = true;
-        $report->status = 'warned';
-        $report->save();
-
-        return redirect()->back();
-    }
-
-    public function deleteReportMessage($id){
-        $report = $this->report->findOrFail($id);
-
-        $report->message = null;
-        $report->active = true;
-        $report->status = 'pending';
-        $report->save();
-
-        return redirect()->back();
     }
 }

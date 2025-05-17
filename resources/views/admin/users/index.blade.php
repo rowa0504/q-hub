@@ -61,7 +61,7 @@
                             @if ($user->role_id !== \App\Models\User::ADMIN_ROLE_ID)
                                 @if ($user->trashed())
                                     {{-- Activate --}}
-                                    <form action="{{ route('admin.users.activate', ['user' => $user->id]) }}" method="POST" class="d-inline">
+                                    <form action="{{ route('admin.users.activate', $user->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('PATCH')
                                         <button type="submit" class="btn btn-success btn-sm">
@@ -70,7 +70,7 @@
                                     </form>
                                 @else
                                     {{-- Deactivate --}}
-                                    <form action="{{ route('admin.users.deactivate', ['user' => $user->id]) }}" method="POST" class="d-inline">
+                                    <form action="{{ route('admin.users.deactivate', $user->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">
