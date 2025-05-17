@@ -39,6 +39,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/{id}/delete', [PostController::class, 'delete'])->name('delete');
     });
 
+    Route::get('/loadmore', [PostController::class, 'loadMore'])->name('posts.loadMore');
+
     // Like route
     Route::group(['prefix' => 'like', 'as' => 'like.'], function () {
         Route::post('/{id}/store', [LikeController::class, 'store'])->name('store');

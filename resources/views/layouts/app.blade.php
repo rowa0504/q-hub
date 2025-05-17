@@ -142,7 +142,6 @@
     </div>
 
     @include('posts.components.sidebar-mobile')
-
     @include('posts.components.post-category-modal')
     @include('posts.components.forms.post-form-other-modal')
     @include('posts.components.forms.post-form-event-modal')
