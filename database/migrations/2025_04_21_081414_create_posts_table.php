@@ -17,6 +17,8 @@ return new class extends Migration
             $table->text('description');
             $table->longText('image')->nullable();
             $table->string('location')->nullable()->comment('food/travel');
+            $table->decimal('latitude', 10, 7)->nullable()->comment('food/travel');
+            $table->decimal('longitude', 10, 7)->nullable()->comment('food/travel');
             $table->string('departure')->nullable()->comment('trans');
             $table->string('destination')->nullable()->comment('trans');
             $table->integer('fee')->nullable()->comment('trans');
@@ -26,6 +28,7 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('trans_category_id')->nullable()->comment('trans');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('best_answer_id')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
