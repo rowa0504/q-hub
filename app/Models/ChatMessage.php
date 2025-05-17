@@ -13,7 +13,7 @@ class ChatMessage extends Model
 
     // メッセージの送信者
     public function user(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     // 所属するチャットルーム

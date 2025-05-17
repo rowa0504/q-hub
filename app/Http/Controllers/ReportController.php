@@ -90,4 +90,26 @@ class ReportController extends Controller
 
         return redirect()->back();
     }
+
+    public function updateReportMessage(Request $request, $id){
+        $report = $this->report->findOrFail($id);
+
+        $report->message = $request->message;
+        $report->active = true;
+        $report->status = 'warned';
+        $report->save();
+
+        return redirect()->back();
+    }
+
+    public function deleteReportMessage($id){
+        $report = $this->report->findOrFail($id);
+
+        $report->message = null;
+        $report->active = true;
+        $report->status = 'pending';
+        $report->save();
+
+        return redirect()->back();
+    }
 }

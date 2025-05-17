@@ -21,6 +21,14 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
+    public function comments(){
+        return $this->hasMany(Comment::class);
+    }
+
+    public function answers(){
+        return $this->hasMany(Answer::class);
+    }
+
     // ユーザーが参加しているチャットルーム
     public function chatRooms(){
         return $this->belongsToMany(ChatRoom::class, 'chat_room_user')
