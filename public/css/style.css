@@ -223,10 +223,16 @@ body {
 .my-pagination p {
     padding-right: 1rem;
 }
+<<<<<<< HEAD
 
 .post-pagination{
     margin-right: 15rem;
 }
+=======
+    .card-image-scroll-wrapper {
+        position: relative;
+        width: 100%;
+>>>>>>> master
 
 .card-image-scroll-wrapper {
     position: relative;

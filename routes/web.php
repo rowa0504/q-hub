@@ -137,49 +137,43 @@ Route::group(['middleware' => 'auth'], function () {
 
         // ユーザーの状態変更
         Route::get('/users', [AdminController::class, 'users'])->name('users');
-        Route::patch('/users/{user}/activate', [AdminController::class, 'activate'])->name('users.activate');
-        Route::delete('/users/{user}/deactivate', [AdminController::class, 'deactivate'])->name('users.deactivate');
-        Route::post('/users/{user}/warn', [AdminController::class, 'warn'])->name('users.warn');
-        Route::patch('/users/{user}/toggle-status', [AdminController::class, 'toggleStatus'])->name('users.toggleStatus');
+        Route::patch('/users/{id}/activate', [AdminController::class, 'activate'])->name('users.activate');
+        Route::delete('/users/{id}/deactivate', [AdminController::class, 'deactivate'])->name('users.deactivate');
+
 
         // 投稿の状態変更
         Route::get('/posts', [AdminController::class, 'posts'])->name('posts');
         Route::delete('/posts/{id}/deactivate', [AdminController::class, 'deactivatePost'])->name('posts.deactivate');
         Route::patch('/posts/{id}/activate', [AdminController::class, 'activatePost'])->name('posts.activate');
 
+
         // コメントの状態変更
         Route::get('/comments', [AdminController::class, 'comments'])->name('comments');
-        Route::patch('/comments/{comment}/activate', [AdminController::class, 'activateComment'])->name('comments.activate');
-        Route::delete('/comments/{comment}/deactivate', [AdminController::class, 'deactivateComment'])->name('comments.deactivate');
+        Route::patch('/comments/{id}/activate', [AdminController::class, 'activateComment'])->name('comments.activate');
+        Route::delete('/comments/{id}/deactivate', [AdminController::class, 'deactivateComment'])->name('comments.deactivate');
+
 
         // いいねの状態変更
         Route::get('/answers', [AdminController::class, 'answers'])->name('answers');
-        Route::delete('/answers/{answer}/deactivate', [AdminController::class, 'deactivateAnswer'])->name('answers.deactivate');
-        Route::patch('/answers/{answer}/activate', [AdminController::class, 'activateAnswer'])->name('answers.activate');
+        Route::delete('/answers/{id}/deactivate', [AdminController::class, 'deactivateAnswer'])->name('answers.deactivate');
+        Route::patch('/answers/{id}/activate', [AdminController::class, 'activateAnswer'])->name('answers.activate');
 
-        // 報告の状態変更
-        Route::post('/{id}/storeMessage', [ReportController::class, 'storeMessage'])->name('storeMessage');
-        Route::patch('/{id}/close', [ReportController::class, 'close'])->name('close');
-        Route::post('/{id}/dismissed', [ReportController::class, 'dismissed'])->name('dismissed');
 
+        //chatMessage
         Route::get('/chatMessages', [AdminController::class, 'chatMessages'])->name('chatMessages');
         Route::patch('/chatMessages/{id}/activate', [AdminController::class, 'activateChatMessage'])->name('chatMessages.activate');
         Route::delete('/chatMessages/{id}/deactivate', [AdminController::class, 'deactivateChatMessage'])->name('chatMessages.deactivate');
 
+
+        //reports
         Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
-        Route::patch('/reports/{id}/update', [AdminController::class, 'updateReportMessage'])->name('updateReportMessage');
-        Route::patch('/reports/{id}/delete', [AdminController::class, 'deleteReportMessage'])->name('deleteReportMessage');
-
         Route::get('/{id}/reportedUser', [AdminController::class, 'reportedUserContent'])->name('reportedUser');
-        // Route::post('/admin/posts/{post}/warn', [AdminController::class, 'storeMessage'])->name('posts.warn');
 
-        Route::get('/report-sent', [AdminController::class, 'reportSentIndex'])->name('report_sent');
-
-        // routes/web.php
-        Route::get('/admin/reports/reported', [AdminController::class, 'reportedPosts'])->name('reported_posts');
-
-
-
-
+        //warning
+        Route::post('/{id}/storeMessage', [ReportController::class, 'storeMessage'])->name('storeMessage');
+        Route::patch('/reports/{id}/update', [ReportController::class, 'updateReportMessage'])->name('updateReportMessage');
+        Route::patch('/reports/{id}/delete', [ReportController::class, 'deleteReportMessage'])->name('deleteReportMessage');
+        Route::patch('/{id}/close', [ReportController::class, 'close'])->name('close');
+        Route::post('/{id}/dismissed', [ReportController::class, 'dismissed'])->name('dismissed');
     });
 });

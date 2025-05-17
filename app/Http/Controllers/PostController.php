@@ -255,6 +255,8 @@ class PostController extends Controller
                     'path' => $imageBase64, // DBにbase64文字列を保存
                 ]);
             }
+        } else {
+            $post->images()->delete();
         }
 
         return redirect()->back();
