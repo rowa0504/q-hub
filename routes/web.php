@@ -168,6 +168,8 @@ Route::group(['middleware' => 'auth'], function () {
         //reports
         Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
         Route::get('/{id}/reportedUser', [AdminController::class, 'reportedUserContent'])->name('reportedUser');
+        Route::patch('/reports/{id}/activate', [AdminController::class, 'activateReport'])->name('reports.activate');
+        Route::delete('/reports/{id}/deactivate', [AdminController::class, 'deactivateReport'])->name('reports.deactivate');
 
         //warning
         Route::post('/{id}/storeMessage', [ReportController::class, 'storeMessage'])->name('storeMessage');

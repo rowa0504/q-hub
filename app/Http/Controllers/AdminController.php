@@ -159,7 +159,7 @@ class AdminController extends Controller
 
     // ************ Reports ************
     public function reports(){
-        $reports = $this->report->with([
+        $reports = $this->report->withTrashed()->with([
         'user' => fn($query) => $query->withTrashed(),
 
         'reportable' => function ($morphTo) {
@@ -199,6 +199,28 @@ class AdminController extends Controller
         }
 
         return view('admin.reports.index', compact('reports', 'reportedReasons'));
+    }
+
+    public function deactivateReport($id){
+        $report = $this->report->findOrFail($id);
+
+        $report->status = 'dismissed';
+        $report->save();
+
+        $this->report->destroy($id);
+
+        return redirect()->back();
+    }
+
+    public function activateReport($id){
+        $this->report->onlyTrashed()->findOrFail($id)->restore();
+
+        $report = $this->report->findOrFail($id);
+
+        $report->status = 'pending';
+        $report->save();
+
+        return redirect()->back();
     }
 
     public function reportedUserContent($userId){
