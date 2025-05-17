@@ -18,7 +18,7 @@ class Answer extends Model
 
     // Answerが持つUser（回答者）
     public function user(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     // App\Models\Answer.php

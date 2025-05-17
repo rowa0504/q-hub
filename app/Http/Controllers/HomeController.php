@@ -42,7 +42,7 @@ class HomeController extends Controller
     {
         $all_categories = $this->category->all();
         $all_trans_categories = $this->trans_category->all();
-        $all_posts = $this->post->latest()->get();
+        $all_posts = $this->post->with('user')->latest()->Paginate(5);
         $all_user = $this->user->all();
         $all_report_reasons = $this->reportReason->all();
 

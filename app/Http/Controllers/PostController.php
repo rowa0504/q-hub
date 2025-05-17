@@ -24,8 +24,9 @@ class PostController extends Controller
         $this->postImage = $postImage;
     }
 
-    public function store(Request $request){
-        $commonRules = [//other
+    public function store(Request $request)
+    {
+        $commonRules = [ //other
             'description' => 'required|min:1|max:1000',
             'images.*' => 'image|mimes:jpeg,jpg,png,gif|max:2048',
             'category_id' => 'required|exists:categories,id',
@@ -61,7 +62,7 @@ class PostController extends Controller
                 'title' => 'required|min:1|max:50',
             ];
             $modalId = 'post-form-' . $categoryId;
-        }elseif ($categoryId == 7) { // item
+        } elseif ($categoryId == 7) { // item
             $extraRules = $commonRules;
             $modalId = 'post-form-' . $categoryId;
         }
@@ -111,7 +112,8 @@ class PostController extends Controller
     }
 
 
-    public function edit($id){
+    public function edit($id)
+    {
         // $post = $this->post->findOrFail($id);
 
         // // 画像データがBase64形式で保存されている場合、そのまま返す
@@ -164,8 +166,9 @@ class PostController extends Controller
         ]);
     }
 
-    public function update($id, Request $request){
-        $commonRules = [//other
+    public function update($id, Request $request)
+    {
+        $commonRules = [ //other
             'description' => 'required|min:1|max:1000',
             'images.*' => 'image|mimes:jpeg,jpg,png,gif|max:2048',
             'category_id' => 'required|exists:categories,id',
@@ -201,7 +204,7 @@ class PostController extends Controller
                 'title' => 'required|min:1|max:50',
             ];
             $modalId = 'edit-form-' . $categoryId;
-        }elseif ($categoryId == 7) { // item
+        } elseif ($categoryId == 7) { // item
             $extraRules = $commonRules;
             $modalId = 'edit-form-' . $categoryId;
         }
@@ -259,10 +262,30 @@ class PostController extends Controller
         return redirect()->back();
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         $post = $this->post->findOrFail($id);
 
         $post->forceDelete(); // ← これで完全に削除される
         return redirect()->back();
+    }
+    public function loadMore(Request $request)
+    {
+        if ($request->ajax()) {
+            $page = $request->input('page', 1);
+            $perPage = 5;
+            $all_posts = Post::latest()->paginate($perPage, ['*'], 'page', $page);
+
+            if ($all_posts->isEmpty()) {
+                // 投稿がもうない場合は空レスポンスを返す
+                return response('', 204);
+            }
+
+            return view('posts.components.post-cards', compact('all_posts'))->render();
+        }
+
+        $perPage = 5;
+        $all_posts = Post::latest()->paginate($perPage);
+        return view('home', compact('all_posts'));
     }
 }

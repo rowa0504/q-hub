@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\ReportReason;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ItemController extends Controller
 {
@@ -14,24 +15,30 @@ class ItemController extends Controller
     private $post;
     private $reportReason;
 
-    public function __construct(Post $post, ReportReason $reportReason, User $user){
+    public function __construct(Post $post, ReportReason $reportReason, User $user)
+    {
         $this->user         = $user;
         $this->post         = $post;
         $this->reportReason = $reportReason;
     }
 
-    public function index(){
+    public function index()
+    {
         $all_report_reasons = $this->reportReason->all();
-        $all_user           = $this->user->all();
+        $all_user = $this->user->all();
 
         $wanted_keywords = auth()->user()
             ->wantedItems()
             ->pluck('keyword')
             ->toArray();
 
-        // 投稿取得 + マッチ判定 + ソート
-        $all_posts = $this->post->where('category_id', 3)
-            ->get()
+        // ページネーションされたデータ取得
+        $paginator = $this->post->where('category_id', 3)
+            ->latest()
+            ->paginate(5);
+
+        // コレクション取得
+        $posts = $paginator->getCollection()
             ->map(function ($post) use ($wanted_keywords) {
                 $post->is_recommended  = false;
                 $post->matched_keyword = null;
@@ -40,19 +47,29 @@ class ItemController extends Controller
                     if (str_contains($post->description, $keyword)) {
                         $post->is_recommended = true;
                         $post->matched_keyword = $keyword;
-                        break; // 最初にマッチしたキーワードのみ
+                        break;
                     }
                 }
-
                 return $post;
             })
-            ->sortByDesc('is_recommended') // おすすめ投稿を上に
-            ->values(); // キーをリセット（インデックス0から）
+            ->sortByDesc('is_recommended')
+            ->values();
+
+        // ソート済みコレクションを再セットしてページネーターを作成
+        $all_posts = new LengthAwarePaginator(
+            $posts,
+            $paginator->total(),
+            $paginator->perPage(),
+            $paginator->currentPage(),
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
 
         return view('posts.categories.items.index', compact('all_posts', 'all_report_reasons', 'all_user'));
     }
 
-    public function search(Request $request){
+
+    public function search(Request $request)
+    {
         $all_report_reasons = $this->reportReason->all();
 
         $posts = $this->post
@@ -62,9 +79,9 @@ class ItemController extends Controller
                     ->orWhere('description', 'like', '%' . $request->search . '%');
             })
             ->where('user_id', '!=', Auth::id())
-            ->get();
+            ->latest()->Paginate(5);
 
-            return view('posts.categories.items.search')
+        return view('posts.categories.items.search')
             ->with('all_report_reasons', $all_report_reasons)
             ->with('posts', $posts)
             ->with('search', $request->search);

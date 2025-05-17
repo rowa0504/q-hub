@@ -18,7 +18,7 @@ class TransportationController extends Controller
 
     public function index(){
         $all_report_reasons = $this->reportReason->all();
-        $all_posts          = $this->post->where('category_id', 5)->get();
+        $all_posts          = $this->post->where('category_id', 5)->latest()->Paginate(5);
 
         return view('posts.categories.transportations.index', compact('all_posts', 'all_report_reasons'));
     }

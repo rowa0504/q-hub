@@ -22,7 +22,7 @@ class EventController extends Controller
     public function index(){
         $all_report_reasons = $this->reportReason->all();
         $all_user           = $this->user->all();
-        $all_posts          = $this->post->where('category_id', 1)->get();
+        $all_posts          = $this->post->where('category_id', 1)->latest()->Paginate(5);
 
         return view('posts.categories.events.index', compact('all_posts', 'all_user', 'all_report_reasons'));
     }
