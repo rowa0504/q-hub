@@ -224,7 +224,10 @@ body {
     padding-right: 1rem;
 }
 
-/* card image */
+.post-pagination{
+    margin-right: 15rem;
+}
+
 .card-image-scroll-wrapper {
     position: relative;
     width: 100%;
@@ -232,23 +235,31 @@ body {
     margin: 0 auto;
 }
 
+.card-image-scroll-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.image-scroll-container img {
+    height: 300px;
+    object-fit: contain;
+    background-color: #736f6f; /* 空白が出たときの背景色 */
+}
+
 .card-image-scroll-container {
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    gap: 10px;
     scroll-behavior: smooth;
-    padding-bottom: 10px;
+    scroll-snap-align: center;
 }
 
 .card-scroll-image {
-    flex: 0 0 100%;
-    max-width: 100%;
-    height: auto;
-    scroll-snap-align: start;
-    border-radius: 10px;
-    object-fit: cover;
+    flex: 0 0 100%; /* 1枚あたりの幅を100%に設定 */
+    scroll-snap-align: center;
+    height: 300px;
+    object-fit: contain;
+    background-color: #f8f8f8;
 }
 
 /* インジケーターのドット */
@@ -282,18 +293,9 @@ body {
     padding-bottom: 10px;
     scrollbar-width: none; /* Firefox用スクロールバー非表示 */
 }
+
 .image-scroll-container::-webkit-scrollbar {
     display: none; /* Chrome, Safari用スクロールバー非表示 */
-}
-
-.image-scroll-container img {
-    flex: 0 0 300px; /* 横幅固定（1枚分） */
-    height: 300px; /* 高さも固定 */
-    object-fit: cover;
-    scroll-snap-align: start;
-    border-radius: 8px;
-    cursor: pointer;
-    user-select: none;
 }
 
 .scroll-indicators {

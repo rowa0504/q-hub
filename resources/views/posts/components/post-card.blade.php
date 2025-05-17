@@ -75,9 +75,12 @@
     @endif
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // 複数の画像スライダーに対応
-            document.querySelectorAll('.card-image-scroll-wrapper').forEach((wrapper, index) => {
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeImageScrollers(); // 初回読み込み用
+        });
+
+        function initializeImageScrollers() {
+            document.querySelectorAll('.card-image-scroll-wrapper:not([data-initialized])').forEach((wrapper, index) => {
                 const container = wrapper.querySelector('.card-image-scroll-container');
                 const dots = wrapper.querySelectorAll('.card-indicator-dot');
 
@@ -91,10 +94,8 @@
                     });
                 }
 
-                // スクロール時にドットを更新
                 container.addEventListener('scroll', updateActiveDot);
 
-                // ドットクリックでスクロール移動
                 dots.forEach((dot, i) => {
                     dot.addEventListener('click', () => {
                         container.scrollTo({
@@ -103,9 +104,12 @@
                         });
                     });
                 });
+
+                wrapper.setAttribute('data-initialized', 'true');
             });
-        });
+        }
     </script>
+
 
 
     <div class="card-body">

@@ -18,7 +18,7 @@ class FoodController extends Controller
 
     public function index(){
         $all_report_reasons = $this->reportReason->all();
-        $all_posts          = $this->post->where('category_id', 2)->get();
+        $all_posts          = $this->post->where('category_id', 2)->latest()->Paginate(5);
 
         return view('posts.categories.foods.index', compact('all_posts', 'all_report_reasons'));
     }

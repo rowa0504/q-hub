@@ -18,7 +18,7 @@ class QuestionController extends Controller
 
     public function index(){
         $all_report_reasons = $this->reportReason->all();
-        $all_posts          = $this->post->where('category_id', 6)->get();
+        $all_posts          = $this->post->where('category_id', 6)->latest()->Paginate(5);
 
         return view('posts.categories.questions.index', compact('all_posts', 'all_report_reasons'));
     }
