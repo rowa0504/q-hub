@@ -224,13 +224,13 @@ body {
     padding-right: 1rem;
 }
 
-.post-pagination{
+.post-pagination {
     margin-right: 15rem;
 }
 
-    .card-image-scroll-wrapper {
-        position: relative;
-        width: 100%;
+.card-image-scroll-wrapper {
+    position: relative;
+    width: 100%;
 
     margin: 0 auto;
 }

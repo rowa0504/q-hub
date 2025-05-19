@@ -46,6 +46,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/{id}/delete', [LikeController::class, 'delete'])->name('delete');
     });
 
+    // like route
+    Route::post('/posts/{post_id}/like-toggle', [LikeController::class, 'likeToggle'])->name('posts.likeToggle');
+
     // Comment route
     Route::group(['prefix' => 'comment', 'as' => 'comment.'], function () {
         Route::post('/{id}/store', [CommentController::class, 'store'])->name('store');
