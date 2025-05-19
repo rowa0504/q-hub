@@ -269,23 +269,4 @@ class PostController extends Controller
         $post->forceDelete(); // ← これで完全に削除される
         return redirect()->back();
     }
-    public function loadMore(Request $request)
-    {
-        if ($request->ajax()) {
-            $page = $request->input('page', 1);
-            $perPage = 5;
-            $all_posts = Post::latest()->paginate($perPage, ['*'], 'page', $page);
-
-            if ($all_posts->isEmpty()) {
-                // 投稿がもうない場合は空レスポンスを返す
-                return response('', 204);
-            }
-
-            return view('posts.components.post-cards', compact('all_posts'))->render();
-        }
-
-        $perPage = 5;
-        $all_posts = Post::latest()->paginate($perPage);
-        return view('home', compact('all_posts'));
-    }
 }
