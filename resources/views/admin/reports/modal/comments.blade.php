@@ -42,14 +42,23 @@
                     <small class="text-muted">Comment ID: {{ $report->reportable->id }}</small>
                 </div>
                 <div>
-                    <form action="{{ route('admin.comments.deactivate', $report->reportable->id) }}" method="POST"
-                        class="d-inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">
-                            <i class="fa-solid fa-trash-can me-1"></i> Delete Comment
-                        </button>
-                    </form>
+                    @if ($report->reportable->deleted_at)
+                        <form action="{{ route('admin.comments.activate', $report->reportable->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" class="btn btn-success btn-sm">
+                                <i class="fa-solid fa-rotate-left"></i> Restore
+                            </button>
+                        </form>
+                    @else
+                        <form action="{{ route('admin.comments.deactivate', $report->reportable->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fa-solid fa-trash-can"></i> Delete
+                            </button>
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>

@@ -41,11 +41,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/loadmore', [PostController::class, 'loadMore'])->name('posts.loadMore');
 
-    // Like route
-    Route::group(['prefix' => 'like', 'as' => 'like.'], function () {
-        Route::post('/{id}/store', [LikeController::class, 'store'])->name('store');
-        Route::delete('/{id}/delete', [LikeController::class, 'delete'])->name('delete');
-    });
+    // like route
+    Route::post('/posts/{post_id}/like-toggle', [LikeController::class, 'likeToggle'])->name('posts.likeToggle');
 
     // Comment route
     Route::group(['prefix' => 'comment', 'as' => 'comment.'], function () {
@@ -168,6 +165,8 @@ Route::group(['middleware' => 'auth'], function () {
         //reports
         Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
         Route::get('/{id}/reportedUser', [AdminController::class, 'reportedUserContent'])->name('reportedUser');
+        Route::patch('/reports/{id}/activate', [AdminController::class, 'activateReport'])->name('reports.activate');
+        Route::delete('/reports/{id}/deactivate', [AdminController::class, 'deactivateReport'])->name('reports.deactivate');
 
         //warning
         Route::post('/{id}/storeMessage', [ReportController::class, 'storeMessage'])->name('storeMessage');
