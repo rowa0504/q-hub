@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('post_images', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('post_id');
-            $table->string('path'); // 画像の保存パス
+            $table->longText('path'); // 画像の保存パス
             $table->timestamps();
 
             $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');

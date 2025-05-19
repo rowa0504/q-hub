@@ -29,15 +29,23 @@
                                     <small class="text-muted">Post ID: {{ $report->reportable->id }}</small>
                                 </div>
                                 <div>
-                                    {{-- Delete ボタン --}}
-                                    <form action="{{ route('admin.posts.deactivate', $report->reportable->id) }}"
-                                        method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">
-                                            <i class="fa-solid fa-trash-can me-1"></i> Delete Post
-                                        </button>
-                                    </form>
+                                    @if ($report->reportable->deleted_at)
+                                        <form action="{{ route('admin.posts.activate', $report->reportable->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="btn btn-success btn-sm">
+                                                <i class="fa-solid fa-rotate-left"></i> Restore
+                                            </button>
+                                        </form>
+                                    @else
+                                        <form action="{{ route('admin.posts.deactivate', $report->reportable->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="fa-solid fa-trash-can"></i> Delete
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             </div>
                         @endif
