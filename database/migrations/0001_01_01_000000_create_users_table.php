@@ -17,10 +17,14 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->longText('avatar')->nullable();
             $table->string('password');
+            $table->rememberToken();
             $table->string('introduction',100)->nullable();
             $table->unsignedBigInteger('role_id')
                         ->default(2)
                         ->comment('1:admin 2:user');
+            $table->date('enrollment_start')->nullable();
+            $table->date('enrollment_end')->nullable();
+            $table->string('graduation_status')->default(false);
             $table->timestamps();
         });
 
@@ -48,5 +52,6 @@ return new class extends Migration
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('remember_token');
     }
 };
