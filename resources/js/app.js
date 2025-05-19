@@ -1,10 +1,11 @@
 import './bootstrap';
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;
-
 import { Calendar } from '@fullcalendar/core';
+import { likeComponent } from './likeComponent.js';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import Alpine from 'alpinejs'
 
 let calendar;
 let calendarModal = new bootstrap.Modal(document.getElementById('calendar')); // カレンダーモーダルのインスタンス
@@ -94,5 +95,7 @@ window.closePostForm = function () {
     calendarModal.show();
 };
 
+window.likeComponent = likeComponent;
 
+Alpine.start();
 

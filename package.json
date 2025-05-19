@@ -21,6 +21,7 @@
         "@fullcalendar/daygrid": "^6.1.17",
         "@fullcalendar/interaction": "^6.1.17",
         "@fullcalendar/timegrid": "^6.1.17",
-        "@googlemaps/google-maps-services-js": "^3.4.1"
+        "@googlemaps/google-maps-services-js": "^3.4.1",
+        "alpinejs": "^3.14.9"
     }
 }
