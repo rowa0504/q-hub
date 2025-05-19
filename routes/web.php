@@ -21,6 +21,7 @@ use App\Http\Controllers\ChatRoomController;
 use App\Http\Controllers\ChatMessageController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\WantedItemController;
+use App\Http\Controllers\ReportReasonController;
 
 
 Auth::routes();
@@ -177,5 +178,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::patch('/reports/{id}/delete', [ReportController::class, 'deleteReportMessage'])->name('deleteReportMessage');
         Route::patch('/{id}/close', [ReportController::class, 'close'])->name('close');
         Route::post('/{id}/dismissed', [ReportController::class, 'dismissed'])->name('dismissed');
+
+        Route::get('/reportReasons/create', [ReportReasonController::class, 'create'])->name('reportReasons.create');
+        Route::post('/reportReasons/store', [ReportReasonController::class, 'store'])->name('reportReasons.store');
+        Route::patch('/reportReasons/{id}/update', [ReportReasonController::class, 'update'])->name('reportReasons.update');
+        Route::delete('/reportReasons/{id}/delete', [ReportReasonController::class, 'destroy'])->name('reportReasons.delete');
     });
 });
