@@ -122,7 +122,7 @@
                 @endphp
 
                 <div x-data="likeComponent({{ $post->id }}, {{ $post->likes->count() }}, {{ $isLiked ? 'true' : 'false' }})" class="d-flex align-items-center gap-2">
-                    <button type="button" class="btn d-flex align-items-center" @click="toggleLike">
+                    <button type="button" class="btn d-flex align-items-center text-muted" @click="toggleLike">
                         <i :class="liked ? 'fas fa-heart text-danger me-1' : 'far fa-heart me-1'"></i>
                         <span x-text="likesCount" class="text-muted"></span>
                     </button>

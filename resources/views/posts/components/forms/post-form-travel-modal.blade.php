@@ -63,8 +63,6 @@
 </div>
 
 <script>
-
-    // map4とmarker4を外に出す
     let map4;
     let marker4;
 
