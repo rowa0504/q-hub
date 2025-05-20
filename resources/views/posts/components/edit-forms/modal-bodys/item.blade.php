@@ -7,12 +7,6 @@
     @method('PATCH')
 
     <div class="modal-body">
-        <!-- Image preview -->
-        {{-- <div class="mb-3 text-center">
-            <img id="item-imagePreview-{{ $post->id }}" src="https://via.placeholder.com/300x200" alt="Image Preview"
-                class="img-fluid rounded">
-        </div> --}}
-
         <div class="image-scroll-wrapper">
             <div class="image-scroll-container" id="item-imagePreviewWrapper-{{ $post->id }}">
                 <!-- 画像がJSで挿入される -->
@@ -20,16 +14,11 @@
             <div class="scroll-indicators" id="scrollIndicators-{{ $post->id }}"></div>
         </div>
 
-        <!-- File input -->
-        {{-- <div class="mb-3">
-            <input class="form-control" type="file" name="image" id="item-imageInput-{{ $post->id }}" accept="image/*">
-            @error('image')
-                <p class="text-danger small">{{ $message }}</p>
-            @enderror
-        </div> --}}
-
         <div class="mb-3">
             <input class="form-control" type="file" name="images[]" id="item-imageInput-{{ $post->id }}" accept="image/*" multiple>
+            <div class="form-text text-start">
+                Acceptable formats: jpeg, jpg, png, gif only<br>Max file size is 2048kB<br>Up to 3 images
+            </div>
             @error('images')
                 <p class="text-danger small">{{ $message }}</p>
             @enderror
@@ -76,52 +65,6 @@
     </div>
 </form>
 
-{{-- <script>
-    document.getElementById('item-imageInput-{{ $post->id }}').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                document.getElementById('item-imagePreview-{{ $post->id }}').src = event.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    $('.btn-edit').on('click', function () {
-        const postId = $(this).data('id');
-        const categoryId = $(this).data('category-id');
-
-        // サーバーから投稿データを取得
-        $.get(`/posts/${postId}/edit`, function (data) {
-
-            function formatDate(date) {
-                const d = new Date(date);
-                if (isNaN(d.getTime())) {
-                    return ''; // 無効な日付の場合は空文字を返す
-                }
-                const year = d.getFullYear();
-                const month = String(d.getMonth() + 1).padStart(2, '0');
-                const day = String(d.getDate()).padStart(2, '0');
-                return `${year}-${month}-${day}`;  // 修正: YYYY-MM-DD 形式に変更
-            }
-            // フォームへのデータの流し込み
-            $('#item-description-{{ $post->id }}').val(data.description || '');
-            $('#item-startdate-{{ $post->id }}').val(formatDate(data.startdatetime) || '');
-            $('#item-enddate-{{ $post->id }}').val(formatDate(data.enddatetime) || '');
-            $('#item-max-{{ $post->id }}').val(data.max || '');
-
-            // 画像プレビュー（Base64データを使って表示）
-            if (data.image && data.image.startsWith('data:image')) {
-                $('#item-imagePreview-{{ $post->id }}').attr('src', data.image);
-            } else {
-                $('#item-imagePreview-{{ $post->id }}').attr('src', 'https://via.placeholder.com/300x200');
-            }
-        });
-    });
-
-</script> --}}
-
 <script>
 const postId = {{ $post->id }};
 const imageInput = document.getElementById(`item-imageInput-${postId}`);
@@ -167,7 +110,7 @@ imageInput.addEventListener('change', function (e) {
             const img = document.createElement('img');
             img.src = event.target.result;
             img.className = 'img-fluid rounded mb-2 me-2';
-            img.style.maxWidth = '300px';
+            img.style.maxWidth = '400px';
             img.style.height = '300px';
             img.style.objectFit = 'cover';
             imagePreviewWrapper.appendChild(img);
@@ -215,7 +158,7 @@ $(document).on('click', '.btn-edit', function () {
                         const img = document.createElement('img');
                         img.src = base64Img;
                         img.className = 'img-fluid rounded mb-2 me-2';
-                        img.style.maxWidth = '300px';
+                        img.style.maxWidth = '400px';
                         img.style.height = '300px';
                         img.style.objectFit = 'cover';
                         imagePreviewWrapper.appendChild(img);

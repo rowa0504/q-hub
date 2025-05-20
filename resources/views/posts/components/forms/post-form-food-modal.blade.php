@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 <!-- food Post Modal -->
+=======
+>>>>>>> master
 <div class="modal fade" id="post-form-2" tabindex="-1" aria-labelledby="otherPostModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content p-4">
@@ -20,7 +23,10 @@
 
                     <!-- File input -->
                     <div class="mb-3">
-                        <input class="form-control" type="file" name="images[]" id="imageInput2" accept="image/*" value="{{ old('image') }}" multiple>
+                        <input class="form-control" type="file" name="images[]" id="imageInput2" accept="image/*" multiple>
+                        <div class="form-text text-start">
+                            Acceptable formats: jpeg, jpg, png, gif only<br>Max file size is 2048kB<br>Up to 3 images
+                        </div>
                         @error('images')
                             <p class="text-danger small">{{ $message }}</p>
                         @enderror
@@ -45,7 +51,7 @@
 
                     <!-- Description input -->
                     <div class="mb-3">
-                        <textarea class="form-control" name="description" placeholder="Enter your post description..." rows="3"></textarea>
+                        <textarea class="form-control" name="description" placeholder="Enter your food description..." rows="3"></textarea>
                         @error('description')
                             <p class="text-danger small">{{ $message }}</p>
                         @enderror
@@ -165,4 +171,18 @@ document.getElementById('imageInput2').addEventListener('change', function(e) {
         });
     });
 });
+<<<<<<< HEAD
+=======
+    // モーダルが開いたときに地図を初期化
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     const modal = document.getElementById('post-form-2');
+    //     if (modal) {
+    //         modal.addEventListener('shown.bs.modal', function () {
+    //             setTimeout(() => {
+    //                 initAutocomplete2();
+    //             }, 500); // 少し待つことで描画不具合を防ぐ
+    //         });
+    //     }
+    // });
+>>>>>>> master
 </script>
