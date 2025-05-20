@@ -8,27 +8,12 @@
     @method('PATCH')
 
     <div class="modal-body">
-        <!-- Image preview -->
-        {{-- <div class="mb-3 text-center">
-            <img id="travel-imagePreview-{{ $post->id }}" src="https://via.placeholder.com/300x200"
-                alt="Image Preview" class="img-fluid rounded">
-        </div> --}}
-
         <div class="image-scroll-wrapper">
             <div class="image-scroll-container" id="travel-imagePreviewWrapper-{{ $post->id }}">
                 <!-- 画像がJSで挿入される -->
             </div>
             <div class="scroll-indicators" id="scrollIndicators-{{ $post->id }}"></div>
         </div>
-
-        <!-- File input -->
-        {{-- <div class="mb-3">
-            <input class="form-control" type="file" name="image" id="travel-imageInput-{{ $post->id }}"
-                accept="image/*">
-            @error('image')
-                <p class="text-danger small">{{ $message }}</p>
-            @enderror
-        </div> --}}
 
         <div class="mb-3">
             <input class="form-control" type="file" name="images[]" id="travel-imageInput-{{ $post->id }}" accept="image/*" multiple>
@@ -81,42 +66,6 @@
 </form>
 
 <script>
-    // Image preview
-    // document.getElementById('travel-imageInput-{{ $post->id }}').addEventListener('change', function(e) {
-    //     const file = e.target.files[0];
-    //     if (file) {
-    //         const reader = new FileReader();
-    //         reader.onload = function(event) {
-    //             document.getElementById('travel-imagePreview-{{ $post->id }}').src = event.target.result;
-    //         };
-    //         reader.readAsDataURL(file);
-    //     }
-    // });
-
-    // // Editボタンがクリックされたときの処理
-    // $('.btn-edit').on('click', function() {
-    //     const postId = $(this).data('id');
-
-    //     $.get(`/posts/${postId}/edit`, function(data) {
-    //         $('#travel-location-{{ $post->id }}').val(data.location || '');
-    //         $('#travel-description-{{ $post->id }}').val(data.description || '');
-
-    //         // 緯度・経度のセットを追加
-    //         $('#latitude-{{ $post->id }}').val(data.latitude || '');
-    //         $('#longitude-{{ $post->id }}').val(data.longitude || '');
-
-    //         // 画像プレビュー
-    //         if (data.image && data.image.startsWith('data:image')) {
-    //             $('#travel-imagePreview-{{ $post->id }}').attr('src', data.image);
-    //         } else {
-    //             $('#travel-imagePreview-{{ $post->id }}').attr('src', 'https://via.placeholder.com/300x200');
-    //         }
-
-    //         // 緯度経度を設定してからマップ初期化（重要）
-    //         initAutocompleteTravel(postId);
-    //     });
-    // });
-
     // Google Maps Autocomplete
     function initAutocompleteTravel(postId) {
         const input = document.getElementById('travel-location-' + postId);
@@ -265,7 +214,7 @@ $(document).on('click', '.btn-edit', function () {
                         const img = document.createElement('img');
                         img.src = base64Img;
                         img.className = 'img-fluid rounded mb-2 me-2';
-                        img.style.maxWidth = '300px';
+                        img.style.maxWidth = '400px';
                         img.style.height = '300px';
                         img.style.objectFit = 'cover';
                         imagePreviewWrapper.appendChild(img);
