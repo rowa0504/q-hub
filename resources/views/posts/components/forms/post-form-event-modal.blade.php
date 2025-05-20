@@ -1,4 +1,3 @@
-<!--  postFormModal を追加 -->
 <div class="modal fade" id="post-form-1" tabindex="-1" aria-labelledby="otherPostModalLabel"
 aria-hidden="true">
 <div class="modal-dialog modal-dialog-centered">
@@ -21,7 +20,10 @@ aria-hidden="true">
 
                 <!-- File input -->
                 <div class="mb-3">
-                    <input class="form-control" type="file" name="images[]" id="imageInput1" accept="image/*" value="{{ old('image') }}" multiple>
+                    <input class="form-control" type="file" name="images[]" id="imageInput1" accept="image/*" multiple>
+                    <div class="form-text text-start">
+                        Acceptable formats: jpeg, jpg, png, gif only<br>Max file size is 2048kB<br>Up to 3 images
+                    </div>
                     @error('images')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
@@ -53,7 +55,7 @@ aria-hidden="true">
 
                 <!-- Description input -->
                 <div class="mb-3">
-                    <textarea class="form-control" name="description" id="description" placeholder="Enter your post description..." rows="3">{{ old('description') }}</textarea>
+                    <textarea class="form-control" name="description" id="description" placeholder="Enter your event description..." rows="3">{{ old('description') }}</textarea>
                     @error('description')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
