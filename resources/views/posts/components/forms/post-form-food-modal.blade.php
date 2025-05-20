@@ -1,3 +1,4 @@
+<!-- Food Post Modal -->
 <div class="modal fade" id="post-form-2" tabindex="-1" aria-labelledby="otherPostModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content p-4">
@@ -64,24 +65,7 @@
     </div>
 </div>
 
-<!-- Google Maps JavaScript API -->
-<script async defer
-    src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.api_key') }}&libraries=places"></script>
-
 <script>
-    // 画像プレビュー
-    // document.getElementById('imageInput2').addEventListener('change', function (e) {
-    //     const file = e.target.files[0];
-    //     if (file) {
-    //         const reader = new FileReader();
-    //         reader.onload = function (event) {
-    //             document.getElementById('imagePreview2').src = event.target.result;
-    //         };
-    //         reader.readAsDataURL(file);
-    //     }
-    // });
-
-    // map2とmarker2を外に出す
     let map2;
     let marker2;
 
@@ -121,6 +105,18 @@
             document.getElementById('longitude-2').value = location.lng();
         });
     }
+
+    // モーダルが開いたときに地図を初期化
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('post-form-2');
+        if (modal) {
+            modal.addEventListener('shown.bs.modal', function () {
+                setTimeout(() => {
+                    initAutocomplete2();
+                }, 500); // 少し待つことで描画不具合を防ぐ
+            });
+        }
+    });
 
 document.getElementById('imageInput2').addEventListener('change', function(e) {
     const previewContainer = document.getElementById('imagePreviewContainer2');
@@ -171,15 +167,4 @@ document.getElementById('imageInput2').addEventListener('change', function(e) {
         });
     });
 });
-    // モーダルが開いたときに地図を初期化
-    // document.addEventListener('DOMContentLoaded', function () {
-    //     const modal = document.getElementById('post-form-2');
-    //     if (modal) {
-    //         modal.addEventListener('shown.bs.modal', function () {
-    //             setTimeout(() => {
-    //                 initAutocomplete2();
-    //             }, 500); // 少し待つことで描画不具合を防ぐ
-    //         });
-    //     }
-    // });
 </script>

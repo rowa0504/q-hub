@@ -1,7 +1,8 @@
 <div class="modal-header">
-    <h5 class="modal-title" id="otherPostModalLabel">Edit Food Post</h5>
+    <h5 class="modal-title" id="foddPostModalLabel">Edit Food Post</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
+
 <form action="{{ route('posts.update', $post->id) }}" method="post" enctype="multipart/form-data">
     @csrf
     @method('PATCH')
@@ -15,7 +16,7 @@
         </div>
 
         <div class="mb-3">
-            <input class="form-control" type="file" name="images[]" id="event-imageInput-{{ $post->id }}" accept="image/*" multiple>
+            <input class="form-control" type="file" name="images[]" id="food-imageInput-{{ $post->id }}" accept="image/*" multiple>
             <div class="form-text text-start">
                 Acceptable formats: jpeg, jpg, png, gif only<br>Max file size is 2048kB<br>Up to 3 images
             </div>
@@ -26,19 +27,22 @@
 
         <!-- Location input -->
         <div class="mb-3">
-            <input type="text" id="food-location-{{ $post->id }}" name="location" class="form-control"
+            <input type="text" class="form-control" name="location" id="food-location-{{ $post->id }}"
                 placeholder="Enter a location...">
             <input type="hidden" id="latitude-{{ $post->id }}" name="latitude">
             <input type="hidden" id="longitude-{{ $post->id }}" name="longitude">
-            <!-- Map Display -->
-            <div id="map-{{ $post->id }}" style="height: 300px;" class="mb-3 rounded"></div>
+
+            <!-- 地図を表示する要素 -->
+            <div id="map-food-{{ $post->id }}" style="height: 300px; width: 100%;" class="mt-2 rounded shadow-sm">
+            </div>
+
+            @error('location')
+                <p class="text-danger small">{{ $message }}</p>
+            @enderror
             @error('latitude')
                 <p class="text-danger small">{{ $message }}</p>
             @enderror
             @error('longitude')
-                <p class="text-danger small">{{ $message }}</p>
-            @enderror
-            @error('location')
                 <p class="text-danger small">{{ $message }}</p>
             @enderror
         </div>
@@ -53,23 +57,36 @@
             @enderror
         </div>
     </div>
+
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">Cancel</button>
         <button type="submit" class="btn btn-warning text-white">Edit</button>
-
-        <input type="hidden" name="category_id" value="2">
+        <input type="hidden" name="category_id" value="4">
     </div>
 </form>
 
 <script>
-    // Google Maps Autocomplete（Food用）
-    function initAutocomplete() {
-        const input = document.getElementById('food-location-{{ $post->id }}');
-        const mapElement = document.getElementById('map-{{ $post->id }}');
-        const lat = parseFloat(document.getElementById('latitude-{{ $post->id }}').value);
-        const lng = parseFloat(document.getElementById('longitude-{{ $post->id }}').value);
-
+    // Google Maps Autocomplete
+    function initAutocompletefood(postId) {
+        const input = document.getElementById('food-location-' + postId);
+        const mapElement = document.getElementById('map-food-' + postId);
         if (!input || !mapElement) return;
+
+        const defaultLocation = {
+            lat: 13.41,
+            lng: 122.56
+        }; // フィリピン中央あたり
+
+        const map = new google.maps.Map(mapElement, {
+            center: defaultLocation,
+            zoom: 6
+        });
+
+        const marker = new google.maps.Marker({
+            map: map,
+            position: defaultLocation,
+            draggable: false
+        });
 
         const autocomplete = new google.maps.places.Autocomplete(input, {
             types: ['geocode'],
@@ -78,39 +95,29 @@
             }
         });
 
-        const defaultLocation = (!isNaN(lat) && !isNaN(lng)) ? {
-            lat: lat,
-            lng: lng
-        } : {
-            lat: 13.41,
-            lng: 122.56
-        };
-
-        const map = new google.maps.Map(mapElement, {
-            center: defaultLocation,
-            zoom: (!isNaN(lat) && !isNaN(lng)) ? 15 : 6
-        });
-
-        const marker = new google.maps.Marker({
-            map: map,
-            position: (!isNaN(lat) && !isNaN(lng)) ? defaultLocation : null,
-            visible: (!isNaN(lat) && !isNaN(lng))
-        });
-
         autocomplete.addListener('place_changed', function() {
             const place = autocomplete.getPlace();
             if (!place.geometry) return;
 
-            document.getElementById('latitude-{{ $post->id }}').value = place.geometry.location.lat();
-            document.getElementById('longitude-{{ $post->id }}').value = place.geometry.location.lng();
-
-            map.setCenter(place.geometry.location);
+            const location = place.geometry.location;
+            map.setCenter(location);
             map.setZoom(15);
+            marker.setPosition(location);
 
-            marker.setPosition(place.geometry.location);
-            marker.setVisible(true);
+            document.getElementById('latitude-' + postId).value = location.lat();
+            document.getElementById('longitude-' + postId).value = location.lng();
         });
     }
+
+    // モーダルが表示されたときにGoogle Mapsオートコンプリート初期化
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('edit-form-{{ $post->id }}');
+        if (modal) {
+            modal.addEventListener('shown.bs.modal', function() {
+                initAutocompletefood('{{ $post->id }}');
+            });
+        }
+    });
 </script>
 
 <script>
@@ -196,7 +203,7 @@ $(document).on('click', '.btn-edit', function () {
             }
 
             $(`#food-description-${postId}`).val(data.post.description || '');
-            $(`#food-location-${postId}`).val(formatDate(data.post.location) || '');
+            $(`#fodd-location-${postId}`).val(formatDate(data.post.location) || '');
             // 緯度・経度のセットを追加
             $(`#latitude-${postId}`).val(data.post.latitude || '');
             $(`#longitude-${postId}`).val(data.post.longitude || '');
