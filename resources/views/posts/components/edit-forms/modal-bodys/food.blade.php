@@ -7,27 +7,12 @@
     @method('PATCH')
 
     <div class="modal-body">
-        <!-- Image preview -->
-        {{-- <div class="mb-3 text-center">
-            <img id="food-imagePreview-{{ $post->id }}" src="https://via.placeholder.com/300x200"
-                alt="Image Preview" class="img-fluid rounded">
-        </div> --}}
-
         <div class="image-scroll-wrapper">
             <div class="image-scroll-container" id="food-imagePreviewWrapper-{{ $post->id }}">
                 <!-- 画像がJSで挿入される -->
             </div>
             <div class="scroll-indicators" id="scrollIndicators-{{ $post->id }}"></div>
         </div>
-
-        <!-- File input -->
-        {{-- <div class="mb-3">
-            <input class="form-control" type="file" name="image" id="food-imageInput-{{ $post->id }}"
-                accept="image/*">
-            @error('image')
-                <p class="text-danger small">{{ $message }}</p>
-            @enderror
-        </div> --}}
 
         <div class="mb-3">
             <input class="form-control" type="file" name="images[]" id="event-imageInput-{{ $post->id }}" accept="image/*" multiple>
@@ -77,42 +62,6 @@
 </form>
 
 <script>
-    // document.getElementById('food-imageInput-{{ $post->id }}').addEventListener('change', function(e) {
-    //     const file = e.target.files[0];
-    //     if (file) {
-    //         const reader = new FileReader();
-    //         reader.onload = function(event) {
-    //             document.getElementById('food-imagePreview-{{ $post->id }}').src = event.target.result;
-    //         };
-    //         reader.readAsDataURL(file);
-    //     }
-    // });
-    // $('.btn-edit').on('click', function() {
-    //     const postId = $(this).data('id');
-    //     const categoryId = $(this).data('category-id');
-
-    //     $.get(`/posts/${postId}/edit`, function(data) {
-    //         $('#food-location-{{ $post->id }}').val(data.location || '');
-    //         $('#food-description-{{ $post->id }}').val(data.description || '');
-
-    //         // 緯度・経度のセットを追加
-    //         $('#latitude-{{ $post->id }}').val(data.latitude || '');
-    //         $('#longitude-{{ $post->id }}').val(data.longitude || '');
-
-    //         // 画像プレビュー
-    //         if (data.image && data.image.startsWith('data:image')) {
-    //             $('#food-imagePreview-{{ $post->id }}').attr('src', data.image);
-    //         } else {
-    //             $('#food-imagePreview-{{ $post->id }}').attr('src',
-    //                 'https://via.placeholder.com/300x200');
-    //         }
-
-    //         // 緯度経度を設定してからマップ初期化（重要）
-    //         initAutocomplete();
-    //     });
-    // });
-
-
     // Google Maps Autocomplete（Food用）
     function initAutocomplete() {
         const input = document.getElementById('food-location-{{ $post->id }}');
@@ -258,7 +207,7 @@ $(document).on('click', '.btn-edit', function () {
                         const img = document.createElement('img');
                         img.src = base64Img;
                         img.className = 'img-fluid rounded mb-2 me-2';
-                        img.style.maxWidth = '300px';
+                        img.style.maxWidth = '400px';
                         img.style.height = '300px';
                         img.style.objectFit = 'cover';
                         imagePreviewWrapper.appendChild(img);
