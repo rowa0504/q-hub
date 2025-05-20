@@ -1,4 +1,5 @@
-<div class="modal fade" id="edit-form-{{ $post->id }}" data-post-id="{{ $post->id }}" tabindex="-1" aria-labelledby="otherPostModalLabel" aria-hidden="true">
+<div class="modal fade" id="edit-form-{{ $post->id }}" data-post-id="{{ $post->id }}" tabindex="-1"
+    aria-labelledby="otherPostModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content p-4">
             {{-- masa->bodyのみ別ファイルで挿入（categoryごとに分ける必要があるため） --}}

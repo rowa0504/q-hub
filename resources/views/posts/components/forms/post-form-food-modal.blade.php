@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-<!-- food Post Modal -->
-=======
->>>>>>> master
+<!-- Food Post Modal -->
 <div class="modal fade" id="post-form-2" tabindex="-1" aria-labelledby="otherPostModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content p-4">
@@ -69,7 +66,6 @@
 </div>
 
 <script>
-
     let map2;
     let marker2;
 
@@ -171,18 +167,4 @@ document.getElementById('imageInput2').addEventListener('change', function(e) {
         });
     });
 });
-<<<<<<< HEAD
-=======
-    // モーダルが開いたときに地図を初期化
-    // document.addEventListener('DOMContentLoaded', function () {
-    //     const modal = document.getElementById('post-form-2');
-    //     if (modal) {
-    //         modal.addEventListener('shown.bs.modal', function () {
-    //             setTimeout(() => {
-    //                 initAutocomplete2();
-    //             }, 500); // 少し待つことで描画不具合を防ぐ
-    //         });
-    //     }
-    // });
->>>>>>> master
 </script>
