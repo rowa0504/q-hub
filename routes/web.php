@@ -21,6 +21,7 @@ use App\Http\Controllers\ChatRoomController;
 use App\Http\Controllers\ChatMessageController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\WantedItemController;
+use App\Http\Controllers\ReportReasonController;
 
 
 Auth::routes();
@@ -41,11 +42,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/loadmore', [PostController::class, 'loadMore'])->name('posts.loadMore');
 
-    // Like route
-    Route::group(['prefix' => 'like', 'as' => 'like.'], function () {
-        Route::post('/{id}/store', [LikeController::class, 'store'])->name('store');
-        Route::delete('/{id}/delete', [LikeController::class, 'delete'])->name('delete');
-    });
+    // like route
+    Route::post('/posts/{post_id}/like-toggle', [LikeController::class, 'likeToggle'])->name('posts.likeToggle');
 
     // Comment route
     Route::group(['prefix' => 'comment', 'as' => 'comment.'], function () {
@@ -177,5 +175,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::patch('/reports/{id}/delete', [ReportController::class, 'deleteReportMessage'])->name('deleteReportMessage');
         Route::patch('/{id}/close', [ReportController::class, 'close'])->name('close');
         Route::post('/{id}/dismissed', [ReportController::class, 'dismissed'])->name('dismissed');
+
+        Route::get('/reportReasons/create', [ReportReasonController::class, 'create'])->name('reportReasons.create');
+        Route::post('/reportReasons/store', [ReportReasonController::class, 'store'])->name('reportReasons.store');
+        Route::patch('/reportReasons/{id}/update', [ReportReasonController::class, 'update'])->name('reportReasons.update');
+        Route::delete('/reportReasons/{id}/delete', [ReportReasonController::class, 'destroy'])->name('reportReasons.delete');
     });
 });

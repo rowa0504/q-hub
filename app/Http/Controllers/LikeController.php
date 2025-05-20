@@ -4,30 +4,89 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Like;
+use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 
 class LikeController extends Controller
 {
-    private $like;
+    // public function likeToggle($post_id)
+    // {
+    //     logger('likeToggle called for post_id: ' . $post_id);
 
-    public function __construct(Like $like){
-        $this->like = $like;
+    //     $user_id = Auth::id();
+    //     if (!$user_id) {
+    //         logger('Auth ID is null!');
+    //         return response()->json(['error' => 'Not authenticated'], 401);
+    //     }
+
+    //     $post = Post::find($post_id);
+    //     if (!$post) {
+    //         logger('Post not found!');
+    //         return response()->json(['error' => 'Post not found'], 404);
+    //     }
+
+    //     $like = Like::where('user_id', $user_id)
+    //         ->where('post_id', $post_id)
+    //         ->first();
+
+    //     if ($like) {
+    //         $like->delete();
+    //         $status = 'unliked';
+    //     } else {
+    //         Like::create([
+    //             'user_id' => $user_id,
+    //             'post_id' => $post_id,
+    //         ]);
+    //         $status = 'liked';
+    //     }
+
+    //     $likeCount = $post->likes()->count();
+
+    //     return response()->json([
+    //         'status' => $status,
+    //         'likes_count' => $likeCount,
+    //     ]);
+    // }
+
+    public function likeToggle($post_id)
+{
+    try {
+        $user_id = Auth::id();
+        if (!$user_id) {
+            return response()->json(['error' => 'Not authenticated'], 401);
+        }
+
+        $post = Post::find($post_id);
+        if (!$post) {
+            return response()->json(['error' => 'Post not found'], 404);
+        }
+
+        $like = Like::where('user_id', $user_id)
+            ->where('post_id', $post_id)
+            ->first();
+
+        if ($like) {
+            $like->delete();
+            $status = 'unliked';
+        } else {
+            Like::create([
+                'user_id' => $user_id,
+                'post_id' => $post_id,
+            ]);
+            $status = 'liked';
+        }
+
+        $likeCount = $post->likes()->count();
+
+        return response()->json([
+            'status' => $status,
+            'likes_count' => $likeCount,
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage()
+        ], 500);
     }
+}
 
-    public function store($post_id){
-        $this->like->user_id = Auth::user()->id;
-        $this->like->post_id = $post_id;
-        $this->like->save();
-
-        return redirect()->back();
-    }
-
-    public function delete($post_id){
-        $this->like
-                ->where('post_id', $post_id)
-                ->where('user_id', Auth::user()->id)
-                ->delete();
-
-        return redirect()->back();
-    }
 }

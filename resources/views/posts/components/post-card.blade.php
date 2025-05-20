@@ -117,22 +117,16 @@
         <div class="d-flex align-items-center mb-3">
             {{-- いいね --}}
             <div class="me-3">
-                @if ($post->isLiked())
-                    <form action="{{ route('like.delete', $post->id) }}" method="post" class="d-inline">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn p-0 text-danger d-flex align-items-center">
-                            <i class="fa-solid fa-heart me-1"></i>{{ $post->likes->count() }}
-                        </button>
-                    </form>
-                @else
-                    <form action="{{ route('like.store', $post->id) }}" method="post" class="d-inline">
-                        @csrf
-                        <button class="btn p-0 text-muted d-flex align-items-center">
-                            <i class="fa-regular fa-heart me-1"></i>{{ $post->likes->count() }}
-                        </button>
-                    </form>
-                @endif
+                @php
+                    $isLiked = $post->isLiked();
+                @endphp
+
+                <div x-data="likeComponent({{ $post->id }}, {{ $post->likes->count() }}, {{ $isLiked ? 'true' : 'false' }})" class="d-flex align-items-center gap-2">
+                    <button type="button" class="btn d-flex align-items-center" @click="toggleLike">
+                        <i :class="liked ? 'fas fa-heart text-danger me-1' : 'far fa-heart me-1'"></i>
+                        <span x-text="likesCount" class="text-muted"></span>
+                    </button>
+                </div>
             </div>
 
             {{-- コメント or アンサー --}}
@@ -150,6 +144,7 @@
                 @endif
             </div>
         </div>
+
 
         {{-- カテゴリ別情報 --}}
         @switch($post->category_id)
@@ -359,6 +354,38 @@
             }
         </script>
 
+        <script>
+            function likeComponent(postId, initialLikesCount, isLikedInitially) {
+                return {
+                    liked: isLikedInitially === true || isLikedInitially === 'true',
+                    likesCount: initialLikesCount,
+
+                    toggleLike() {
+                        fetch(`/posts/${postId}/like-toggle`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                        'content')
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'liked') {
+                                    this.liked = true;
+                                    this.likesCount = data.likes_count;
+                                } else if (data.status === 'unliked') {
+                                    this.liked = false;
+                                    this.likesCount = data.likes_count;
+                                } else {
+                                    console.error("Unknown response", data);
+                                }
+                            })
+                            .catch(() => alert("接続エラー"));
+                    }
+                }
+            }
+        </script>
 
     </div>
 </div>

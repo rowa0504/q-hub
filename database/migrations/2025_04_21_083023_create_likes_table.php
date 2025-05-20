@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('likes', function (Blueprint $table) {
+            $table->id(); 
             $table->unsignedBigInteger('user_id');//the id of the user who liked the post
             $table->unsignedBigInteger('post_id');//the id of the post being liked
 

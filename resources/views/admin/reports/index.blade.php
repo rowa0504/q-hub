@@ -7,6 +7,7 @@
 
         <div class="d-flex justify-content-between align-items-center bg-dark text-white p-3 rounded-top">
             <h4 class="mb-0"><i class="fa-solid fa-flag"></i> Report Management</h4>
+            <a href="{{ route('admin.reportReasons.create') }}" class="btn btn-danger">Report Reason</a>
         </div>
 
         <div class="bg-white p-3 border rounded-bottom table-responsive">
@@ -124,7 +125,7 @@
                                     <form action="{{ route('admin.reports.activate', $report->id) }}" method="POST">
                                         @csrf
                                         @method('PATCH') {{-- or POST, depending on your route definition --}}
-                                        
+
                                         <button class="btn btn-info btn-sm">
                                             <i class="fa-solid fa-rotate-left"></i> Restore
                                         </button>
