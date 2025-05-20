@@ -66,48 +66,81 @@
 </form>
 
 <script>
+const postId = {{ $post->id }};
+const imageInput = document.getElementById(`item-imageInput-${postId}`);
+const imagePreviewWrapper = document.getElementById(`item-imagePreviewWrapper-${postId}`);
+const scrollIndicators = document.getElementById(`scrollIndicators-${postId}`);
+
+// プレビュー画像にドットを動的生成
+function createIndicators(wrapper, indicators, count) {
+    indicators.innerHTML = '';
+    for (let i = 0; i < count; i++) {
+        const dot = document.createElement('span');
+        dot.className = 'indicator-dot';
+        if (i === 0) dot.classList.add('active');
+        dot.dataset.index = i;
+        indicators.appendChild(dot);
+
+        dot.addEventListener('click', () => {
+            const scrollX = i * 310; // 画像幅300px + gap 10px
+            wrapper.scrollTo({ left: scrollX, behavior: 'smooth' });
+        });
+    }
+}
+
+// アクティブドットを更新
+function updateActiveIndicator(wrapper, indicators) {
+    const scrollLeft = wrapper.scrollLeft;
+    const index = Math.round(scrollLeft / 310);
+    const dots = indicators.querySelectorAll('.indicator-dot');
+    dots.forEach(dot => dot.classList.remove('active'));
+    if (dots[index]) dots[index].classList.add('active');
+}
+
+// 選択画像のプレビュー（新規投稿時）
+imageInput.addEventListener('change', function (e) {
+    const files = e.target.files;
+    imagePreviewWrapper.innerHTML = '';
+    scrollIndicators.innerHTML = '';
+    if (!files.length) return;
+
+    Array.from(files).forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            const img = document.createElement('img');
+            img.src = event.target.result;
+            img.className = 'img-fluid rounded mb-2 me-2';
+            img.style.maxWidth = '400px';
+            img.style.height = '300px';
+            img.style.objectFit = 'cover';
+            imagePreviewWrapper.appendChild(img);
+
+            if (index === files.length - 1) {
+                createIndicators(imagePreviewWrapper, scrollIndicators, files.length);
+            }
+        };
+        reader.readAsDataURL(file);
+    });
+});
+
+// 編集ボタンクリック時に既存データ取得＆モーダル初期化
 $(document).on('click', '.btn-edit', function () {
     const postId = $(this).data('id');
-    const imageInput = document.getElementById(`item-imageInput-${postId}`);
+    console.log('Edit button clicked, postId:', postId);
+
     const imagePreviewWrapper = document.getElementById(`item-imagePreviewWrapper-${postId}`);
     const scrollIndicators = document.getElementById(`scrollIndicators-${postId}`);
-
-    // 初期化
     imagePreviewWrapper.innerHTML = '';
     scrollIndicators.innerHTML = '';
 
-    // File input の再登録（changeイベントを確実に付け直す）
-    const newImageInput = imageInput.cloneNode(true);
-    imageInput.parentNode.replaceChild(newImageInput, imageInput);
-
-    newImageInput.addEventListener('change', function (e) {
-        const files = e.target.files;
-        imagePreviewWrapper.innerHTML = '';
-        scrollIndicators.innerHTML = '';
-        if (!files.length) return;
-
-        Array.from(files).forEach((file, index) => {
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                const img = document.createElement('img');
-                img.src = event.target.result;
-                img.className = 'img-fluid rounded mb-2 me-2';
-                img.style.maxWidth = '400px';
-                img.style.height = '300px';
-                img.style.objectFit = 'cover';
-                imagePreviewWrapper.appendChild(img);
-
-                if (index === files.length - 1) {
-                    createIndicators(imagePreviewWrapper, scrollIndicators, files.length);
-                }
-            };
-            reader.readAsDataURL(file);
-        });
-    });
-
-    // 既存データ取得
     $.get(`/posts/${postId}/edit`)
         .done(function (data) {
+            console.log('AJAX success:', data);
+            if (!data) {
+                console.error('No data returned from server');
+                return;
+            }
+
             function formatDate(date) {
                 const d = new Date(date);
                 if (isNaN(d.getTime())) return '';
@@ -137,10 +170,10 @@ $(document).on('click', '.btn-edit', function () {
         .fail(function (jqXHR, textStatus, errorThrown) {
             console.error('AJAX failed:', textStatus, errorThrown);
         });
+});
 
-    // スクロールイベント再登録
-    imagePreviewWrapper.addEventListener('scroll', () => {
-        updateActiveIndicator(imagePreviewWrapper, scrollIndicators);
-    });
+// スクロール時にアクティブドット更新
+imagePreviewWrapper.addEventListener('scroll', () => {
+    updateActiveIndicator(imagePreviewWrapper, scrollIndicators);
 });
 </script>
