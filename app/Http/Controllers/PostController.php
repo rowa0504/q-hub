@@ -15,19 +15,20 @@ class PostController extends Controller
     private $post;
     private $category;
     private $trans_category;
+    private $postImage;
 
-    public function __construct(Post $post, Category $category, TransCategory $trans_category, PostImage $postImage)
-    {
+    public function __construct(Post $post, Category $category, TransCategory $trans_category, PostImage $postImage){
         $this->post           = $post;
         $this->category       = $category;
         $this->trans_category = $trans_category;
-        $this->postImage = $postImage;
+        $this->postImage      = $postImage;
     }
 
     public function store(Request $request)
     {
-        $commonRules = [ //other
+        $commonRules = [
             'description' => 'required|min:1|max:1000',
+            'images' => 'array|max:3',
             'images.*' => 'image|mimes:jpeg,jpg,png,gif|max:2048',
             'category_id' => 'required|exists:categories,id',
         ];
@@ -62,7 +63,7 @@ class PostController extends Controller
                 'title' => 'required|min:1|max:50',
             ];
             $modalId = 'post-form-' . $categoryId;
-        } elseif ($categoryId == 7) { // item
+        } elseif ($categoryId == 7) { // other
             $extraRules = $commonRules;
             $modalId = 'post-form-' . $categoryId;
         }
@@ -73,18 +74,12 @@ class PostController extends Controller
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput()
-                ->with('open_modal', $modalId);  // モーダルIDをセッションに保存
+                ->with('open_modal', $modalId);
         }
 
-        $this->post->user_id     = Auth::user()->id;
-        $this->post->title       = $request->title;
-        $this->post->description = $request->description;
-
-        // if ($request->hasFile('image')) {
-        //     $this->post->image = 'data:image/' . $request->image->extension() .
-        //         ';base64,' . base64_encode(file_get_contents($request->image));
-        // }
-
+        $this->post->user_id           = Auth::user()->id;
+        $this->post->title             = $request->title;
+        $this->post->description       = $request->description;
         $this->post->location          = $request->location;
         $this->post->latitude          = $request->latitude;
         $this->post->longitude         = $request->longitude;
@@ -103,7 +98,7 @@ class PostController extends Controller
             foreach ($request->file('images') as $image) {
                 $imageBase64 = 'data:image/' . $image->extension() . ';base64,' . base64_encode(file_get_contents($image));
                 $this->post->images()->create([
-                    'path' => $imageBase64, // DBにbase64文字列を保存
+                    'path' => $imageBase64,
                 ]);
             }
         }
@@ -112,29 +107,8 @@ class PostController extends Controller
     }
 
 
-    public function edit($id)
-    {
-        // $post = $this->post->findOrFail($id);
-
-        // // 画像データがBase64形式で保存されている場合、そのまま返す
-        // if ($post->image && strpos($post->image, 'data:image') === false) {
-        //     // 画像ファイルのパスが保存されている場合
-        //     $imagePath = storage_path('app/public/' . $post->image);
-
-        //     // 画像が存在する場合、Base64に変換して返す
-        //     if (file_exists($imagePath)) {
-        //         $imageData = base64_encode(file_get_contents($imagePath));
-        //         $mimeType = mime_content_type($imagePath); // MIMEタイプを取得
-        //         $post->image = 'data:' . $mimeType . ';base64,' . $imageData;
-        //     } else {
-        //         // 画像が存在しない場合、nullを設定
-        //         $post->image = null;
-        //     }
-        // }
-
-        // return response()->json($post);
-
-        $post = Post::with('images')->findOrFail($id);
+    public function edit($id){
+        $post = $this->post->with('images')->findOrFail($id);
 
         $images = [];
         foreach ($post->images as $image) {
@@ -168,8 +142,9 @@ class PostController extends Controller
 
     public function update($id, Request $request)
     {
-        $commonRules = [ //other
+        $commonRules = [
             'description' => 'required|min:1|max:1000',
+            'images' => 'required|array|max:3',
             'images.*' => 'image|mimes:jpeg,jpg,png,gif|max:2048',
             'category_id' => 'required|exists:categories,id',
         ];
@@ -204,7 +179,7 @@ class PostController extends Controller
                 'title' => 'required|min:1|max:50',
             ];
             $modalId = 'edit-form-' . $categoryId;
-        } elseif ($categoryId == 7) { // item
+        } elseif ($categoryId == 7) { // other
             $extraRules = $commonRules;
             $modalId = 'edit-form-' . $categoryId;
         }
@@ -220,16 +195,9 @@ class PostController extends Controller
 
         $post = $this->post->findOrFail($id);
 
-        $post->user_id     = Auth::user()->id;
-        $post->title       = $request->title;
-        $post->description = $request->description;
-        // if ($request->hasFile('image')) {
-
-        //     $post->image = 'data:image/' . $request->image->extension() .
-        //                          ';base64,' . base64_encode(file_get_contents($request->image));
-        // } else {
-        //     $post->image = null;
-        // }
+        $post->user_id           = Auth::user()->id;
+        $post->title             = $request->title;
+        $post->description       = $request->description;
         $post->location          = $request->location;
         $post->latitude          = $request->latitude;
         $post->longitude         = $request->longitude;
@@ -262,11 +230,10 @@ class PostController extends Controller
         return redirect()->back();
     }
 
-    public function delete($id)
-    {
+    public function delete($id){
         $post = $this->post->findOrFail($id);
 
-        $post->forceDelete(); // ← これで完全に削除される
+        $post->forceDelete();
         return redirect()->back();
     }
 }

@@ -21,7 +21,10 @@ aria-hidden="true">
 
                 <!-- File input -->
                 <div class="mb-3">
-                    <input class="form-control" type="file" name="images[]" id="imageInput5" accept="image/*" value="{{ old('image') }}" multiple>
+                    <input class="form-control" type="file" name="images[]" id="imageInput5" accept="image/*" multiple>
+                    <div class="form-text text-start">
+                        Acceptable formats: jpeg, jpg, png, gif only<br>Max file size is 2048kB<br>Up to 3 images
+                    </div>
                     @error('images')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror
@@ -71,7 +74,7 @@ aria-hidden="true">
 
                 <!-- Description input -->
                 <div class="mb-3">
-                    <textarea class="form-control" name="description" id="description" placeholder="Enter your post description..." rows="3">{{ old('description') }}</textarea>
+                    <textarea class="form-control" name="description" id="description" placeholder="Enter your transportation description..." rows="3">{{ old('description') }}</textarea>
                     @error('description')
                         <p class="text-danger small">{{ $message }}</p>
                     @enderror

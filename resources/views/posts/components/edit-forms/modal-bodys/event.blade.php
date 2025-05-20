@@ -18,6 +18,9 @@
         <!-- File input -->
         <div class="mb-3">
             <input class="form-control" type="file" name="images[]" id="event-imageInput-{{ $post->id }}" accept="image/*" multiple>
+            <div class="form-text text-start">
+                Acceptable formats: jpeg, jpg, png, gif only<br>Max file size is 2048kB<br>Up to 3 images
+            </div>
             @error('images')
                 <p class="text-danger small">{{ $message }}</p>
             @enderror
@@ -64,128 +67,49 @@
     </div>
 </form>
 
-{{-- <script>
-    document.getElementById('event-imageInput-{{ $post->id }}').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                document.getElementById('event-imagePreview-{{ $post->id }}').src = event.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    $('.btn-edit').on('click', function () {
-        const postId = $(this).data('id');
-        const categoryId = $(this).data('category-id');
-
-        // サーバーから投稿データを取得
-        $.get(`/posts/${postId}/edit`, function (data) {
-
-            function formatDate(date) {
-                const d = new Date(date);
-                if (isNaN(d.getTime())) {
-                    return ''; // 無効な日付の場合は空文字を返す
-                }
-                const year = d.getFullYear();
-                const month = String(d.getMonth() + 1).padStart(2, '0');
-                const day = String(d.getDate()).padStart(2, '0');
-                return `${year}-${month}-${day}`;  // 修正: YYYY-MM-DD 形式に変更
-            }
-            // フォームへのデータの流し込み
-            $('#event-description-{{ $post->id }}').val(data.description || '');
-            $('#event-startdate-{{ $post->id }}').val(formatDate(data.startdatetime) || '');
-            $('#event-enddate-{{ $post->id }}').val(formatDate(data.enddatetime) || '');
-            $('#event-max-{{ $post->id }}').val(data.max || '');
-
-            // 画像プレビュー（Base64データを使って表示）
-            if (data.image && data.image.startsWith('data:image')) {
-                $('#event-imagePreview-{{ $post->id }}').attr('src', data.image);
-            } else {
-                $('#event-imagePreview-{{ $post->id }}').attr('src', 'https://via.placeholder.com/300x200');
-            }
-        });
-    });
-
-</script> --}}
-
 <script>
-const postId = {{ $post->id }};
-const imageInput = document.getElementById(`event-imageInput-${postId}`);
-const imagePreviewWrapper = document.getElementById(`event-imagePreviewWrapper-${postId}`);
-const scrollIndicators = document.getElementById(`scrollIndicators-${postId}`);
-
-// プレビュー画像にドットを動的生成
-function createIndicators(wrapper, indicators, count) {
-    indicators.innerHTML = '';
-    for (let i = 0; i < count; i++) {
-        const dot = document.createElement('span');
-        dot.className = 'indicator-dot';
-        if (i === 0) dot.classList.add('active');
-        dot.dataset.index = i;
-        indicators.appendChild(dot);
-
-        dot.addEventListener('click', () => {
-            const scrollX = i * 310; // 画像幅300px + gap 10px
-            wrapper.scrollTo({ left: scrollX, behavior: 'smooth' });
-        });
-    }
-}
-
-// アクティブドットを更新
-function updateActiveIndicator(wrapper, indicators) {
-    const scrollLeft = wrapper.scrollLeft;
-    const index = Math.round(scrollLeft / 310);
-    const dots = indicators.querySelectorAll('.indicator-dot');
-    dots.forEach(dot => dot.classList.remove('active'));
-    if (dots[index]) dots[index].classList.add('active');
-}
-
-// 選択画像のプレビュー（新規投稿時）
-imageInput.addEventListener('change', function (e) {
-    const files = e.target.files;
-    imagePreviewWrapper.innerHTML = '';
-    scrollIndicators.innerHTML = '';
-    if (!files.length) return;
-
-    Array.from(files).forEach((file, index) => {
-        const reader = new FileReader();
-        reader.onload = function (event) {
-            const img = document.createElement('img');
-            img.src = event.target.result;
-            img.className = 'img-fluid rounded mb-2 me-2';
-            img.style.maxWidth = '300px';
-            img.style.height = '300px';
-            img.style.objectFit = 'cover';
-            imagePreviewWrapper.appendChild(img);
-
-            if (index === files.length - 1) {
-                createIndicators(imagePreviewWrapper, scrollIndicators, files.length);
-            }
-        };
-        reader.readAsDataURL(file);
-    });
-});
-
-// 編集ボタンクリック時に既存データ取得＆モーダル初期化
 $(document).on('click', '.btn-edit', function () {
     const postId = $(this).data('id');
-    console.log('Edit button clicked, postId:', postId);
-
+    const imageInput = document.getElementById(`event-imageInput-${postId}`);
     const imagePreviewWrapper = document.getElementById(`event-imagePreviewWrapper-${postId}`);
     const scrollIndicators = document.getElementById(`scrollIndicators-${postId}`);
+
+    // 初期化
     imagePreviewWrapper.innerHTML = '';
     scrollIndicators.innerHTML = '';
 
+    // changeイベントを再設定（すでに付いていたら一旦削除）
+    imageInput.replaceWith(imageInput.cloneNode(true));
+    const newImageInput = document.getElementById(`event-imageInput-${postId}`);
+
+    newImageInput.addEventListener('change', function (e) {
+        const files = e.target.files;
+        imagePreviewWrapper.innerHTML = '';
+        scrollIndicators.innerHTML = '';
+        if (!files.length) return;
+
+        Array.from(files).forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const img = document.createElement('img');
+                img.src = event.target.result;
+                img.className = 'img-fluid rounded mb-2 me-2';
+                img.style.maxWidth = '400px';
+                img.style.height = '300px';
+                img.style.objectFit = 'cover';
+                imagePreviewWrapper.appendChild(img);
+
+                if (index === files.length - 1) {
+                    createIndicators(imagePreviewWrapper, scrollIndicators, files.length);
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
+    // 投稿データ取得
     $.get(`/posts/${postId}/edit`)
         .done(function (data) {
-            console.log('AJAX success:', data);
-            if (!data) {
-                console.error('No data returned from server');
-                return;
-            }
-
             function formatDate(date) {
                 const d = new Date(date);
                 if (isNaN(d.getTime())) return '';
@@ -203,7 +127,7 @@ $(document).on('click', '.btn-edit', function () {
                         const img = document.createElement('img');
                         img.src = base64Img;
                         img.className = 'img-fluid rounded mb-2 me-2';
-                        img.style.maxWidth = '300px';
+                        img.style.maxWidth = '400px';
                         img.style.height = '300px';
                         img.style.objectFit = 'cover';
                         imagePreviewWrapper.appendChild(img);
@@ -215,11 +139,11 @@ $(document).on('click', '.btn-edit', function () {
         .fail(function (jqXHR, textStatus, errorThrown) {
             console.error('AJAX failed:', textStatus, errorThrown);
         });
-});
 
-// スクロール時にアクティブドット更新
-imagePreviewWrapper.addEventListener('scroll', () => {
-    updateActiveIndicator(imagePreviewWrapper, scrollIndicators);
+    // スクロールイベント設定
+    imagePreviewWrapper.addEventListener('scroll', () => {
+        updateActiveIndicator(imagePreviewWrapper, scrollIndicators);
+    });
 });
 </script>
 

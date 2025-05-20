@@ -29,6 +29,9 @@
 
         <div class="mb-3">
             <input class="form-control" type="file" name="images[]" id="other-imageInput-{{ $post->id }}" accept="image/*" multiple>
+            <div class="form-text text-start">
+                Acceptable formats: jpeg, jpg, png, gif only<br>Max file size is 2048kB<br>Up to 3 images
+            </div>
             @error('images')
                 <p class="text-danger small">{{ $message }}</p>
             @enderror
@@ -129,7 +132,7 @@ imageInput.addEventListener('change', function (e) {
             const img = document.createElement('img');
             img.src = event.target.result;
             img.className = 'img-fluid rounded mb-2 me-2';
-            img.style.maxWidth = '300px';
+            img.style.maxWidth = '400px';
             img.style.height = '300px';
             img.style.objectFit = 'cover';
             imagePreviewWrapper.appendChild(img);
