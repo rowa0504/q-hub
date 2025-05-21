@@ -76,8 +76,8 @@ function updateActiveIndicator(wrapper, indicators) {
 // 選択画像のプレビュー（新規投稿時）
 imageInput.addEventListener('change', function (e) {
     const files = e.target.files;
-    imagePreviewWrapper.innerHTML = '';
-    scrollIndicators.innerHTML = '';
+    imagePreviewWrapper.innerHTML = '';  // ここで既存画像をクリア
+    scrollIndicators.innerHTML = '';      // インジケータもクリア
     if (!files.length) return;
 
     Array.from(files).forEach((file, index) => {
@@ -100,15 +100,52 @@ imageInput.addEventListener('change', function (e) {
 });
 
 // 編集ボタンクリック時に既存データ取得＆モーダル初期化
+// 重要：postIdごとにイベントハンドラを登録するのではなく、編集ボタンクリック後にイベントを登録する方式に切替え例
+
 $(document).on('click', '.btn-edit', function () {
     const postId = $(this).data('id');
     console.log('Edit button clicked, postId:', postId);
 
     const imagePreviewWrapper = document.getElementById(`other-imagePreviewWrapper-${postId}`);
     const scrollIndicators = document.getElementById(`scrollIndicators-${postId}`);
+    const imageInput = document.getElementById(`other-imageInput-${postId}`);
+    const descriptionInput = document.getElementById(`other-description-${postId}`);
+
+    // 既存のプレビューとインジケータをクリア
     imagePreviewWrapper.innerHTML = '';
     scrollIndicators.innerHTML = '';
 
+    // 既存のchangeイベントを外す（念のため）
+    imageInput.replaceWith(imageInput.cloneNode(true));
+    const newImageInput = document.getElementById(`other-imageInput-${postId}`);
+
+    // 新規画像選択時のプレビュー表示
+    newImageInput.addEventListener('change', function (e) {
+        const files = e.target.files;
+        imagePreviewWrapper.innerHTML = '';  // 既存画像クリア
+        scrollIndicators.innerHTML = '';      // インジケータもクリア
+        if (!files.length) return;
+
+        Array.from(files).forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const img = document.createElement('img');
+                img.src = event.target.result;
+                img.className = 'img-fluid rounded mb-2 me-2';
+                img.style.maxWidth = '400px';
+                img.style.height = '300px';
+                img.style.objectFit = 'cover';
+                imagePreviewWrapper.appendChild(img);
+
+                if (index === files.length - 1) {
+                    createIndicators(imagePreviewWrapper, scrollIndicators, files.length);
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
+    // AJAXで既存投稿データ取得
     $.get(`/posts/${postId}/edit`)
         .done(function (data) {
             console.log('AJAX success:', data);
@@ -116,14 +153,7 @@ $(document).on('click', '.btn-edit', function () {
                 console.error('No data returned from server');
                 return;
             }
-
-            function formatDate(date) {
-                const d = new Date(date);
-                if (isNaN(d.getTime())) return '';
-                return d.toISOString().split('T')[0];
-            }
-
-            $(`#other-description-${postId}`).val(data.post.description || '');
+            descriptionInput.value = data.post.description || '';
 
             if (data.images && data.images.length > 0) {
                 data.images.forEach(base64Img => {
