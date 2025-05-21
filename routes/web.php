@@ -51,10 +51,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Comment route
     Route::group(['prefix' => 'comment', 'as' => 'comment.'], function () {
-        Route::post('/{id}/store', [CommentController::class, 'store'])->name('store');
+        Route::post('/{post_id}', [CommentController::class, 'store'])->name('store');
         Route::delete('/{id}/destroy', [CommentController::class, 'destroy'])->name('destroy');
         Route::patch('/{post_id}/{id}', [CommentController::class, 'update'])->name('update');
     });
+
+    Route::post('/comment/{post_id}', [CommentController::class, 'store'])->name('comment.store');
 
     // Answer route
     Route::group(['prefix' => 'answer', 'as' => 'answer.'], function () {
