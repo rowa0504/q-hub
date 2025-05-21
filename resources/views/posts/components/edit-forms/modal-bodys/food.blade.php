@@ -1,18 +1,13 @@
 <div class="modal-header">
-    <h5 class="modal-title" id="otherPostModalLabel">Edit Food Post</h5>
+    <h5 class="modal-title" id="foddPostModalLabel">Edit Food Post</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
+
 <form action="{{ route('posts.update', $post->id) }}" method="post" enctype="multipart/form-data">
     @csrf
     @method('PATCH')
 
     <div class="modal-body">
-        <!-- Image preview -->
-        {{-- <div class="mb-3 text-center">
-            <img id="food-imagePreview-{{ $post->id }}" src="https://via.placeholder.com/300x200"
-                alt="Image Preview" class="img-fluid rounded">
-        </div> --}}
-
         <div class="image-scroll-wrapper">
             <div class="image-scroll-container" id="food-imagePreviewWrapper-{{ $post->id }}">
                 <!-- 画像がJSで挿入される -->
@@ -20,17 +15,11 @@
             <div class="scroll-indicators" id="scrollIndicators-{{ $post->id }}"></div>
         </div>
 
-        <!-- File input -->
-        {{-- <div class="mb-3">
-            <input class="form-control" type="file" name="image" id="food-imageInput-{{ $post->id }}"
-                accept="image/*">
-            @error('image')
-                <p class="text-danger small">{{ $message }}</p>
-            @enderror
-        </div> --}}
-
         <div class="mb-3">
-            <input class="form-control" type="file" name="images[]" id="event-imageInput-{{ $post->id }}" accept="image/*" multiple>
+            <input class="form-control" type="file" name="images[]" id="food-imageInput-{{ $post->id }}" accept="image/*" multiple>
+            <div class="form-text text-start">
+                Acceptable formats: jpeg, jpg, png, gif only<br>Max file size is 2048kB<br>Up to 3 images
+            </div>
             @error('images')
                 <p class="text-danger small">{{ $message }}</p>
             @enderror
@@ -38,19 +27,22 @@
 
         <!-- Location input -->
         <div class="mb-3">
-            <input type="text" id="food-location-{{ $post->id }}" name="location" class="form-control"
+            <input type="text" class="form-control" name="location" id="food-location-{{ $post->id }}"
                 placeholder="Enter a location...">
             <input type="hidden" id="latitude-{{ $post->id }}" name="latitude">
             <input type="hidden" id="longitude-{{ $post->id }}" name="longitude">
-            <!-- Map Display -->
-            <div id="map-{{ $post->id }}" style="height: 300px;" class="mb-3 rounded"></div>
+
+            <!-- 地図を表示する要素 -->
+            <div id="map-food-{{ $post->id }}" style="height: 300px; width: 100%;" class="mt-2 rounded shadow-sm">
+            </div>
+
+            @error('location')
+                <p class="text-danger small">{{ $message }}</p>
+            @enderror
             @error('latitude')
                 <p class="text-danger small">{{ $message }}</p>
             @enderror
             @error('longitude')
-                <p class="text-danger small">{{ $message }}</p>
-            @enderror
-            @error('location')
                 <p class="text-danger small">{{ $message }}</p>
             @enderror
         </div>
@@ -65,59 +57,36 @@
             @enderror
         </div>
     </div>
+
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">Cancel</button>
         <button type="submit" class="btn btn-warning text-white">Edit</button>
-
-        <input type="hidden" name="category_id" value="2">
+        <input type="hidden" name="category_id" value="4">
     </div>
 </form>
 
 <script>
-    // document.getElementById('food-imageInput-{{ $post->id }}').addEventListener('change', function(e) {
-    //     const file = e.target.files[0];
-    //     if (file) {
-    //         const reader = new FileReader();
-    //         reader.onload = function(event) {
-    //             document.getElementById('food-imagePreview-{{ $post->id }}').src = event.target.result;
-    //         };
-    //         reader.readAsDataURL(file);
-    //     }
-    // });
-    // $('.btn-edit').on('click', function() {
-    //     const postId = $(this).data('id');
-    //     const categoryId = $(this).data('category-id');
-
-    //     $.get(`/posts/${postId}/edit`, function(data) {
-    //         $('#food-location-{{ $post->id }}').val(data.location || '');
-    //         $('#food-description-{{ $post->id }}').val(data.description || '');
-
-    //         // 緯度・経度のセットを追加
-    //         $('#latitude-{{ $post->id }}').val(data.latitude || '');
-    //         $('#longitude-{{ $post->id }}').val(data.longitude || '');
-
-    //         // 画像プレビュー
-    //         if (data.image && data.image.startsWith('data:image')) {
-    //             $('#food-imagePreview-{{ $post->id }}').attr('src', data.image);
-    //         } else {
-    //             $('#food-imagePreview-{{ $post->id }}').attr('src',
-    //                 'https://via.placeholder.com/300x200');
-    //         }
-
-    //         // 緯度経度を設定してからマップ初期化（重要）
-    //         initAutocomplete();
-    //     });
-    // });
-
-
-    // Google Maps Autocomplete（Food用）
-    function initAutocomplete() {
-        const input = document.getElementById('food-location-{{ $post->id }}');
-        const mapElement = document.getElementById('map-{{ $post->id }}');
-        const lat = parseFloat(document.getElementById('latitude-{{ $post->id }}').value);
-        const lng = parseFloat(document.getElementById('longitude-{{ $post->id }}').value);
-
+    // Google Maps Autocomplete
+    function initAutocompletefood(postId) {
+        const input = document.getElementById('food-location-' + postId);
+        const mapElement = document.getElementById('map-food-' + postId);
         if (!input || !mapElement) return;
+
+        const defaultLocation = {
+            lat: 13.41,
+            lng: 122.56
+        }; // フィリピン中央あたり
+
+        const map = new google.maps.Map(mapElement, {
+            center: defaultLocation,
+            zoom: 6
+        });
+
+        const marker = new google.maps.Marker({
+            map: map,
+            position: defaultLocation,
+            draggable: false
+        });
 
         const autocomplete = new google.maps.places.Autocomplete(input, {
             types: ['geocode'],
@@ -126,151 +95,135 @@
             }
         });
 
-        const defaultLocation = (!isNaN(lat) && !isNaN(lng)) ? {
-            lat: lat,
-            lng: lng
-        } : {
-            lat: 13.41,
-            lng: 122.56
-        };
-
-        const map = new google.maps.Map(mapElement, {
-            center: defaultLocation,
-            zoom: (!isNaN(lat) && !isNaN(lng)) ? 15 : 6
-        });
-
-        const marker = new google.maps.Marker({
-            map: map,
-            position: (!isNaN(lat) && !isNaN(lng)) ? defaultLocation : null,
-            visible: (!isNaN(lat) && !isNaN(lng))
-        });
-
         autocomplete.addListener('place_changed', function() {
             const place = autocomplete.getPlace();
             if (!place.geometry) return;
 
-            document.getElementById('latitude-{{ $post->id }}').value = place.geometry.location.lat();
-            document.getElementById('longitude-{{ $post->id }}').value = place.geometry.location.lng();
-
-            map.setCenter(place.geometry.location);
+            const location = place.geometry.location;
+            map.setCenter(location);
             map.setZoom(15);
+            marker.setPosition(location);
 
-            marker.setPosition(place.geometry.location);
-            marker.setVisible(true);
+            document.getElementById('latitude-' + postId).value = location.lat();
+            document.getElementById('longitude-' + postId).value = location.lng();
         });
     }
+
+    // モーダルが表示されたときにGoogle Mapsオートコンプリート初期化
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('edit-form-{{ $post->id }}');
+        if (modal) {
+            modal.addEventListener('shown.bs.modal', function() {
+                initAutocompletefood('{{ $post->id }}');
+            });
+        }
+    });
 </script>
 
 <script>
-const postId = {{ $post->id }};
-const imageInput = document.getElementById(`food-imageInput-${postId}`);
-const imagePreviewWrapper = document.getElementById(`food-imagePreviewWrapper-${postId}`);
-const scrollIndicators = document.getElementById(`scrollIndicators-${postId}`);
+    // プレビュー画像にドットを動的生成
+    function createIndicators(wrapper, indicators, count) {
+        indicators.innerHTML = '';
+        for (let i = 0; i < count; i++) {
+            const dot = document.createElement('span');
+            dot.className = 'indicator-dot';
+            if (i === 0) dot.classList.add('active');
+            dot.dataset.index = i;
+            indicators.appendChild(dot);
 
-// プレビュー画像にドットを動的生成
-function createIndicators(wrapper, indicators, count) {
-    indicators.innerHTML = '';
-    for (let i = 0; i < count; i++) {
-        const dot = document.createElement('span');
-        dot.className = 'indicator-dot';
-        if (i === 0) dot.classList.add('active');
-        dot.dataset.index = i;
-        indicators.appendChild(dot);
-
-        dot.addEventListener('click', () => {
-            const scrollX = i * 310; // 画像幅300px + gap 10px
-            wrapper.scrollTo({ left: scrollX, behavior: 'smooth' });
-        });
+            dot.addEventListener('click', () => {
+                const scrollX = i * 310; // 画像幅300px + gap 10px
+                wrapper.scrollTo({ left: scrollX, behavior: 'smooth' });
+            });
+        }
     }
-}
 
-// アクティブドットを更新
-function updateActiveIndicator(wrapper, indicators) {
-    const scrollLeft = wrapper.scrollLeft;
-    const index = Math.round(scrollLeft / 310);
-    const dots = indicators.querySelectorAll('.indicator-dot');
-    dots.forEach(dot => dot.classList.remove('active'));
-    if (dots[index]) dots[index].classList.add('active');
-}
+    // アクティブドットを更新
+    function updateActiveIndicator(wrapper, indicators) {
+        const scrollLeft = wrapper.scrollLeft;
+        const index = Math.round(scrollLeft / 310);
+        const dots = indicators.querySelectorAll('.indicator-dot');
+        dots.forEach(dot => dot.classList.remove('active'));
+        if (dots[index]) dots[index].classList.add('active');
+    }
 
-// 選択画像のプレビュー（新規投稿時）
-imageInput.addEventListener('change', function (e) {
-    const files = e.target.files;
-    imagePreviewWrapper.innerHTML = '';
-    scrollIndicators.innerHTML = '';
-    if (!files.length) return;
+    // スクロールイベント登録済みか管理
+    const scrollEventRegistered = {};
 
-    Array.from(files).forEach((file, index) => {
-        const reader = new FileReader();
-        reader.onload = function (event) {
-            const img = document.createElement('img');
-            img.src = event.target.result;
-            img.className = 'img-fluid rounded mb-2 me-2';
-            img.style.maxWidth = '300px';
-            img.style.height = '300px';
-            img.style.objectFit = 'cover';
-            imagePreviewWrapper.appendChild(img);
+    // 編集ボタンクリック時の処理
+    $(document).on('click', '.btn-edit', function () {
+        const postId = $(this).data('id');
+        const wrapper = document.getElementById(`food-imagePreviewWrapper-${postId}`);
+        const indicators = document.getElementById(`scrollIndicators-${postId}`);
 
-            if (index === files.length - 1) {
-                createIndicators(imagePreviewWrapper, scrollIndicators, files.length);
-            }
-        };
-        reader.readAsDataURL(file);
+        wrapper.innerHTML = '';
+        indicators.innerHTML = '';
+
+        $.get(`/posts/${postId}/edit`)
+            .done(function (data) {
+                $(`#food-description-${postId}`).val(data.post.description || '');
+                $(`#food-location-${postId}`).val(data.post.location || '');
+                $(`#latitude-${postId}`).val(data.post.latitude || '');
+                $(`#longitude-${postId}`).val(data.post.longitude || '');
+
+                if (data.images && data.images.length > 0) {
+                    data.images.forEach((base64Img, index) => {
+                        if (base64Img.startsWith('data:image')) {
+                            const img = document.createElement('img');
+                            img.src = base64Img;
+                            img.className = 'img-fluid rounded mb-2 me-2';
+                            img.style.maxWidth = '400px';
+                            img.style.height = '300px';
+                            img.style.objectFit = 'cover';
+                            wrapper.appendChild(img);
+                        }
+                    });
+                    createIndicators(wrapper, indicators, data.images.length);
+                }
+
+                // スクロールイベントを一度だけ登録
+                if (!scrollEventRegistered[postId]) {
+                    wrapper.addEventListener('scroll', () => {
+                        updateActiveIndicator(wrapper, indicators);
+                    });
+                    scrollEventRegistered[postId] = true;
+                }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                console.error('AJAX failed:', textStatus, errorThrown);
+            });
     });
-});
 
-// 編集ボタンクリック時に既存データ取得＆モーダル初期化
-$(document).on('click', '.btn-edit', function () {
-    const postId = $(this).data('id');
-    console.log('Edit button clicked, postId:', postId);
+    // ファイル選択時のプレビュー表示（動的登録）
+    $(document).on('change', 'input[type="file"][id^="food-imageInput-"]', function (e) {
+        const input = e.target;
+        const postId = input.id.replace('food-imageInput-', '');
+        const wrapper = document.getElementById(`food-imagePreviewWrapper-${postId}`);
+        const indicators = document.getElementById(`scrollIndicators-${postId}`);
 
-    const imagePreviewWrapper = document.getElementById(`food-imagePreviewWrapper-${postId}`);
-    const scrollIndicators = document.getElementById(`scrollIndicators-${postId}`);
-    imagePreviewWrapper.innerHTML = '';
-    scrollIndicators.innerHTML = '';
+        wrapper.innerHTML = '';
+        indicators.innerHTML = '';
 
-    $.get(`/posts/${postId}/edit`)
-        .done(function (data) {
-            console.log('AJAX success:', data);
-            if (!data) {
-                console.error('No data returned from server');
-                return;
-            }
+        const files = input.files;
+        if (!files.length) return;
 
-            function formatDate(date) {
-                const d = new Date(date);
-                if (isNaN(d.getTime())) return '';
-                return d.toISOString().split('T')[0];
-            }
+        Array.from(files).forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const img = document.createElement('img');
+                img.src = event.target.result;
+                img.className = 'img-fluid rounded mb-2 me-2';
+                img.style.maxWidth = '400px';
+                img.style.height = '300px';
+                img.style.objectFit = 'cover';
+                wrapper.appendChild(img);
 
-            $(`#food-description-${postId}`).val(data.post.description || '');
-            $(`#food-location-${postId}`).val(formatDate(data.post.location) || '');
-            // 緯度・経度のセットを追加
-            $(`#latitude-${postId}`).val(data.post.latitude || '');
-            $(`#longitude-${postId}`).val(data.post.longitude || '');
-
-            if (data.images && data.images.length > 0) {
-                data.images.forEach(base64Img => {
-                    if (base64Img.startsWith('data:image')) {
-                        const img = document.createElement('img');
-                        img.src = base64Img;
-                        img.className = 'img-fluid rounded mb-2 me-2';
-                        img.style.maxWidth = '300px';
-                        img.style.height = '300px';
-                        img.style.objectFit = 'cover';
-                        imagePreviewWrapper.appendChild(img);
-                    }
-                });
-                createIndicators(imagePreviewWrapper, scrollIndicators, data.images.length);
-            }
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            console.error('AJAX failed:', textStatus, errorThrown);
+                if (index === files.length - 1) {
+                    createIndicators(wrapper, indicators, files.length);
+                }
+            };
+            reader.readAsDataURL(file);
         });
-});
-
-// スクロール時にアクティブドット更新
-imagePreviewWrapper.addEventListener('scroll', () => {
-    updateActiveIndicator(imagePreviewWrapper, scrollIndicators);
-});
+    });
 </script>
+

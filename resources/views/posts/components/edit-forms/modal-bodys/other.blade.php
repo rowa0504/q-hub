@@ -7,11 +7,6 @@
     @method('PATCH')
 
     <div class="modal-body">
-        <!-- Image preview -->
-        {{-- <div class="mb-3 text-center">
-            <img id="other-imagePreview-{{ $post->id }}" src="https://via.placeholder.com/300x200" alt="Image Preview" class="img-fluid rounded">
-        </div> --}}
-
         <div class="image-scroll-wrapper">
             <div class="image-scroll-container" id="other-imagePreviewWrapper-{{ $post->id }}">
                 <!-- 画像がJSで挿入される -->
@@ -19,16 +14,11 @@
             <div class="scroll-indicators" id="scrollIndicators-{{ $post->id }}"></div>
         </div>
 
-        <!-- File input -->
-        {{-- <div class="mb-3">
-            <input class="form-control" type="file" name="image" id="other-imageInput-{{ $post->id }}" accept="image/*">
-            @error('image')
-                <p class="text-danger small">{{ $message }}</p>
-            @enderror
-        </div> --}}
-
         <div class="mb-3">
             <input class="form-control" type="file" name="images[]" id="other-imageInput-{{ $post->id }}" accept="image/*" multiple>
+            <div class="form-text text-start">
+                Acceptable formats: jpeg, jpg, png, gif only<br>Max file size is 2048kB<br>Up to 3 images
+            </div>
             @error('images')
                 <p class="text-danger small">{{ $message }}</p>
             @enderror
@@ -50,39 +40,6 @@
         <input type="hidden" name="category_id" value="7">
     </div>
 </form>
-
-{{-- <script>
-    document.getElementById('other-imageInput-{{ $post->id }}').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                document.getElementById('other-imagePreview-{{ $post->id }}').src = event.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    $('.btn-edit').on('click', function () {
-        const postId = $(this).data('id');
-        const categoryId = $(this).data('category-id');
-
-        // サーバーから投稿データを取得
-        $.get(`/posts/${postId}/edit`, function (data) {
-
-            // フォームへのデータの流し込み
-            $('#other-description-{{ $post->id }}').val(data.description || '');
-
-            // 画像プレビュー（Base64データを使って表示）
-            if (data.image && data.image.startsWith('data:image')) {
-                $('#other-imagePreview-{{ $post->id }}').attr('src', data.image);
-            } else {
-                $('#other-imagePreview-{{ $post->id }}').attr('src', 'https://via.placeholder.com/300x200');
-            }
-        });
-    });
-
-</script> --}}
 
 <script>
 const postId = {{ $post->id }};
@@ -119,8 +76,8 @@ function updateActiveIndicator(wrapper, indicators) {
 // 選択画像のプレビュー（新規投稿時）
 imageInput.addEventListener('change', function (e) {
     const files = e.target.files;
-    imagePreviewWrapper.innerHTML = '';
-    scrollIndicators.innerHTML = '';
+    imagePreviewWrapper.innerHTML = '';  // ここで既存画像をクリア
+    scrollIndicators.innerHTML = '';      // インジケータもクリア
     if (!files.length) return;
 
     Array.from(files).forEach((file, index) => {
@@ -129,7 +86,7 @@ imageInput.addEventListener('change', function (e) {
             const img = document.createElement('img');
             img.src = event.target.result;
             img.className = 'img-fluid rounded mb-2 me-2';
-            img.style.maxWidth = '300px';
+            img.style.maxWidth = '400px';
             img.style.height = '300px';
             img.style.objectFit = 'cover';
             imagePreviewWrapper.appendChild(img);
@@ -143,15 +100,52 @@ imageInput.addEventListener('change', function (e) {
 });
 
 // 編集ボタンクリック時に既存データ取得＆モーダル初期化
+// 重要：postIdごとにイベントハンドラを登録するのではなく、編集ボタンクリック後にイベントを登録する方式に切替え例
+
 $(document).on('click', '.btn-edit', function () {
     const postId = $(this).data('id');
     console.log('Edit button clicked, postId:', postId);
 
     const imagePreviewWrapper = document.getElementById(`other-imagePreviewWrapper-${postId}`);
     const scrollIndicators = document.getElementById(`scrollIndicators-${postId}`);
+    const imageInput = document.getElementById(`other-imageInput-${postId}`);
+    const descriptionInput = document.getElementById(`other-description-${postId}`);
+
+    // 既存のプレビューとインジケータをクリア
     imagePreviewWrapper.innerHTML = '';
     scrollIndicators.innerHTML = '';
 
+    // 既存のchangeイベントを外す（念のため）
+    imageInput.replaceWith(imageInput.cloneNode(true));
+    const newImageInput = document.getElementById(`other-imageInput-${postId}`);
+
+    // 新規画像選択時のプレビュー表示
+    newImageInput.addEventListener('change', function (e) {
+        const files = e.target.files;
+        imagePreviewWrapper.innerHTML = '';  // 既存画像クリア
+        scrollIndicators.innerHTML = '';      // インジケータもクリア
+        if (!files.length) return;
+
+        Array.from(files).forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const img = document.createElement('img');
+                img.src = event.target.result;
+                img.className = 'img-fluid rounded mb-2 me-2';
+                img.style.maxWidth = '400px';
+                img.style.height = '300px';
+                img.style.objectFit = 'cover';
+                imagePreviewWrapper.appendChild(img);
+
+                if (index === files.length - 1) {
+                    createIndicators(imagePreviewWrapper, scrollIndicators, files.length);
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
+    // AJAXで既存投稿データ取得
     $.get(`/posts/${postId}/edit`)
         .done(function (data) {
             console.log('AJAX success:', data);
@@ -159,14 +153,7 @@ $(document).on('click', '.btn-edit', function () {
                 console.error('No data returned from server');
                 return;
             }
-
-            function formatDate(date) {
-                const d = new Date(date);
-                if (isNaN(d.getTime())) return '';
-                return d.toISOString().split('T')[0];
-            }
-
-            $(`#other-description-${postId}`).val(data.post.description || '');
+            descriptionInput.value = data.post.description || '';
 
             if (data.images && data.images.length > 0) {
                 data.images.forEach(base64Img => {
@@ -174,7 +161,7 @@ $(document).on('click', '.btn-edit', function () {
                         const img = document.createElement('img');
                         img.src = base64Img;
                         img.className = 'img-fluid rounded mb-2 me-2';
-                        img.style.maxWidth = '300px';
+                        img.style.maxWidth = '400px';
                         img.style.height = '300px';
                         img.style.objectFit = 'cover';
                         imagePreviewWrapper.appendChild(img);

@@ -1,4 +1,5 @@
 {{-- スマホ用ハンバーガー --}}
+@if (!in_array(Route::currentRouteName(), ['login', 'register']))
     <button class="btn d-md-none position-fixed hamburger-menu" onclick="toggleSidebar()">
         <i class="fas fa-bars"></i>
     </button>
@@ -40,18 +41,12 @@
 
             {{-- メニュー --}}
             <div class="d-flex flex-column gap-3">
-                <a href="{{ route('event.index') }}" class="text-dark text-decoration-none"><i
-                        class="fa-solid fa-calendar-days"></i> Event</a>
-                <a href="{{ route('food.index') }}" class="text-dark text-decoration-none"><i
-                        class="fa-solid fa-burger"></i> Food</a>
-                <a href="{{ route('item.index') }}" class="text-dark text-decoration-none"><i
-                        class="fa-solid fa-gift"></i> Item</a>
-                <a href="{{ route('travel.index') }}" class="text-dark text-decoration-none"><i
-                        class="fa-solid fa-location-dot"></i> Travel</a>
-                <a href="{{ route('transportation.index') }}" class="text-dark text-decoration-none"><i
-                        class="fa-solid fa-car"></i> Transportation</a>
-                <a href="{{ route('question.index') }}" class="text-dark text-decoration-none"><i
-                        class="fa-solid fa-circle-question"></i> Question</a>
+                <a href="{{ route('event.index') }}" class="text-dark text-decoration-none"><i class="fa-solid fa-calendar-days"></i> Event</a>
+                <a href="{{ route('food.index') }}" class="text-dark text-decoration-none"><i class="fa-solid fa-burger"></i> Food</a>
+                <a href="{{ route('item.index') }}" class="text-dark text-decoration-none"><i class="fa-solid fa-gift"></i> Item</a>
+                <a href="{{ route('travel.index') }}" class="text-dark text-decoration-none"><i class="fa-solid fa-location-dot"></i> Travel</a>
+                <a href="{{ route('transportation.index') }}" class="text-dark text-decoration-none"><i class="fa-solid fa-car"></i> Transportation</a>
+                <a href="{{ route('question.index') }}" class="text-dark text-decoration-none"><i class="fa-solid fa-circle-question"></i> Question</a>
             </div>
 
             <hr class="text-dark">
@@ -68,17 +63,4 @@
             @endauth
         </div>
     </div>
-
-    {{-- サイドバースクリプト --}}
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('mobileSidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            const hamburger = document.querySelector('.hamburger-menu');
-
-            sidebar.classList.toggle('show');
-            overlay.classList.toggle('show');
-
-            hamburger.style.display = sidebar.classList.contains('show') ? 'none' : 'block';
-        }
-    </script>
+@endif
