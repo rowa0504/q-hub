@@ -238,7 +238,7 @@
                 {{-- 参加者数 --}}
                 @if ($post->chatRoom)
                     <h5 class="mb-2">
-                        Participants ({{ $post->chatRoom->users->count() }} / {{ $post->max }})
+                        Participants ({{ $post->chatRoom->users->where('role_id', '!=', 1)->count() }} / {{ $post->max }})
                     </h5>
                 @else
                     <h5 class="mb-2">

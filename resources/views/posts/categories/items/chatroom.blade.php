@@ -8,9 +8,12 @@
 
     {{-- Participants --}}
     <div class="mb-4">
-        <h5><i class="fa-solid fa-users me-2"></i>Participants ({{ $chatdate->users->count() }} / {{ $chatdate->post->max }})</h5>
+        <h5>
+            <i class="fa-solid fa-users me-2"></i>
+            Participants ({{ $chatdate->users->where('role_id', '!=', 1)->count() }} / {{ $chatdate->post->max }})
+        </h5>
         <ul class="ps-3">
-            @foreach ($chatdate->users as $user)
+            @foreach ($chatdate->users->reject(fn($user) => $user->role_id == 1) as $user)
                 <li>{{ $user->name }}</li>
             @endforeach
         </ul>
