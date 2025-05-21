@@ -328,6 +328,8 @@
             @include('posts.categories.questions.modal', ['post' => $post])
         @endif
 
+
+
         {{-- スクロール保持 --}}
         <script>
             document.querySelectorAll('form').forEach(form => {
