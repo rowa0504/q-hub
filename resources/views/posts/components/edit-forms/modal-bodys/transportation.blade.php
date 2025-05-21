@@ -84,114 +84,104 @@
 </form>
 
 <script>
-const postId = {{ $post->id }};
-const imageInput = document.getElementById(`transportation-imageInput-${postId}`);
-const imagePreviewWrapper = document.getElementById(`transportation-imagePreviewWrapper-${postId}`);
-const scrollIndicators = document.getElementById(`scrollIndicators-${postId}`);
+    const scrollEventRegistered = {};
 
-// プレビュー画像にドットを動的生成
-function createIndicators(wrapper, indicators, count) {
-    indicators.innerHTML = '';
-    for (let i = 0; i < count; i++) {
-        const dot = document.createElement('span');
-        dot.className = 'indicator-dot';
-        if (i === 0) dot.classList.add('active');
-        dot.dataset.index = i;
-        indicators.appendChild(dot);
+    function createIndicators(wrapper, indicators, count) {
+        indicators.innerHTML = '';
+        for (let i = 0; i < count; i++) {
+            const dot = document.createElement('span');
+            dot.className = 'indicator-dot';
+            if (i === 0) dot.classList.add('active');
+            dot.dataset.index = i;
+            indicators.appendChild(dot);
 
-        dot.addEventListener('click', () => {
-            const scrollX = i * 310; // 画像幅300px + gap 10px
-            wrapper.scrollTo({ left: scrollX, behavior: 'smooth' });
-        });
+            dot.addEventListener('click', () => {
+                const scrollX = i * 310;
+                wrapper.scrollTo({ left: scrollX, behavior: 'smooth' });
+            });
+        }
     }
-}
 
-// アクティブドットを更新
-function updateActiveIndicator(wrapper, indicators) {
-    const scrollLeft = wrapper.scrollLeft;
-    const index = Math.round(scrollLeft / 310);
-    const dots = indicators.querySelectorAll('.indicator-dot');
-    dots.forEach(dot => dot.classList.remove('active'));
-    if (dots[index]) dots[index].classList.add('active');
-}
+    function updateActiveIndicator(wrapper, indicators) {
+        const scrollLeft = wrapper.scrollLeft;
+        const index = Math.round(scrollLeft / 310);
+        const dots = indicators.querySelectorAll('.indicator-dot');
+        dots.forEach(dot => dot.classList.remove('active'));
+        if (dots[index]) dots[index].classList.add('active');
+    }
 
-// 選択画像のプレビュー（新規投稿時）
-imageInput.addEventListener('change', function (e) {
-    const files = e.target.files;
-    imagePreviewWrapper.innerHTML = '';
-    scrollIndicators.innerHTML = '';
-    if (!files.length) return;
+    // 編集ボタンをクリックしたとき
+    $(document).on('click', '.btn-edit', function () {
+        const postId = $(this).data('id');
 
-    Array.from(files).forEach((file, index) => {
-        const reader = new FileReader();
-        reader.onload = function (event) {
-            const img = document.createElement('img');
-            img.src = event.target.result;
-            img.className = 'img-fluid rounded mb-2 me-2';
-            img.style.maxWidth = '400px';
-            img.style.height = '300px';
-            img.style.objectFit = 'cover';
-            imagePreviewWrapper.appendChild(img);
+        const wrapper = document.getElementById(`transportation-imagePreviewWrapper-${postId}`);
+        const indicators = document.getElementById(`scrollIndicators-${postId}`);
 
-            if (index === files.length - 1) {
-                createIndicators(imagePreviewWrapper, scrollIndicators, files.length);
-            }
-        };
-        reader.readAsDataURL(file);
+        wrapper.innerHTML = '';
+        indicators.innerHTML = '';
+
+        $.get(`/posts/${postId}/edit`)
+            .done(function (data) {
+                $(`#transportation-fee-${postId}`).val(data.post.fee || '');
+                $(`#transportation-departure-${postId}`).val(data.post.departure || '');
+                $(`#transportation-destination-${postId}`).val(data.post.destination || '');
+                $(`#transportation-description-${postId}`).val(data.post.description || '');
+
+                if (data.images && data.images.length > 0) {
+                    data.images.forEach((base64Img) => {
+                        if (base64Img.startsWith('data:image')) {
+                            const img = document.createElement('img');
+                            img.src = base64Img;
+                            img.className = 'img-fluid rounded mb-2 me-2';
+                            img.style.maxWidth = '400px';
+                            img.style.height = '300px';
+                            img.style.objectFit = 'cover';
+                            wrapper.appendChild(img);
+                        }
+                    });
+                    createIndicators(wrapper, indicators, data.images.length);
+                }
+
+                // スクロールイベントは1回だけ登録
+                if (!scrollEventRegistered[postId]) {
+                    wrapper.addEventListener('scroll', () => {
+                        updateActiveIndicator(wrapper, indicators);
+                    });
+                    scrollEventRegistered[postId] = true;
+                }
+            });
     });
-});
 
-// 編集ボタンクリック時に既存データ取得＆モーダル初期化
-$(document).on('click', '.btn-edit', function () {
-    const postId = $(this).data('id');
-    console.log('Edit button clicked, postId:', postId);
+    // 画像を選んだときの処理（新しい画像が選択されたときにプレビューを入れ替える）
+    $(document).on('change', 'input[type="file"][id^="transportation-imageInput-"]', function () {
+        const input = this;
+        const postId = input.id.replace('transportation-imageInput-', '');
 
-    const imagePreviewWrapper = document.getElementById(`transportation-imagePreviewWrapper-${postId}`);
-    const scrollIndicators = document.getElementById(`scrollIndicators-${postId}`);
-    imagePreviewWrapper.innerHTML = '';
-    scrollIndicators.innerHTML = '';
+        const wrapper = document.getElementById(`transportation-imagePreviewWrapper-${postId}`);
+        const indicators = document.getElementById(`scrollIndicators-${postId}`);
 
-    $.get(`/posts/${postId}/edit`)
-        .done(function (data) {
-            console.log('AJAX success:', data);
-            if (!data) {
-                console.error('No data returned from server');
-                return;
-            }
+        wrapper.innerHTML = '';
+        indicators.innerHTML = '';
 
-            function formatDate(date) {
-                const d = new Date(date);
-                if (isNaN(d.getTime())) return '';
-                return d.toISOString().split('T')[0];
-            }
+        const files = input.files;
+        if (!files.length) return;
 
-            $(`#transportation-fee-${postId}`).val(data.post.fee || '');
-            $(`#transportation-departure-${postId}`).val(data.post.departure || '');
-            $(`#transportation-destination-${postId}`).val(data.post.destination || '');
-            $(`#transportation-description-${postId}`).val(data.post.description || '');
+        Array.from(files).forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const img = document.createElement('img');
+                img.src = event.target.result;
+                img.className = 'img-fluid rounded mb-2 me-2';
+                img.style.maxWidth = '400px';
+                img.style.height = '300px';
+                img.style.objectFit = 'cover';
+                wrapper.appendChild(img);
 
-            if (data.images && data.images.length > 0) {
-                data.images.forEach(base64Img => {
-                    if (base64Img.startsWith('data:image')) {
-                        const img = document.createElement('img');
-                        img.src = base64Img;
-                        img.className = 'img-fluid rounded mb-2 me-2';
-                        img.style.maxWidth = '400px';
-                        img.style.height = '300px';
-                        img.style.objectFit = 'cover';
-                        imagePreviewWrapper.appendChild(img);
-                    }
-                });
-                createIndicators(imagePreviewWrapper, scrollIndicators, data.images.length);
-            }
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            console.error('AJAX failed:', textStatus, errorThrown);
+                if (index === files.length - 1) {
+                    createIndicators(wrapper, indicators, files.length);
+                }
+            };
+            reader.readAsDataURL(file);
         });
-});
-
-// スクロール時にアクティブドット更新
-imagePreviewWrapper.addEventListener('scroll', () => {
-    updateActiveIndicator(imagePreviewWrapper, scrollIndicators);
-});
+    });
 </script>
