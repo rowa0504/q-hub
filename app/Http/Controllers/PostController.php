@@ -144,7 +144,7 @@ class PostController extends Controller
     {
         $commonRules = [
             'description' => 'required|min:1|max:1000',
-            'images' => 'required|array|max:3',
+            'images' => 'array|max:3',
             'images.*' => 'image|mimes:jpeg,jpg,png,gif|max:2048',
             'category_id' => 'required|exists:categories,id',
         ];
