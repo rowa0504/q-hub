@@ -16,50 +16,71 @@ class CommentController extends Controller
     }
 
     // コメント投稿
-    public function store(Request $request, $post_id)
+    public function store(Request $request, $postId)
     {
-        $request->validate(
-            ['body' => 'required|max:150'],
-            [
-                'body.required' => 'You cannot submit an empty comment.',
-                'body.max'      => 'Your comment must not have more than 150 characters.'
-            ]
-        );
+        $request->validate([
+            'body' => 'required|string|max:255',
+        ]);
 
-        $this->comment->body    = $request->input('body');
-        $this->comment->user_id = Auth::id();
-        $this->comment->post_id = $post_id;
-        $this->comment->save();
+        $comment = new Comment();
+        $comment->post_id = $postId;
+        $comment->user_id = Auth::id();
+        $comment->body = $request->body;
+        $comment->save();
 
-        return redirect()->route('index', $post_id);
+        $comment->load('user');
+
+        return response()->json([
+            'id' => $comment->id,
+            'body' => $comment->body,
+            'user' => [
+                'name' => $comment->user->name,
+                'avatar' => $comment->user->avatar,
+            ],
+        ]);
     }
 
-    // コメント削除
-    public function destroy($id)
-    {
-        $this->comment->destroy($id);
-        return redirect()->back();
-    }
+
 
     // コメント編集
     public function update(Request $request, $post_id, $id)
     {
-        $request->validate(
-            ['body' => 'required|max:150'],
-            [
-                'body.required' => 'You cannot submit an empty comment.',
-                'body.max'      => 'Your comment must not have more than 150 characters.'
-            ]
-        );
+        $request->validate([
+            'body' => 'required|string|max:255',
+        ]);
 
-        $comment = $this->comment->findOrFail($id);
-        $comment->body    = $request->input('body');
-        $comment->user_id = Auth::id();
-        $comment->post_id = $post_id;
+        // コメントを取得（IDで検索）
+        $comment = Comment::findOrFail($id);
+
+        // 投稿IDが一致するかチェック（安全のため）
+        if ($comment->post_id != $post_id) {
+            return response()->json(['message' => 'Invalid post ID'], 400);
+        }
+
+        // ログインユーザーが投稿者かどうかも確認したほうが安全です
+        if ($comment->user_id != Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $comment->body = $request->body;
         $comment->save();
 
-        return redirect()->back();
+        return response()->json([
+            'id' => $comment->id,
+            'body' => $comment->body,
+        ]);
     }
 
+    public function destroy($id)
+    {
+        $comment = Comment::findOrFail($id);
 
+        if ($comment->user_id != Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $comment->delete();
+
+        return response()->json(['message' => 'Deleted successfully']);
+    }
 }
