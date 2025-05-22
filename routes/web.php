@@ -56,8 +56,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::patch('/{post_id}/{id}', [CommentController::class, 'update'])->name('update');
     });
 
-    Route::post('/comment/{post_id}', [CommentController::class, 'store'])->name('comment.store');
-
     // Answer route
     Route::group(['prefix' => 'answer', 'as' => 'answer.'], function () {
         Route::post('/store', [AnswerController::class, 'store'])->name('store');

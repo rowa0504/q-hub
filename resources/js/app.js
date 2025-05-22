@@ -1,6 +1,3 @@
-import './bootstrap';
-import * as bootstrap from 'bootstrap';
-window.bootstrap = bootstrap;
 import { Calendar } from '@fullcalendar/core';
 import { likeComponent } from './likeComponent.js';
 import dayGridPlugin from '@fullcalendar/daygrid';
