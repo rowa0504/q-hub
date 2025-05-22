@@ -1,3 +1,5 @@
+import * as bootstrap from 'bootstrap';
+window.bootstrap = bootstrap; // グローバルに定義
 import { Calendar } from '@fullcalendar/core';
 import { likeComponent } from './likeComponent.js';
 import dayGridPlugin from '@fullcalendar/daygrid';
