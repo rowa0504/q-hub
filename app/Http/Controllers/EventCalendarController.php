@@ -21,7 +21,7 @@ class EventCalendarController extends Controller
         $formattedEvents = $events->map(function ($event) {
             return [
                 'id'    => $event->id,
-                'title' => $event->title,
+                'title' => $event->description,
                 'start' => $event->startdatetime,
                 'end'   => $event->enddatetime ? $event->enddatetime : null,
             ];
