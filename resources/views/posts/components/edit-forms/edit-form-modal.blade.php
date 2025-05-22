@@ -21,3 +21,17 @@
         </div>
     </div>
 </div>
+
+@if (session('open_modal'))
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modalId = @json(session('open_modal')); // セッションからモーダルIDを取得
+            const modalElement = document.getElementById(modalId); // IDでモーダル要素を取得
+            console.log(modalElement);
+            if (modalElement) {
+                const modal = new bootstrap.Modal(document.getElementById('modal-id'));
+                modal.show(); // OK
+            }
+        });
+</script>
+@endif
