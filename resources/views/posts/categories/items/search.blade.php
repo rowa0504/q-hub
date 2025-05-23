@@ -9,7 +9,7 @@
         <div class="row justify-content-center align-items-start mt-3">
             <div class="col-12 col-md-9">
 
-                 <div class="max-w-xl mx-auto mt-5">
+                <div class="max-w-xl mx-auto mt-5">
 
                     {{-- 成功メッセージ --}}
                     @if (session('success'))
