@@ -10,17 +10,6 @@
             <div class="col-12 col-md-9">
 
                 <div class="max-w-xl mx-auto mt-5">
-                    <h2 class="text-2xl font-bold mb-4">What kind of item do you want?</h2>
-
-                    {{-- 検索フォーム --}}
-                    <form action="{{ route('item.search') }}" method="GET"
-                        class="d-flex mb-3 bg-white rounded-pill p-2 shadow-sm">
-                        <input type="text" placeholder="Search your item..." class="form-control border-0 me-2"
-                            name="search" id="search" aria-label="Search for items">
-                        <button class="btn btn-info text-white rounded-circle" type="submit" aria-label="Search">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </form>
 
                     {{-- 成功メッセージ --}}
                     @if (session('success'))
@@ -28,22 +17,29 @@
                             {{ session('success') }}
                         </div>
                     @endif
-
                     {{-- 新規アイテム登録フォーム --}}
-                    <form action="{{ route('wantedItem.store') }}" method="POST" class="space-y-4">
+                    <form action="{{ route('wantedItem.store') }}" method="POST" class="row g-3 align-items-end mt-4">
                         @csrf
-                        <div>
-                            <label for="keyword" class="form-label text-sm font-medium text-gray-700">Item Name</label>
-                            <input type="text" name="keyword" id="keyword" class="form-control mb-1" required>
+
+                        {{-- ラベルと入力欄 --}}
+                        <div class="col-md-9">
+                            <label for="keyword" class="form-label fw-semibold">Item Name</label>
+                            <input type="text" name="keyword" id="keyword" class="form-control"
+                                placeholder="Enter item name" required>
                             @error('keyword')
-                                <span class="text-danger text-sm">{{ $message }}</span>
+                                <span class="text-danger small">{{ $message }}</span>
                             @enderror
                         </div>
 
-                        <button type="submit" class="btn btn-info px-4 py-2 rounded">
-                            Register
-                        </button>
+                        {{-- 登録ボタン --}}
+                        <div class="col-md-3">
+                            <label class="form-label invisible">Register</label> {{-- invisibleで上下位置調整 --}}
+                            <button type="submit" class="btn btn-info w-100 fw-bold">
+                                Register
+                            </button>
+                        </div>
                     </form>
+
                 </div>
 
                 {{-- 投稿表示 --}}
