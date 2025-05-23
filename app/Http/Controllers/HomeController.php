@@ -9,6 +9,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Models\ReportReason;
 use App\Models\Report;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -52,5 +53,21 @@ class HomeController extends Controller
             ->with('all_posts', $all_posts)
             ->with('all_user', $all_user)
             ->with('all_report_reasons', $all_report_reasons);
+    }
+
+    public function search(Request $request){
+        $all_report_reasons = $this->reportReason->all();
+
+        $posts = $this->post
+            ->where(function ($query) use ($request) {
+                $query->where('description', 'like', '%' . $request->search . '%');
+            })
+            ->where('user_id', '!=', Auth::id())
+            ->latest()->paginate(5); // ← Pは小文字の `paginate`
+
+        return view('home-search')
+            ->with('all_report_reasons', $all_report_reasons)
+            ->with('posts', $posts)
+            ->with('search', $request->search);
     }
 }
