@@ -8,13 +8,40 @@
     <div class="container-fluid">
         <div class="row justify-content-center align-items-start mt-3">
             <div class="col-12 col-md-9">
-                <form action="{{ route('item.search') }}" class="search-box mb-3 d-flex bg-white rounded-pill px-3 py-2">
-                    <input type="text" placeholder="Search ..." class="form-control border-2 me-2" name="search"
-                        id="search">
-                    <button class="btn btn-info text-white rounded-circle">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </form>
+
+                 <div class="max-w-xl mx-auto mt-5">
+
+                    {{-- 成功メッセージ --}}
+                    @if (session('success'))
+                        <div class="alert alert-success p-3 rounded mb-4">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+                    {{-- 新規アイテム登録フォーム --}}
+                    <form action="{{ route('wantedItem.store') }}" method="POST" class="row g-3 align-items-end mt-4">
+                        @csrf
+
+                        {{-- ラベルと入力欄 --}}
+                        <div class="col-md-9">
+                            <label for="keyword" class="form-label fw-semibold">Item Name</label>
+                            <input type="text" name="keyword" id="keyword" class="form-control"
+                                placeholder="Enter item name" required>
+                            @error('keyword')
+                                <span class="text-danger small">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        {{-- 登録ボタン --}}
+                        <div class="col-md-3">
+                            <label class="form-label invisible">Register</label> {{-- invisibleで上下位置調整 --}}
+                            <button type="submit" class="btn btn-info w-100 fw-bold">
+                                Register
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+
                 <p class="h5 text-muted mb-4">Search results for "<span class="fw-bold">{{ $search }}</span>"</p>
                 @forelse($posts as $post)
                     @include('posts.components.post-card', ['post' => $post])

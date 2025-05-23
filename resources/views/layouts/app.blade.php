@@ -31,7 +31,6 @@
     {{-- alpine.js --}}
     <script defer src="//unpkg.com/alpinejs"></script>
 
-
     <!-- Google Maps JavaScript API -->
     <script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.api_key') }}&libraries=places"
         loading="async"></script>
@@ -66,44 +65,34 @@
                             <!-- Search -->
                             <li class="nav-item">
                                 @php
-                                    $routeName = Route::currentRouteName();
-                                    $searchAction = '#'; // デフォルト
-                                    $placeholder = 'Search ...';
+                                    $path = request()->path(); // 例: "event", "food", etc.
+                                    $searchAction = route('search'); // デフォルトの全体検索
+                                    $placeholder = 'Search all content...';
 
-                                    switch ($routeName) {
-                                        case 'event.index':
-                                            $searchAction = route('event.search');
-                                            $placeholder = 'Search Events...';
-                                            break;
-                                        case 'food.index':
-                                            $searchAction = route('food.search');
-                                            $placeholder = 'Search Foods...';
-                                            break;
-                                        case 'item.index':
-                                            $searchAction = route('item.search');
-                                            $placeholder = 'Search Items...';
-                                            break;
-                                        case 'travel.index':
-                                            $searchAction = route('travel.search');
-                                            $placeholder = 'Search Travels...';
-                                            break;
-                                        case 'transportation.index':
-                                            $searchAction = route('transportation.search');
-                                            $placeholder = 'Search Transportation...';
-                                            break;
-                                        case 'question.index':
-                                            $searchAction = route('question.search');
-                                            $placeholder = 'Search Questions...';
-                                            break;
-                                        default:
-                                            $searchAction = route('search'); // ホームや全体検索
-                                            $placeholder = 'Search all content...';
+                                    if (request()->is('event*')) {
+                                        $searchAction = route('event.search');
+                                        $placeholder = 'Search Events...';
+                                    } elseif (request()->is('food*')) {
+                                        $searchAction = route('food.search');
+                                        $placeholder = 'Search Foods...';
+                                    } elseif (request()->is('item*')) {
+                                        $searchAction = route('item.search');
+                                        $placeholder = 'Search Items...';
+                                    } elseif (request()->is('travel*')) {
+                                        $searchAction = route('travel.search');
+                                        $placeholder = 'Search Travels...';
+                                    } elseif (request()->is('transportation*')) {
+                                        $searchAction = route('transportation.search');
+                                        $placeholder = 'Search Transportation...';
+                                    } elseif (request()->is('question*')) {
+                                        $searchAction = route('question.search');
+                                        $placeholder = 'Search Questions...';
                                     }
                                 @endphp
 
                                 <form action="{{ $searchAction }}" method="GET"
                                     class="search-box mb-3 d-flex bg-white rounded-pill px-3 py-2">
-                                    <input type="text" name="q" placeholder="{{ $placeholder }}"
+                                    <input type="text" name="search" placeholder="{{ $placeholder }}"
                                         class="form-control border-2 me-2">
                                     <button class="btn btn-info text-white rounded-circle">
                                         <i class="fas fa-search"></i>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\ReportReason;
+use Illuminate\Support\Facades\Auth;
 
 class FoodController extends Controller
 {

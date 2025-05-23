@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\ReportReason;
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
@@ -37,6 +38,7 @@ class EventController extends Controller
 
     public function search(Request $request){
         $all_report_reasons = $this->reportReason->all();
+        $all_user           = $this->user->all();
 
         $posts = $this->post
             ->where('category_id', 1)
@@ -49,6 +51,7 @@ class EventController extends Controller
         return view('posts.categories.events.search')
             ->with('all_report_reasons', $all_report_reasons)
             ->with('posts', $posts)
+            ->with('all_user', $all_user)
             ->with('search', $request->search);
     }
 }
