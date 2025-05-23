@@ -317,3 +317,7 @@ body {
 .scroll-indicators .indicator-dot.active {
     background-color: #007bff;
 }
+
+.fc-event-time {
+    display: none !important;
+}
