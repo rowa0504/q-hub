@@ -74,16 +74,23 @@ class ItemController extends Controller
     }
 
 
-    public function search(Request $request){
+    public function search(Request $request)
+    {
         $all_report_reasons = $this->reportReason->all();
+        $now = Carbon::now();
 
         $posts = $this->post
             ->where('category_id', 3)
             ->where(function ($query) use ($request) {
                 $query->where('description', 'like', '%' . $request->search . '%');
             })
+            ->where(function ($query) use ($now) {
+                $query->where('startdatetime', '>=', $now)
+                    ->orWhere('enddatetime', '>=', $now);
+            })
             ->where('user_id', '!=', Auth::id())
-            ->latest()->paginate(5); // ← Pは小文字の `paginate`
+            ->latest()
+            ->paginate(5);
 
         return view('posts.categories.items.search')
             ->with('all_report_reasons', $all_report_reasons)
