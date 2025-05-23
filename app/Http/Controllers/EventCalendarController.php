@@ -15,7 +15,10 @@ class EventCalendarController extends Controller
 
     public function index(){
         // イベントデータを取得（適宜変更）
-        $events = $this->post->where('category_id', 1)->get();
+        $events = $this->post
+            ->where('category_id', 1)
+            ->whereDate('startdatetime', '>=', now()->toDateString())
+            ->get();
 
         // FullCalendarが期待する形式に変換して返す
         $formattedEvents = $events->map(function ($event) {
