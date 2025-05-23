@@ -22,4 +22,22 @@ class QuestionController extends Controller
 
         return view('posts.categories.questions.index', compact('all_posts', 'all_report_reasons'));
     }
+
+    public function search(Request $request){
+        $all_report_reasons = $this->reportReason->all();
+
+        $posts = $this->post
+            ->where('category_id', 6)
+            ->where(function ($query) use ($request) {
+                $query->where('description', 'like', '%' . $request->search . '%')
+                    ->orWhere('title', 'like', '%' . $request->search . '%');
+            })
+            ->where('user_id', '!=', Auth::id())
+            ->latest()->paginate(5);
+
+        return view('posts.categories.questions.search')
+            ->with('all_report_reasons', $all_report_reasons)
+            ->with('posts', $posts)
+            ->with('search', $request->search);
+    }
 }

@@ -8,6 +8,7 @@ use App\Models\ReportReason;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Carbon\Carbon;
 
 class ItemController extends Controller
 {
@@ -32,12 +33,18 @@ class ItemController extends Controller
             ->pluck('keyword')
             ->toArray();
 
-        // ページネーションされたデータ取得
+        $now = Carbon::now();
+
+        // クエリに時間条件を追加
         $paginator = $this->post->where('category_id', 3)
+            ->where(function ($query) use ($now) {
+                // startdatetimeが今以降 または enddatetimeが今以降
+                $query->where('startdatetime', '>=', $now)
+                    ->orWhere('enddatetime', '>=', $now);
+            })
             ->latest()
             ->paginate(5);
 
-        // コレクション取得
         $posts = $paginator->getCollection()
             ->map(function ($post) use ($wanted_keywords) {
                 $post->is_recommended  = false;
@@ -55,7 +62,6 @@ class ItemController extends Controller
             ->sortByDesc('is_recommended')
             ->values();
 
-        // ソート済みコレクションを再セットしてページネーターを作成
         $all_posts = new LengthAwarePaginator(
             $posts,
             $paginator->total(),
