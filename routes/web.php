@@ -31,6 +31,7 @@ Route::get('/login/{provider}/callback', [SocialLoginController::class, 'handleP
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/', [HomeController::class, 'index'])->name('index');
+    Route::get('/search', [HomeController::class, 'search'])->name('search');
 
     // Post route
     Route::group(['prefix' => 'posts', 'as' => 'posts.'], function () {
@@ -78,6 +79,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'event', 'as' => 'event.'], function () {
         Route::get('/', [EventController::class, 'index'])->name('index');
         Route::get('/{id}/show', [EventController::class, 'show'])->name('show');
+        Route::get('/search', [EventController::class, 'search'])->name('search');
     });
 
     Route::group(['prefix' => 'participation', 'as' => 'participation.'], function () {
@@ -88,6 +90,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Food route
     Route::group(['prefix' => 'food', 'as' => 'food.'], function () {
         Route::get('/', [FoodController::class, 'index'])->name('index');
+        Route::get('/search', [FoodController::class, 'search'])->name('search');
     });
 
     // Item route
@@ -114,16 +117,19 @@ Route::group(['middleware' => 'auth'], function () {
     // Travel route
     Route::group(['prefix' => 'travel', 'as' => 'travel.'], function () {
         Route::get('/', [TravelController::class, 'index'])->name('index');
+        Route::get('/search', [TravelController::class, 'search'])->name('search');
     });
 
     // Transportation route
     Route::group(['prefix' => 'transportation', 'as' => 'transportation.'], function () {
         Route::get('/', [TransportationController::class, 'index'])->name('index');
+        Route::get('/search', [TransportationController::class, 'search'])->name('search');
     });
 
     // Question route
     Route::group(['prefix' => 'question', 'as' => 'question.'], function () {
         Route::get('/', [QuestionController::class, 'index'])->name('index');
+        Route::get('/search', [QuestionController::class, 'search'])->name('search');
     });
 
 
