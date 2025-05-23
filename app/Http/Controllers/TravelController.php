@@ -23,4 +23,22 @@ class TravelController extends Controller
 
         return view('posts.categories.travels.index', compact('all_posts', 'all_report_reasons'));
     }
+
+    public function search(Request $request){
+        $all_report_reasons = $this->reportReason->all();
+
+        $posts = $this->post
+            ->where('category_id', 4)
+            ->where(function ($query) use ($request) {
+                $query->where('description', 'like', '%' . $request->search . '%')
+                    ->orWhere('location', 'like', '%' . $request->search . '%');
+            })
+            ->where('user_id', '!=', Auth::id())
+            ->latest()->paginate(5);
+
+        return view('posts.categories.travels.search')
+            ->with('all_report_reasons', $all_report_reasons)
+            ->with('posts', $posts)
+            ->with('search', $request->search);
+    }
 }
