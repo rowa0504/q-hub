@@ -65,6 +65,9 @@
     </div>
 </form>
 
+<!-- jQueryを先に読み込む -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
     // Google Maps Autocomplete
     function initAutocompletefood(postId) {
@@ -121,7 +124,18 @@
 </script>
 
 <script>
-    // プレビュー画像にドットを動的生成
+    const scrollEventRegistered = {};
+
+    function createImageElement(src) {
+        const img = document.createElement('img');
+        img.src = src;
+        img.className = 'img-fluid rounded mb-2 me-2';
+        img.style.maxWidth = '400px';
+        img.style.height = '300px';
+        img.style.objectFit = 'cover';
+        return img;
+    }
+
     function createIndicators(wrapper, indicators, count) {
         indicators.innerHTML = '';
         for (let i = 0; i < count; i++) {
@@ -129,16 +143,13 @@
             dot.className = 'indicator-dot';
             if (i === 0) dot.classList.add('active');
             dot.dataset.index = i;
-            indicators.appendChild(dot);
-
             dot.addEventListener('click', () => {
-                const scrollX = i * 310; // 画像幅300px + gap 10px
-                wrapper.scrollTo({ left: scrollX, behavior: 'smooth' });
+                wrapper.scrollTo({ left: i * 310, behavior: 'smooth' });
             });
+            indicators.appendChild(dot);
         }
     }
 
-    // アクティブドットを更新
     function updateActiveIndicator(wrapper, indicators) {
         const scrollLeft = wrapper.scrollLeft;
         const index = Math.round(scrollLeft / 310);
@@ -147,10 +158,31 @@
         if (dots[index]) dots[index].classList.add('active');
     }
 
-    // スクロールイベント登録済みか管理
-    let scrollEventRegistered = {};
+    function previewSelectedImages(files, wrapper, indicators, postId) {
+        wrapper.innerHTML = '';
+        indicators.innerHTML = '';
+        if (!files.length) return;
 
-    // 編集ボタンクリック時の処理
+        Array.from(files).forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                wrapper.appendChild(createImageElement(event.target.result));
+                if (index === files.length - 1) {
+                    createIndicators(wrapper, indicators, files.length);
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // スクロールイベントは一度だけ登録
+        if (!scrollEventRegistered[postId]) {
+            wrapper.addEventListener('scroll', () => {
+                updateActiveIndicator(wrapper, indicators);
+            });
+            scrollEventRegistered[postId] = true;
+        }
+    }
+
     $(document).on('click', '.btn-edit', function () {
         const postId = $(this).data('id');
         const wrapper = document.getElementById(`food-imagePreviewWrapper-${postId}`);
@@ -167,26 +199,19 @@
                 $(`#longitude-${postId}`).val(data.post.longitude || '');
 
                 if (data.images && data.images.length > 0) {
-                    data.images.forEach((base64Img, index) => {
+                    data.images.forEach((base64Img) => {
                         if (base64Img.startsWith('data:image')) {
-                            const img = document.createElement('img');
-                            img.src = base64Img;
-                            img.className = 'img-fluid rounded mb-2 me-2';
-                            img.style.maxWidth = '400px';
-                            img.style.height = '300px';
-                            img.style.objectFit = 'cover';
-                            wrapper.appendChild(img);
+                            wrapper.appendChild(createImageElement(base64Img));
                         }
                     });
                     createIndicators(wrapper, indicators, data.images.length);
-                }
 
-                // スクロールイベントを一度だけ登録
-                if (!scrollEventRegistered[postId]) {
-                    wrapper.addEventListener('scroll', () => {
-                        updateActiveIndicator(wrapper, indicators);
-                    });
-                    scrollEventRegistered[postId] = true;
+                    if (!scrollEventRegistered[postId]) {
+                        wrapper.addEventListener('scroll', () => {
+                            updateActiveIndicator(wrapper, indicators);
+                        });
+                        scrollEventRegistered[postId] = true;
+                    }
                 }
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
@@ -194,36 +219,13 @@
             });
     });
 
-    // ファイル選択時のプレビュー表示（動的登録）
     $(document).on('change', 'input[type="file"][id^="food-imageInput-"]', function (e) {
         const input = e.target;
         const postId = input.id.replace('food-imageInput-', '');
         const wrapper = document.getElementById(`food-imagePreviewWrapper-${postId}`);
         const indicators = document.getElementById(`scrollIndicators-${postId}`);
-
-        wrapper.innerHTML = '';
-        indicators.innerHTML = '';
-
-        const files = input.files;
-        if (!files.length) return;
-
-        Array.from(files).forEach((file, index) => {
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                const img = document.createElement('img');
-                img.src = event.target.result;
-                img.className = 'img-fluid rounded mb-2 me-2';
-                img.style.maxWidth = '400px';
-                img.style.height = '300px';
-                img.style.objectFit = 'cover';
-                wrapper.appendChild(img);
-
-                if (index === files.length - 1) {
-                    createIndicators(wrapper, indicators, files.length);
-                }
-            };
-            reader.readAsDataURL(file);
-        });
+        previewSelectedImages(input.files, wrapper, indicators, postId);
     });
 </script>
+
 
