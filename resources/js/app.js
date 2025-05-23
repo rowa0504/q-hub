@@ -7,8 +7,8 @@ import interactionPlugin from '@fullcalendar/interaction';
 import Alpine from 'alpinejs'
 
 let calendar;
-let calendarModal = new bootstrap.Modal(document.getElementById('calendar')); // カレンダーモーダルのインスタンス
-let postFormModal = new bootstrap.Modal(document.getElementById('post-form-1')); // フォームモーダルのインスタンス
+let calendarModal = new bootstrap.Modal(document.getElementById('calendar'), {});
+let postFormModal = new bootstrap.Modal(document.getElementById('post-form-1'), {});
 
 document.addEventListener('DOMContentLoaded', function () {
     const modal = document.getElementById('calendar');
