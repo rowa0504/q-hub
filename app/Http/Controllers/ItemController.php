@@ -68,18 +68,16 @@ class ItemController extends Controller
     }
 
 
-    public function search(Request $request)
-    {
+    public function search(Request $request){
         $all_report_reasons = $this->reportReason->all();
 
         $posts = $this->post
             ->where('category_id', 3)
             ->where(function ($query) use ($request) {
-                $query->where('title', 'like', '%' . $request->search . '%')
-                    ->orWhere('description', 'like', '%' . $request->search . '%');
+                $query->where('description', 'like', '%' . $request->search . '%');
             })
             ->where('user_id', '!=', Auth::id())
-            ->latest()->Paginate(5);
+            ->latest()->paginate(5); // ← Pは小文字の `paginate`
 
         return view('posts.categories.items.search')
             ->with('all_report_reasons', $all_report_reasons)
