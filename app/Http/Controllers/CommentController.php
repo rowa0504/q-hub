@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ReportReason;
+
 
 class CommentController extends Controller
 {
@@ -14,7 +16,6 @@ class CommentController extends Controller
     {
         $this->comment = $comment;
     }
-
     // コメント投稿
     public function store(Request $request, $postId)
     {
@@ -30,16 +31,23 @@ class CommentController extends Controller
 
         $comment->load('user');
 
+        $all_report_reasons = ReportReason::all(); // ← ここでまとめて取得
+
+        $html = view('posts.components.partials.comment_card', [
+            'comment' => $comment,
+            'all_report_reasons' => $all_report_reasons,
+        ])->render();
+
+        $modal = view('posts.components.partials.comment_report_modal', [
+            'comment' => $comment,
+            'all_report_reasons' => $all_report_reasons,
+        ])->render();
+
         return response()->json([
-            'id' => $comment->id,
-            'body' => $comment->body,
-            'user' => [
-                'name' => $comment->user->name,
-                'avatar' => $comment->user->avatar,
-            ],
+            'html' => $html,
+            'modal' => $modal,
         ]);
     }
-
 
 
     // コメント編集

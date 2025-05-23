@@ -148,7 +148,7 @@
     }
 
     // スクロールイベント登録済みか管理
-    const scrollEventRegistered = {};
+    let scrollEventRegistered = {};
 
     // 編集ボタンクリック時の処理
     $(document).on('click', '.btn-edit', function () {

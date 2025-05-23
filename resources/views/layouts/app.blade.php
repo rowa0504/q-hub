@@ -16,8 +16,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 
     <!-- poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
@@ -29,11 +28,9 @@
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
-    {{-- For Edit --}}
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     {{-- alpine.js --}}
-    <script defer src="//unpkg.com/alpinejs" defer></script>
+    <script defer src="//unpkg.com/alpinejs"></script>
+
 
     <!-- Google Maps JavaScript API -->
     <script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.api_key') }}&libraries=places"
@@ -50,6 +47,7 @@
                         <img src="{{ asset('images/Zinnbei1.png') }}" alt="icon"
                             style="width: auto; height: 100px;">
                     </a>
+
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto mt-3 d-flex flex-row">
                         @guest
@@ -160,6 +158,8 @@
     </div>
     @stack('scripts')
 
+    <!-- 必須: BootstrapのJavaScript（Popper含む） -->
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
 </body>
 
 </html>
