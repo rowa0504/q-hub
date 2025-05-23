@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Food Search')
+@section('title', 'Home Search')
 
 @section('content')
 
@@ -13,7 +13,7 @@
                 @forelse($posts as $post)
                     @include('posts.components.post-card', ['post' => $post])
                 @empty
-                    <p>No matching food posts found.</p>
+                    <p>No matching events found.</p>
                 @endforelse
 
             </div>

@@ -11,7 +11,7 @@
 
                 <h5 class="mb-4 text-muted">Search results for "<strong>{{ $search }}</strong>"</h5>
 
-                @forelse($travel_posts as $post)
+                @forelse($posts as $post)
                     @include('posts.components.post-card', ['post' => $post])
                 @empty
                     <p>No matching travel posts found.</p>
@@ -27,7 +27,7 @@
 
     {{-- pagination --}}
     <div class="d-flex justify-content-center my-pagination post-pagination">
-        {{ $travel_posts->onEachSide(1)->links('pagination::bootstrap-5') }}
+        {{ $posts->onEachSide(1)->links('pagination::bootstrap-5') }}
     </div>
 
 @endsection

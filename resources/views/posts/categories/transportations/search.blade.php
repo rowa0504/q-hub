@@ -9,9 +9,27 @@
         <div class="row justify-content-center align-items-start mt-3">
             <div class="col-12 col-md-9">
 
+                <!-- ステータスフィルター -->
+                <div class="mb-3">
+                    <form method="GET" action="{{ route('transportation.index') }}">
+                        @if (!empty($all_trans_categories))
+                            <select name="trans_category_id" id="trans_category_id" class="form-select"
+                                onchange="this.form.submit()">
+                                <option value="" selected>Select transportation</option>
+                                @foreach ($all_trans_categories as $trans_category)
+                                    <option value="{{ $trans_category->id }}"
+                                        {{ request('trans_category_id') == $trans_category->id ? 'selected' : '' }}>
+                                        {{ $trans_category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        @endif
+                    </form>
+                </div>
+
                 <h5 class="mb-4 text-muted">Search results for "<strong>{{ $search }}</strong>"</h5>
 
-                @forelse($transportation_posts as $post)
+                @forelse($posts as $post)
                     @include('posts.components.post-card', ['post' => $post])
                 @empty
                     <p>No matching transportation posts found.</p>
@@ -27,7 +45,7 @@
 
     {{-- pagination --}}
     <div class="d-flex justify-content-center my-pagination post-pagination">
-        {{ $transportation_posts->onEachSide(1)->links('pagination::bootstrap-5') }}
+        {{ $posts->onEachSide(1)->links('pagination::bootstrap-5') }}
     </div>
 
 @endsection
