@@ -10,7 +10,7 @@
         <div class="row justify-content-center align-items-start mt-3">
             <div class="col-12 col-md-9">
                 @forelse($all_posts as $post)
-                    @include('posts.components.post-card', ['post' => $post])
+                    @include('posts.components.guest-post-card', ['post' => $post])
                 @empty
                     <p>No posts available.</p>
                 @endforelse
@@ -23,7 +23,7 @@
 
     {{-- pagination --}}
     <div class="d-flex justify-content-center w-100 post-pagination my-pagination">
-        {{ $posts->onEachSide(1)->links('pagination::bootstrap-5') }}
+        {{ $all_posts->onEachSide(1)->links('pagination::bootstrap-5') }}
     </div>
 
 @endsection
