@@ -183,7 +183,7 @@ class AdminController extends Controller
         },
 
             'reportReasonReport.reason'
-        ])->oldest()->get();
+        ])->oldest()->paginate(6);
 
         $reportedReasons = [];
 

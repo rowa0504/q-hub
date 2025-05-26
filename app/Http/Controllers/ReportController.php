@@ -54,7 +54,7 @@ class ReportController extends Controller
 
         $report->reportReasonReport()->createMany($report_reason_report);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Report completed');
     }
 
     public function storeMessage(Request $request, $id){
