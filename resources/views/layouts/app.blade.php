@@ -41,11 +41,9 @@
         @if (!in_array(Route::currentRouteName(), ['login', 'register', 'chatRoom.show']))
             <nav x-data="{ searching: false }" class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
                 <div class="container-fluid d-flex justify-content-between align-items-center flex-nowrap">
-                    <a class="navbar-brand ms-3" href="{{ url('/') }}"
-                       x-show="!searching"
-                       x-transition>
+                    <a class="navbar-brand ms-3" href="{{ url('/') }}" x-show="!searching" x-transition>
                         <img src="{{ asset('images/Zinnbei1.png') }}" alt="icon"
-                             style="width: auto; height: 100px;">
+                            style="width: auto; height: 100px;">
                     </a>
 
                     <!-- Right Side Of Navbar -->
@@ -90,12 +88,10 @@
                                 @endphp
 
                                 <form action="{{ $searchAction }}" method="GET"
-                                    class="search-box mb-3 d-flex bg-white rounded-pill px-3 py-2"
-                                >
+                                    class="search-box mb-3 d-flex bg-white rounded-pill px-3 py-2">
                                     <input type="text" name="search" placeholder="{{ $placeholder }}"
                                         class="form-control border-2 me-2"
-                                        @focus="searching = true"
-                                        @blur="searching = false">
+                                        @focus="if (window.innerWidth < 768) searching = true" @blur="searching = false">
                                     <button class="btn btn-info text-white rounded-circle">
                                         <i class="fas fa-search"></i>
                                     </button>
@@ -165,7 +161,9 @@
 
             <div class="container py-4">
                 @if (session('success'))
-                    <div id="successMessage" class="alert alert-danger alert-dismissible fade show fixed-top mx-auto mt-3" style="max-width: 600px; z-index: 1050;" role="alert">
+                    <div id="successMessage"
+                        class="alert alert-danger alert-dismissible fade show fixed-top mx-auto mt-3"
+                        style="max-width: 600px; z-index: 1050;" role="alert">
                         {{ session('success') }}
                     </div>
 
