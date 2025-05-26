@@ -157,6 +157,10 @@
                     @endforeach
                 </tbody>
             </table>
+            <!-- Pagination -->
+            <div class="d-flex justify-content-center my-pagination">
+                {{ $reports->onEachSide(1)->links('pagination::bootstrap-5') }}
+            </div>
         </div>
     </div>
 @endsection

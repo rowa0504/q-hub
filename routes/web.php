@@ -22,9 +22,11 @@ use App\Http\Controllers\ChatMessageController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\WantedItemController;
 use App\Http\Controllers\ReportReasonController;
-
+use App\Http\Controllers\GuestPostController;
 
 Auth::routes();
+
+Route::get('/guest', [GuestPostController::class, 'index'])->name('guest.index');
 
 Route::get('/login/{provider}', [SocialLoginController::class, 'redirectToProvider'])->name('social.login');
 Route::get('/login/{provider}/callback', [SocialLoginController::class, 'handleProviderCallback']);

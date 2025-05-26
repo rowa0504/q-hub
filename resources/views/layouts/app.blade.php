@@ -164,6 +164,22 @@
             @endif
 
             <div class="container py-4">
+                @if (session('success'))
+                    <div id="successMessage" class="alert alert-danger alert-dismissible fade show fixed-top mx-auto mt-3" style="max-width: 600px; z-index: 1050;" role="alert">
+                        {{ session('success') }}
+                    </div>
+
+                    <script>
+                        setTimeout(() => {
+                            const msg = document.getElementById('successMessage');
+                            if (msg) {
+                                msg.style.opacity = '0';
+                                setTimeout(() => msg.remove(), 1000); // 完全に削除
+                            }
+                        }, 2000); // 3秒後にフェードアウト開始
+                    </script>
+                @endif
+
                 @yield('content')
             </div>
         </main>
