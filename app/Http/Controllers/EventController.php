@@ -23,7 +23,7 @@ class EventController extends Controller
     public function index(){
         $all_report_reasons = $this->reportReason->all();
         $all_user           = $this->user->all();
-        $all_posts          = $this->post->where('category_id', 1)->latest()->Paginate(5);
+        $all_posts          = $this->post->where('category_id', 1)->latest()->Paginate(10);
 
         return view('posts.categories.events.index', compact('all_posts', 'all_user', 'all_report_reasons'));
     }
@@ -46,7 +46,7 @@ class EventController extends Controller
                 $query->where('description', 'like', '%' . $request->search . '%');
             })
             ->where('user_id', '!=', Auth::id())
-            ->latest()->paginate(5); // ← Pは小文字の `paginate`
+            ->latest()->paginate(10); // ← Pは小文字の `paginate`
 
         return view('posts.categories.events.search')
             ->with('all_report_reasons', $all_report_reasons)

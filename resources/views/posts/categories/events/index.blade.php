@@ -27,7 +27,7 @@
     </div>
 
     {{-- pagination --}}
-    <div class="d-flex justify-content-center my-pagination post-pagination">
+    <div class="d-flex justify-content-center w-100 post-pagination my-pagination">
         {{ $all_posts->onEachSide(1)->links('pagination::bootstrap-5') }}
     </div>
 

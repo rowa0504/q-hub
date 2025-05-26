@@ -18,7 +18,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-    <!-- poppins -->
+    <!-- Poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
 
@@ -28,7 +28,7 @@
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
-    {{-- alpine.js --}}
+    <!-- Alpine.js -->
     <script defer src="//unpkg.com/alpinejs"></script>
 
     <!-- Google Maps JavaScript API -->
@@ -38,13 +38,14 @@
 
 <body>
     <div id="app">
-        {{-- Navbarをlogin・registerページでは非表示にする --}}
         @if (!in_array(Route::currentRouteName(), ['login', 'register', 'chatRoom.show']))
-            <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+            <nav x-data="{ searching: false }" class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
                 <div class="container-fluid d-flex justify-content-between align-items-center flex-nowrap">
-                    <a class="navbar-brand ms-3" href="{{ url('/') }}">
+                    <a class="navbar-brand ms-3" href="{{ url('/') }}"
+                       x-show="!searching"
+                       x-transition>
                         <img src="{{ asset('images/Zinnbei1.png') }}" alt="icon"
-                            style="width: auto; height: 100px;">
+                             style="width: auto; height: 100px;">
                     </a>
 
                     <!-- Right Side Of Navbar -->
@@ -55,18 +56,16 @@
                                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                                 </li>
                             @endif
-
                             @if (Route::has('register'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
                         @else
-                            <!-- Search -->
                             <li class="nav-item">
                                 @php
-                                    $path = request()->path(); // 例: "event", "food", etc.
-                                    $searchAction = route('search'); // デフォルトの全体検索
+                                    $path = request()->path();
+                                    $searchAction = route('search');
                                     $placeholder = 'Search all content...';
 
                                     if (request()->is('event*')) {
@@ -91,9 +90,12 @@
                                 @endphp
 
                                 <form action="{{ $searchAction }}" method="GET"
-                                    class="search-box mb-3 d-flex bg-white rounded-pill px-3 py-2">
+                                    class="search-box mb-3 d-flex bg-white rounded-pill px-3 py-2"
+                                >
                                     <input type="text" name="search" placeholder="{{ $placeholder }}"
-                                        class="form-control border-2 me-2">
+                                        class="form-control border-2 me-2"
+                                        @focus="searching = true"
+                                        @blur="searching = false">
                                     <button class="btn btn-info text-white rounded-circle">
                                         <i class="fas fa-search"></i>
                                     </button>
@@ -118,7 +120,6 @@
                                         <i class="fa-solid fa-circle-user text-info icon-sm"></i>
                                     @endif
 
-                                    {{-- 通知バッジ --}}
                                     @if ($latestWarning)
                                         <span
                                             class="position-absolute top-0 start-75 translate-middle badge rounded-pill bg-danger"
@@ -128,7 +129,6 @@
                                         </span>
                                     @endif
                                 </button>
-
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="account-dropdown">
                                     @can('admin')
@@ -159,12 +159,10 @@
         @endif
 
         <main class="py-0">
-            {{-- 管理者ページの場合のみ admin.sidebar を表示 --}}
             @if (request()->is('admin/*'))
                 @include('admin.sidebar')
             @endif
 
-            {{-- 全ユーザー共通の通常ページレイアウト --}}
             <div class="container py-4">
                 @if (session('success'))
                     <div id="successMessage" class="alert alert-danger alert-dismissible fade show fixed-top mx-auto mt-3" style="max-width: 600px; z-index: 1050;" role="alert">
@@ -198,11 +196,7 @@
     @include('posts.components.forms.post-form-travel-modal')
     @include('posts.components.modals.getreport')
 
-    </div>
     @stack('scripts')
-
-    <!-- 必須: BootstrapのJavaScript（Popper含む） -->
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
 </body>
 
 </html>

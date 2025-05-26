@@ -19,7 +19,7 @@ class QuestionController extends Controller
 
     public function index(){
         $all_report_reasons = $this->reportReason->all();
-        $all_posts          = $this->post->where('category_id', 6)->latest()->Paginate(5);
+        $all_posts          = $this->post->where('category_id', 6)->latest()->Paginate(10);
 
         return view('posts.categories.questions.index', compact('all_posts', 'all_report_reasons'));
     }
@@ -34,7 +34,7 @@ class QuestionController extends Controller
                     ->orWhere('title', 'like', '%' . $request->search . '%');
             })
             ->where('user_id', '!=', Auth::id())
-            ->latest()->paginate(5);
+            ->latest()->paginate(10);
 
         return view('posts.categories.questions.search')
             ->with('all_report_reasons', $all_report_reasons)

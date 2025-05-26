@@ -41,13 +41,11 @@
                             </button>
                         </div>
 
-                        @if (Route::has('password.request'))
-                            <div class="text-center mt-3">
-                                <a class="btn btn-link" href="{{ route('password.request') }}">
-                                    {{ __('Forgot Your Password?') }}
+                            <div class="d-grid mt-2">
+                                <a href="{{ route('guest.index') }}" class="btn btn-secondary">
+                                    Continue as Guest
                                 </a>
                             </div>
-                        @endif
                     </form>
 
                     <div class="text-center mt-3">

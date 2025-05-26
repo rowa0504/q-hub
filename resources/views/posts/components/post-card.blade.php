@@ -156,7 +156,7 @@
                             <h5 class="fw-bold mb-0">This event has ended</h5>
                         </div>
 
-                        {{-- 内容を薄く表示するエリア（必要に応じて囲んでください）--}}
+                        {{-- 内容を薄く表示するエリア（必要に応じて囲んでください） --}}
                         <div class="opacity-50">
                             <div class="mt-2 fw-bold">
                                 <p class="mb-1 text-muted small">
@@ -187,11 +187,11 @@
                     <div class="mt-2 fw-bold">
                         <p class="mb-1 text-muted small">
                             Start Date:
-                            {{ $post->startdatetime ? \Carbon\Carbon::parse($post->startdatetime)->format('M d, Y H:i') : 'TBD' }}
+                            {{ $post->startdatetime ? \Carbon\Carbon::parse($post->startdatetime)->format('M d, Y') : 'TBD' }}
                         </p>
                         <p class="mb-1 text-muted small">
                             End Date:
-                            {{ $post->enddatetime ? \Carbon\Carbon::parse($post->enddatetime)->format('M d, Y H:i') : 'TBD' }}
+                            {{ $post->enddatetime ? \Carbon\Carbon::parse($post->enddatetime)->format('M d, Y') : 'TBD' }}
                         </p>
 
                         {{-- 参加者数と参加ボタン --}}
@@ -252,7 +252,8 @@
             @case(2)
                 <div class="mt-2 fw-bold">
                     <p>
-                        <a href="https://www.google.com/maps?q={{ $post->latitude }},{{ $post->longitude }}" target="_blank">
+                        <a href="https://www.google.com/maps?q={{ $post->latitude }},{{ $post->longitude }}"
+                            target="_blank">
                             <i class="fa-solid fa-location-dot"></i>
                             {{ $post->location ?? 'TBD' }}
                         </a>
@@ -295,6 +296,15 @@
                         {{ $joined ? 'Enter Chat' : 'Join Chat' }}
                     </a>
                 </div>
+
+                <p class="mb-1 text-muted small">
+                    Start Date:
+                    {{ $post->startdatetime ? \Carbon\Carbon::parse($post->startdatetime)->format('M d, Y') : 'TBD' }}
+                </p>
+                <p class="mb-1 text-muted small">
+                    End Date:
+                    {{ $post->enddatetime ? \Carbon\Carbon::parse($post->enddatetime)->format('M d, Y') : 'TBD' }}
+                </p>
 
 
                 {{-- エラーメッセージ --}}
