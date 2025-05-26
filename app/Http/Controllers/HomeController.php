@@ -43,7 +43,7 @@ class HomeController extends Controller
     {
         $all_categories = $this->category->all();
         $all_trans_categories = $this->trans_category->all();
-        $all_posts = $this->post->with('user')->latest()->Paginate(5);
+        $all_posts = $this->post->with('user')->latest()->Paginate(10);
         $all_user = $this->user->all();
         $all_report_reasons = $this->reportReason->all();
 
@@ -63,7 +63,7 @@ class HomeController extends Controller
                 $query->where('description', 'like', '%' . $request->search . '%');
             })
             ->where('user_id', '!=', Auth::id())
-            ->latest()->paginate(5); // ← Pは小文字の `paginate`
+            ->latest()->paginate(10); // ← Pは小文字の `paginate`
 
         return view('home-search')
             ->with('all_report_reasons', $all_report_reasons)

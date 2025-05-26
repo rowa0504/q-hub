@@ -69,22 +69,8 @@
         const sidebar = document.getElementById("mobileSidebar");
         const overlay = document.getElementById("sidebarOverlay");
 
-        // クラスの切り替え（表示・非表示）
-        sidebar.classList.toggle("d-none");
-        overlay.classList.toggle("d-none");
+        sidebar.classList.toggle("show");
+        overlay.classList.toggle("show");
     }
-
-    // 初期状態で非表示にしておく（必要に応じて）
-    document.addEventListener("DOMContentLoaded", function () {
-        const sidebar = document.getElementById("mobileSidebar");
-        const overlay = document.getElementById("sidebarOverlay");
-
-        // すでにd-noneが付いていなければ追加
-        if (!sidebar.classList.contains("d-none")) {
-            sidebar.classList.add("d-none");
-        }
-        if (!overlay.classList.contains("d-none")) {
-            overlay.classList.add("d-none");
-        }
-    });
 </script>
+

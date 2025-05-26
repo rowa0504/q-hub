@@ -43,7 +43,7 @@ class ItemController extends Controller
                     ->orWhere('enddatetime', '>=', $now);
             })
             ->latest()
-            ->paginate(5);
+            ->paginate(10);
 
         $posts = $paginator->getCollection()
             ->map(function ($post) use ($wanted_keywords) {
@@ -90,7 +90,7 @@ class ItemController extends Controller
             })
             ->where('user_id', '!=', Auth::id())
             ->latest()
-            ->paginate(5);
+            ->paginate(10);
 
         return view('posts.categories.items.search')
             ->with('all_report_reasons', $all_report_reasons)
