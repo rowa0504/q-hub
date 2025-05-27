@@ -4,10 +4,6 @@
 
 @section('content')
 
-    <button class="dropdown-item text-warning btn-edit" data-bs-toggle="modal" data-bs-target="#calendar">
-        <i class="fa-solid fa-calendar-days text-info icon-sm"></i>
-    </button>
-
     {{-- 投稿表示 + PCメニュー --}}
     <div class="container-fluid">
         @include('posts.components.modals.calendar-modal')
