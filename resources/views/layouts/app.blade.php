@@ -84,10 +84,14 @@
                                     } elseif (request()->is('question*')) {
                                         $searchAction = route('question.search');
                                         $placeholder = 'Search Questions...';
+                                    } elseif (request()->is('profile*')) {
+                                        $searchAction = route('profile.search');
+                                        $placeholder = 'Search Your Posts...';
                                     }
                                 @endphp
 
-                                <form action="{{ $searchAction }}" method="GET"
+                                @if (!request()->is('admin*'))
+                                    <form action="{{ $searchAction }}" method="GET"
                                     class="search-box mb-3 d-flex bg-white rounded-pill px-3 py-2">
                                     <input type="text" name="search" placeholder="{{ $placeholder }}"
                                         class="form-control border-2 me-2"
@@ -95,7 +99,8 @@
                                     <button class="btn btn-info text-white rounded-circle">
                                         <i class="fas fa-search"></i>
                                     </button>
-                                </form>
+                                    </form>
+                                @endif
                             </li>
 
                             <!-- Create Post -->
