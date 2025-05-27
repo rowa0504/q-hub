@@ -39,7 +39,7 @@
 <body>
     <div id="app">
         @if (!in_array(Route::currentRouteName(), ['login', 'register', 'chatRoom.show']))
-            <nav x-data="{ searching: false }" class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+            <nav x-data="{ searching: false }" class="navbar navbar-expand-md navbar-light shadow-sm">
                 <div class="container-fluid d-flex justify-content-between align-items-center flex-nowrap">
                     <a class="navbar-brand ms-3" href="{{ url('/') }}" x-show="!searching" x-transition>
                         <img src="{{ asset('images/Zinnbei1.png') }}" alt="icon"
@@ -154,7 +154,7 @@
             </nav>
         @endif
 
-        <main class="py-0">
+        <main class="py-0 all-background">
             @if (request()->is('admin/*'))
                 @include('admin.sidebar')
             @endif
