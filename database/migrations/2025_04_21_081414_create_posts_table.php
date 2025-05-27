@@ -23,8 +23,8 @@ return new class extends Migration
             $table->string('destination')->nullable()->comment('trans');
             $table->integer('fee')->nullable()->comment('trans');
             $table->integer('max')->nullable()->comment('event/item');
-            $table->datetime('startdatetime')->nullable()->comment('event');
-            $table->datetime('enddatetime')->nullable()->comment('event');
+            $table->date('startdatetime')->nullable()->comment('event');
+            $table->date('enddatetime')->nullable()->comment('event');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('trans_category_id')->nullable()->comment('trans');
             $table->unsignedBigInteger('user_id');
