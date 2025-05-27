@@ -57,6 +57,7 @@ class HomeController extends Controller
 
     public function search(Request $request){
         $all_report_reasons = $this->reportReason->all();
+        $all_user = $this->user->all();
 
         $posts = $this->post
             ->where(function ($query) use ($request) {
@@ -68,6 +69,7 @@ class HomeController extends Controller
         return view('home-search')
             ->with('all_report_reasons', $all_report_reasons)
             ->with('posts', $posts)
-            ->with('search', $request->search);
+            ->with('search', $request->search)
+            ->with('all_user', $all_user);
     }
 }
