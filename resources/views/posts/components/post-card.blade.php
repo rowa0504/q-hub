@@ -149,7 +149,7 @@
         {{-- カテゴリ別情報 --}}
         @switch($post->category_id)
             @case(1)
-                @if ($post->startdatetime->isPast() && (!$post->enddatetime || $post->enddatetime->isPast()))
+                @if ($post->startdatetime->lt(\Carbon\Carbon::today()) &&(!$post->enddatetime || $post->enddatetime->lt(\Carbon\Carbon::today())))
                     <div class="bg-light text-muted position-relative p-4 rounded shadow-sm">
                         {{-- 終了メッセージ --}}
                         <div class="position-absolute top-50 start-50 translate-middle text-center">
