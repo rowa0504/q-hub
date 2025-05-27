@@ -9,16 +9,26 @@
         <div class="row justify-content-center align-items-start mt-3">
             <div class="col-12 col-md-9">
 
-                <div class="max-w-xl mx-auto mt-5">
+                <div class="max-w-xl mx-auto mt-2">
 
                     {{-- 成功メッセージ --}}
-                    @if (session('success'))
-                        <div class="alert alert-success p-3 rounded mb-4">
-                            {{ session('success') }}
+                    {{-- @if (session('itemSuccess'))
+                        <div id="successItemMessage" class="alert alert-success p-3 rounded mb-4">
+                            {{ session('itemSuccess') }}
                         </div>
-                    @endif
+
+                        <script>
+                        setTimeout(() => {
+                            const msg = document.getElementById('successItemMessage');
+                            if (msg) {
+                                msg.style.opacity = '0';
+                                setTimeout(() => msg.remove(), 1000); // 完全に削除
+                            }
+                        }, 2000); // 3秒後にフェードアウト開始
+                        </script>
+                    @endif --}}
                     {{-- 新規アイテム登録フォーム --}}
-                    <form action="{{ route('wantedItem.store') }}" method="POST" class="row g-3 align-items-end mt-4">
+                    <form action="{{ route('wantedItem.store') }}" method="POST" class="row g-3 align-items-end mt-2">
                         @csrf
 
                         {{-- ラベルと入力欄 --}}
