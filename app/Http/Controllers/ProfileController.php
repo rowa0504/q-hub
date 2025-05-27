@@ -77,4 +77,25 @@ class ProfileController extends Controller
 
         return redirect()->route('profile.index', Auth::user()->id);
     }
+
+    public function search(Request $request){
+        $all_report_reasons = $this->reportReason->all();
+        $all_user = $this->user->all();
+        $user = $this->user->findOrFail(Auth::id());
+
+        $posts = $this->post
+            ->where(function ($query) use ($request) {
+                $query->where('description', 'like', '%' . $request->search . '%');
+            })
+            ->where('user_id', Auth::id()) // ← 自分の投稿に絞る
+            ->latest()
+            ->paginate(10);
+
+        return view('users.profile.search')
+            ->with('all_report_reasons', $all_report_reasons)
+            ->with('posts', $posts)
+            ->with('search', $request->search)
+            ->with('all_user', $all_user)
+            ->with('user', $user);
+    }
 }

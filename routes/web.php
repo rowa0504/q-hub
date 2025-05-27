@@ -73,7 +73,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/{id}/index', [ProfileController::class, 'index'])->name('index');
         Route::get('/edit', [ProfileController::class, 'edit'])->name('edit');
         Route::patch('/{id}/update', [ProfileController::class, 'update'])->name('update');
-        Route::get('/{id}', [ProfileController::class, 'show'])->name('show');
+        // Route::get('/{id}', [ProfileController::class, 'show'])->name('show');
+        Route::get('/search', [ProfileController::class, 'search'])->name('search');
     });
 
     // カテゴリー別のroute
