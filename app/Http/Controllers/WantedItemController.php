@@ -23,6 +23,6 @@ class WantedItemController extends Controller
         $this->wantedItem->keyword = $request->keyword;
         $this->wantedItem->save();
 
-        return redirect()->back()->with('success', 'registered your desired item');
+        return redirect()->back()->with('itemSuccess', 'registered your desired item');
     }
 }

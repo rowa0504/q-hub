@@ -165,16 +165,33 @@
             @endif
 
             <div class="container py-4">
-                @if (session('success'))
-                    <div id="successMessage"
+                @if (session('reportSuccess'))
+                    <div id="reportSuccessMessage"
                         class="alert alert-danger alert-dismissible fade show fixed-top mx-auto mt-3"
                         style="max-width: 600px; z-index: 1050;" role="alert">
-                        {{ session('success') }}
+                        {{ session('reportSuccess') }}
                     </div>
 
                     <script>
                         setTimeout(() => {
-                            const msg = document.getElementById('successMessage');
+                            const msg = document.getElementById('reportSuccessMessage');
+                            if (msg) {
+                                msg.style.opacity = '0';
+                                setTimeout(() => msg.remove(), 1000); // 完全に削除
+                            }
+                        }, 2000); // 3秒後にフェードアウト開始
+                    </script>
+                @endif
+                @if (session('itemSuccess'))
+                    <div id="successItemMessage"
+                        class="alert alert-success alert-dismissible fade show fixed-top mx-auto mt-3"
+                        style="max-width: 600px; z-index: 1050;" role="alert">
+                        {{ session('itemSuccess') }}
+                    </div>
+
+                    <script>
+                        setTimeout(() => {
+                            const msg = document.getElementById('successItemMessage');
                             if (msg) {
                                 msg.style.opacity = '0';
                                 setTimeout(() => msg.remove(), 1000); // 完全に削除
