@@ -36,10 +36,10 @@
         loading="async"></script>
 </head>
 
-<body>
+<body class="all-background" style="font-family: 'Poppins', sans-serif;">
     <div id="app">
         @if (!in_array(Route::currentRouteName(), ['login', 'register', 'chatRoom.show']))
-            <nav x-data="{ searching: false }" class="navbar navbar-expand-md navbar-light shadow-sm">
+            <nav x-data="{ searching: false }" class="navbar navbar-expand-md navbar-light bg-light shadow-sm">
                 <div class="container-fluid d-flex justify-content-between align-items-center flex-nowrap">
                     <a class="navbar-brand ms-3" href="{{ url('/') }}" x-show="!searching" x-transition>
                         <img src="{{ asset('images/Zinnbei1.png') }}" alt="icon"
