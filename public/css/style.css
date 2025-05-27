@@ -322,3 +322,6 @@ body {
     display: none !important;
 }
 
+.all-background {
+    background-color: #f1f1f1;
+}
