@@ -10,8 +10,14 @@
         </a>
         <div class="ms-2">
             <strong class="d-block">{{ $post->user->name ?? 'UNKNOWN user' }}</strong>
-            <small class="text-muted">
-                <i class="fa-solid fa-tag me-1"></i>{{ $post->category->name }}
+            <small class="text-muted d-flex align-items-center gap-1">
+                <i class="fa-solid fa-tag"></i>{{ $post->category->name }}
+                @if ($post->category_id == 1)
+                    <button class="dropdown-item text-warning btn-edit" data-bs-toggle="modal"
+                        data-bs-target="#calendar">
+                        <i class="fa-solid fa-calendar-days text-info calendar-icon mx-1"></i>
+                    </button>
+                @endif
             </small>
         </div>
 
@@ -149,7 +155,9 @@
         {{-- カテゴリ別情報 --}}
         @switch($post->category_id)
             @case(1)
-                @if ($post->startdatetime->lt(\Carbon\Carbon::today()) &&(!$post->enddatetime || $post->enddatetime->lt(\Carbon\Carbon::today())))
+                @if (
+                    $post->startdatetime->lt(\Carbon\Carbon::today()) &&
+                        (!$post->enddatetime || $post->enddatetime->lt(\Carbon\Carbon::today())))
                     <div class="bg-light text-muted position-relative p-4 rounded shadow-sm">
                         {{-- 終了メッセージ --}}
                         <div class="position-absolute top-50 start-50 translate-middle text-center">
