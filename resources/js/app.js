@@ -94,7 +94,7 @@ window.closePostForm = function () {
     calendarModal.show();
 };
 
-window.likeComponent = likeComponent;
+// window.likeComponent = likeComponent;
 
-Alpine.start();
+// Alpine.start();
 
