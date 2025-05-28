@@ -151,6 +151,7 @@ class PostController extends Controller
 
         // カテゴリIDごとに追加のバリデーションを分ける
         $categoryId = $request->input('category_id');
+        $modalId = 'edit-form-' . $id;
 
         if ($categoryId == 1 || $categoryId == 3) { // event,item
             $extraRules = [
@@ -158,14 +159,12 @@ class PostController extends Controller
                 'startdate' => 'required|date|after_or_equal:today',
                 'enddate'   => 'date|after_or_equal:startdate',
             ];
-            $modalId = 'edit-form-' . $categoryId;
         } elseif ($categoryId == 2 || $categoryId == 4) { // food,travel
             $extraRules = [
                 'location'  => 'required|string|max:50',
                 'latitude'  => 'required|numeric',
                 'longitude' => 'required|numeric',
             ];
-            $modalId = 'edit-form-' . $categoryId;
         } elseif ($categoryId == 5) { // transportation
             $extraRules = [
                 'departure'      => 'required|string|max:50',
@@ -173,15 +172,12 @@ class PostController extends Controller
                 'fee'            => 'required|numeric|min:1',
                 'trans_category' => 'required|exists:trans_categories,id',
             ];
-            $modalId = 'edit-form-' . $categoryId;
         } elseif ($categoryId == 6) { // question
             $extraRules = [
                 'title' => 'required|min:1|max:50',
             ];
-            $modalId = 'edit-form-' . $categoryId;
         } elseif ($categoryId == 7) { // other
             $extraRules = $commonRules;
-            $modalId = 'edit-form-' . $categoryId;
         }
 
         $validator = Validator::make($request->all(), array_merge($commonRules, $extraRules));
