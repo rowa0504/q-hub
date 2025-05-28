@@ -61,7 +61,7 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">Cancel</button>
         <button type="submit" class="btn btn-warning text-white">Edit</button>
-        <input type="hidden" name="category_id" value="4">
+        <input type="hidden" name="category_id" value="2">
     </div>
 </form>
 

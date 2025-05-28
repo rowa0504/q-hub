@@ -19,9 +19,9 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             TransCategorySeeder::class,
             ReportReasonSeeder::class,
-            PostSeeder::class,
-            CommentSeeder::class,
-            AnswerSeeder::class,
+            // PostSeeder::class,
+            // CommentSeeder::class,
+            // AnswerSeeder::class,
         ]);
     }
 }

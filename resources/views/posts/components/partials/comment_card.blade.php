@@ -49,7 +49,7 @@
               onsubmit="submitEditComment(event, {{ $comment->id }}, {{ $comment->post_id }})">
             <div class="input-group input-group-sm">
                 <input type="text" class="form-control" name="body" value="{{ $comment->body }}" required>
-                <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                <button type="submit" class="btn btn-info btn-sm">Save</button>
                 <button type="button" class="btn btn-secondary btn-sm" onclick="cancelEdit({{ $comment->id }})">Cancel</button>
             </div>
         </form>

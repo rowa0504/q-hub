@@ -23,7 +23,7 @@
                 @endif
                 <textarea class="form-control" name="body" rows="2" placeholder="Add an answer..." required></textarea>
             </div>
-            <button type="submit" class="btn btn-primary btn-sm">Answer</button>
+            <button type="submit" class="btn btn-info btn-sm">Answer</button>
         </form>
 
         {{-- アンサー一覧 --}}
@@ -57,7 +57,7 @@
                             <div class="input-group mb-2">
                                 <input type="text" name="body" class="form-control form-control-sm"
                                     value="{{ $answer->body }}" required>
-                                <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                                <button type="submit" class="btn btn-sm btn-info">Save</button>
                                 <button type="button" class="btn btn-sm btn-secondary"
                                     onclick="cancelAnswerEdit({{ $answer->id }})">Cancel</button>
                             </div>
