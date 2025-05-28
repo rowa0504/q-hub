@@ -8,6 +8,8 @@
     <div class="container-fluid">
         <div class="row justify-content-center align-items-start mt-3">
             <div class="col-12 col-md-9">
+                @include('posts.components.modals.calendar-modal')
+                
                 @forelse($all_posts as $post)
                     @include('posts.components.post-card', ['post' => $post])
                 @empty

@@ -24,7 +24,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($reports as $report)
+                    @forelse ($reports as $report)
                         @php
                             $reportable = $report->reportable;
                             $reportedUser = $reportable instanceof App\Models\User ? $reportable : ($reportable?->user ?? null);
@@ -154,7 +154,11 @@
                                 @endif
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">No reports found.</td>
+                    </tr>
+                @endforelse
                 </tbody>
             </table>
             <!-- Pagination -->

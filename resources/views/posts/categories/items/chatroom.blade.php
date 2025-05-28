@@ -43,7 +43,7 @@
                 @endif
 
                 {{-- Message Bubble --}}
-                <div class="p-2 {{ $isMe ? 'bg-primary text-white' : 'bg-white' }} border rounded position-relative" style="max-width: 75%;">
+                <div class="p-2 {{ $isMe ? 'bg-info text-white' : 'bg-white' }} border rounded position-relative" style="max-width: 75%;">
                     <div class="d-flex justify-content-between mb-1">
                         <strong>{{ $message->user->name }}</strong>
                         <small class="text-muted">{{ $message->created_at->format('H:i') }}</small>
@@ -67,7 +67,7 @@
         @csrf
         <div class="input-group">
             <textarea name="body" rows="2" class="form-control" placeholder="Enter your message..." required></textarea>
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-info">
                 <i class="fa-solid fa-paper-plane me-1"></i>Send
             </button>
         </div>
