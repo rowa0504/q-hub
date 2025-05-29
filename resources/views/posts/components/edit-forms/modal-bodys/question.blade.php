@@ -7,6 +7,23 @@
     @method('PATCH')
 
     <div class="modal-body">
+        <div class="image-scroll-wrapper">
+            <div class="image-scroll-container" id="question-imagePreviewWrapper-{{ $post->id }}">
+                <!-- 画像がJSで挿入される -->
+            </div>
+            <div class="scroll-indicators" id="scrollIndicators-{{ $post->id }}"></div>
+        </div>
+
+        <div class="mb-3">
+            <input class="form-control" type="file" name="images[]" id="question-imageInput-{{ $post->id }}" accept="image/*" multiple>
+            <div class="form-text text-start">
+                Acceptable formats: jpeg, jpg, png, gif only<br>Max file size is 2048kB<br>Up to 3 images
+            </div>
+            @error('images')
+                <p class="text-danger small">{{ $message }}</p>
+            @enderror
+        </div>
+        
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>
             <input type="text" class="form-control" id="question-title-{{ $post->id }}" name="title" placeholder='Start your question with “What”, “How”, etc.'>
@@ -21,31 +38,13 @@
                   <p class="text-danger small">{{ $message }}</p>
               @enderror
           </div>
-
-          <div class="image-scroll-wrapper">
-            <div class="image-scroll-container" id="question-imagePreviewWrapper-{{ $post->id }}">
-                <!-- 画像がJSで挿入される -->
-            </div>
-            <div class="scroll-indicators" id="scrollIndicators-{{ $post->id }}"></div>
-        </div>
-
-          <div class="mb-3">
-            <input class="form-control" type="file" name="images[]" id="question-imageInput-{{ $post->id }}" accept="image/*" multiple>
-            <div class="form-text text-start">
-                Acceptable formats: jpeg, jpg, png, gif only<br>Max file size is 2048kB<br>Up to 3 images
-            </div>
-            @error('images')
-                <p class="text-danger small">{{ $message }}</p>
-            @enderror
-        </div>
-
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-warning"
             data-bs-dismiss="modal">Cancel</button>
         <button type="submit" class="btn btn-warning text-white">Edit</button>
 
-        <input type="hidden" name="category_id" value="7">
+        <input type="hidden" name="category_id" value="6">
     </div>
 </form>
 

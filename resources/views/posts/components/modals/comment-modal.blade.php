@@ -14,7 +14,7 @@
                     <div class="input-group">
                         <input type="text" name="body" class="form-control form-control-sm"
                             placeholder="Add a comment..." required>
-                        <button type="submit" class="btn btn-sm btn-primary">Post</button>
+                        <button type="submit" class="btn btn-sm btn-info">Post</button>
                     </div>
                     <p class="text-danger small d-none" id="comment-error-{{ $post->id }}"></p>
                 </form>

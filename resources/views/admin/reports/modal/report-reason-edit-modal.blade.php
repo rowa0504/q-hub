@@ -10,7 +10,7 @@
                 <form action="{{ route('admin.reportReasons.update', $reportReason->id) }}" method="post">
                     @csrf
                     @method('patch')
-                        <input type="text" name="reportReason" id="reportReason" value="{{ old('reportReason',$reportReason->name) }}" placeholder="仕事内容を入力してください" class="form-control">
+                        <input type="text" name="reportReason" id="reportReason" value="{{ old('reportReason',$reportReason->name) }}" placeholder="Enter Report Reason" class="form-control">
                         @error('reportReason')
                         <p class="text-danger small">{{ $message }}</p>
                         @enderror
