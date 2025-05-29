@@ -265,31 +265,58 @@
                         </span>
                     </div>
                 @endif
-
-                {{-- 参加者数 --}}
-                @if ($post->chatRoom)
-                    <h5 class="mb-2">
-                        Participants ({{ $post->chatRoom->users->where('role_id', '!=', 1)->count() }} / {{ $post->max }})
-                    </h5>
-                @else
-                    <h5 class="mb-2">
-                        Participants (0 / {{ $post->max }})
-                    </h5>
-                @endif
-
-
                 {{-- チャット開始リンク --}}
                 @php
-                    $joined = $post->chatRoom && $post->chatRoom->users->contains(Auth::id());
+                    $currentParticipants = $post->chatRoom
+                        ? $post->chatRoom->users->where('role_id', '!=', 1)->count()
+                        : 0;
+                    $max = $post->max ?? 0;
+                    $isJoined = $post->chatRoom && $post->chatRoom->users->contains(Auth::id());
                 @endphp
 
-                <div class="mb-2">
-                    <a href="{{ route('chatRoom.start', $post->id) }}"
-                        class="btn btn-sm {{ $joined ? 'btn-success' : 'btn-outline-info' }}">
-                        <i class="fa-regular fa-comments me-1"></i>
-                        {{ $joined ? 'Enter Chat' : 'Join Chat' }}
-                    </a>
+                @php
+                    $isFull = $max > 0 && $currentParticipants >= $max;
+                @endphp
+
+                <div x-data="{
+                    isFull: {{ $isFull ? 'true' : 'false' }},
+                    joined: {{ $isJoined ? 'true' : 'false' }},
+                    max: {{ $max }},
+                    count: {{ $currentParticipants }}
+                }" class="my-2">
+
+                    {{-- 参加者数表示 --}}
+                    <h5 class="mb-1 text-muted d-flex align-items-center">
+                        <i
+                            :class="isFull ? 'fa-solid fa-circle-exclamation text-danger me-1' :
+                                'fa-solid fa-users text-muted me-1'"></i>
+                        <span x-text="`Participants (${count} / ${max})`"></span>
+                        <template x-if="isFull && !joined">
+                            <span class="ms-2 text-danger">
+                                <i class="fa-solid fa-ban me-1"></i>
+                                <span class="badge bg-danger">Full</span>
+                            </span>
+                        </template>
+                    </h5>
+
+                    {{-- ボタン部分 --}}
+                    <div>
+                        <template x-if="isFull && !joined">
+                            <button class="btn btn-sm btn-secondary d-flex align-items-center" disabled>
+                                <i class="fa-solid fa-ban me-1"></i> Join Chat (Full)
+                            </button>
+                        </template>
+
+                        <template x-if="!isFull || joined">
+                            <a href="{{ route('chatRoom.start', $post->id) }}" class="btn btn-sm"
+                                :class="joined ? 'btn-success' : 'btn-outline-info'">
+                                <i class="fa-regular fa-comments me-1"></i>
+                                <span x-text="joined ? 'Enter Chat' : 'Join Chat'"></span>
+                            </a>
+                        </template>
+                    </div>
                 </div>
+
 
                 <p class="mb-1 text-muted small">
                     Start Date:
