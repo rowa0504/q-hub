@@ -280,7 +280,7 @@
                 <div class="mb-2">
                     <a href="{{ route('chatRoom.start', $post->id) }}"
                         class="btn btn-sm {{ $joined ? 'btn-success' : 'btn-outline-info' }}">
-                        <i class="fa-brands fa-rocketchat me-1"></i>
+                        <i class="fa-regular fa-comments me-1"></i>
                         {{ $joined ? 'Enter Chat' : 'Join Chat' }}
                     </a>
                 </div>

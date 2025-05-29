@@ -32,7 +32,7 @@
         <div class="col">
             <div class="card text-center shadow-sm">
                 <div class="card-body">
-                    <i class="fa-solid fa-comments fa-2x mb-2 text-primary"></i>
+                    <i class="fa-solid fa-tags fa-2x mb-2 text-primary"></i>
                     <h5 class="card-title">Comments</h5>
                     <p class="h4">{{ $comments_count }}</p>
                     <a href="{{ route('admin.comments') }}" class="btn btn-outline-primary btn-sm mt-2">View</a>
@@ -56,7 +56,7 @@
         <div class="col">
             <div class="card text-center shadow-sm">
                 <div class="card-body">
-                    <i class="fa-brands fa-rocketchat fa-2x mb-2 text-primary"></i>
+                    <i class="fa-regular fa-comments fa-2x mb-2 text-primary"></i>
                     <h5 class="card-title">ChatMessages</h5>
                     <p class="h4">{{ $chatMessage_count ?? '-' }}</p>
                     <a href="{{ route('admin.chatMessages') }}" class="btn btn-outline-primary btn-sm mt-2">View</a>

@@ -7,7 +7,7 @@
 
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center bg-dark text-white p-3 rounded-top">
-        <h4 class="mb-0"><i class="fa-regular fa-comments"></i> Comment Management</h4>
+        <h4 class="mb-0"><i class="fa-solid fa-tags"></i> Comment Management</h4>
     </div>
 
     <!-- Comment Table -->
@@ -18,7 +18,7 @@
                     <th>#ID</th>
                     <th>Comment</th>
                     <th>User</th>
-                    <th>Post</th>
+                    <th>Post ID</th>
                     <th>Created At</th>
                     <th>Status</th>
                     <th>Action</th>
@@ -39,13 +39,14 @@
                             @endif
                         </td>
                         <td>
-                            @if ($comment->post)
+                            <a href="{{ route('admin.posts.show', $comment->post->id) }}" class="text-decoration-none">{{ '#' . $comment->post->id }}</a>
+                            {{-- @if ($comment->post)
                                 <a href="{{ $comment->post->getCategoryRoute() }}" class="text-decoration-none">
-                                    {{ $comment->post->title ?? 'Post #' . $comment->post_id }}
+
                                 </a>
                             @else
                                 <span class="text-muted">[Deleted Post]</span>
-                            @endif
+                            @endif --}}
                         </td>
                         <td>{{ $comment->created_at->format('Y-m-d') }}</td>
                         <td>

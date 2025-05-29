@@ -16,7 +16,7 @@
             <thead class="table-info text-dark">
                 <tr>
                     <th>#ID</th>
-                    <th>Title</th>
+                    <th>Discription</th>
                     <th>User</th>
                     <th>Category</th>
                     <th>Created At</th>
@@ -29,13 +29,14 @@
                     <tr>
                         <td>{{ $post->id }}</td>
                         <td>
-                            @if ($post->getCategoryRoute())
+                            <a href="{{ route('admin.posts.show', $post->id) }}" class="text-decoration-none">{{ $post->description }}</a>
+                            {{-- @if ($post->getCategoryRoute())
                                 <a href="{{ $post->getCategoryRoute() }}" class="text-decoration-none">
-                                    {{ $post->title }}
+                                    {{ $post->description }}
                                 </a>
                             @else
                                 <span class="text-muted">No route</span>
-                            @endif
+                            @endif --}}
                         </td>
 
                         <td>

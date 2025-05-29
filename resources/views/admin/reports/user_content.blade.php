@@ -36,12 +36,11 @@
         <div class="tab-content border rounded p-3 bg-white" id="contentTabsContent">
             {{-- Posts --}}
             <div class="tab-pane fade show active" id="posts" role="tabpanel">
-                <h5>Posts</h5>
                 <table class="table table-hover align-middle text-secondary">
                     <thead class="table-info text-dark">
                         <tr>
                             <th>#ID</th>
-                            <th>Title</th>
+                            <th>Discription</th>
                             <th>User</th>
                             <th>Category</th>
                             <th>Created At</th>
@@ -54,13 +53,14 @@
                             <tr>
                                 <td>{{ $post->id }}</td>
                                 <td>
-                                    @if ($post->getCategoryRoute())
+                                    <a href="{{ route('admin.posts.show', $post->id) }}" class="text-decoration-none">{{ $post->description }}</a>
+                                    {{-- @if ($post->getCategoryRoute())
                                         <a href="{{ $post->getCategoryRoute() }}" class="text-decoration-none">
                                             {{ $post->title }}
                                         </a>
                                     @else
                                         <span class="text-muted">No route</span>
-                                    @endif
+                                    @endif --}}
                                 </td>
 
                                 <td>
@@ -118,14 +118,13 @@
 
             {{-- Comments --}}
             <div class="tab-pane fade" id="comments" role="tabpanel">
-                <h5>Comments</h5>
                 <table class="table table-hover align-middle text-secondary">
                     <thead class="table-info text-dark">
                         <tr>
                             <th>#ID</th>
                             <th>Comment</th>
                             <th>User</th>
-                            <th>Post</th>
+                            <th>Post ID</th>
                             <th>Created At</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -147,13 +146,14 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($comment->post)
+                                    <a href="{{ route('admin.posts.show', $comment->post->id) }}" class="text-decoration-none">{{ '#' . $comment->post->id }}</a>
+                                    {{-- @if ($comment->post)
                                         <a href="{{ $comment->post->getCategoryRoute() }}" class="text-decoration-none">
                                             {{ $comment->post->title ?? 'Post #' . $comment->post_id }}
                                         </a>
                                     @else
                                         <span class="text-muted">[Deleted Post]</span>
-                                    @endif
+                                    @endif --}}
                                 </td>
                                 <td>{{ $comment->created_at->format('Y-m-d') }}</td>
                                 <td>
@@ -195,20 +195,19 @@
 
                 <!-- Pagination -->
                 <div class="d-flex justify-content-center my-pagination">
-                    {{ $comments->links() }}
+                    {{ $comments->onEachSide(1)->links('pagination::bootstrap-5') }}
                 </div>
             </div>
 
             {{-- Answers --}}
             <div class="tab-pane fade" id="answers" role="tabpanel">
-                <h5>Answers</h5>
                 <table class="table table-hover align-middle text-secondary">
                     <thead class="table-info text-dark">
                         <tr>
                             <th>#ID</th>
                             <th>Answer</th>
                             <th>User</th>
-                            <th>Post</th>
+                            <th>Post ID</th>
                             <th>Created At</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -230,13 +229,14 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($answer->post)
+                                    <a href="{{ route('admin.posts.show', $answer->post->id) }}" class="text-decoration-none">{{ '#' . $answer->post->id }}</a>
+                                    {{-- @if ($answer->post)
                                         <a href="{{ $answer->post->getCategoryRoute() }}" class="text-decoration-none">
                                             {{ $answer->post->title ?? 'Post #' . $answer->post_id }}
                                         </a>
                                     @else
                                         <span class="text-muted">[Deleted Post]</span>
-                                    @endif
+                                    @endif --}}
                                 </td>
                                 <td>{{ $answer->created_at->format('Y-m-d') }}</td>
                                 <td>
@@ -278,20 +278,19 @@
 
                 <!-- Pagination -->
                 <div class="d-flex justify-content-center my-pagination">
-                    {{ $answers->links() }}
+                    {{ $answers->onEachSide(1)->links('pagination::bootstrap-5') }}
                 </div>
             </div>
 
             {{-- Chat Messages --}}
             <div class="tab-pane fade" id="chat" role="tabpanel">
-                <h5>Chat Messages</h5>
                 <table class="table table-hover align-middle text-secondary">
                     <thead class="table-info text-dark">
                         <tr>
                             <th>#ID</th>
                             <th>Message</th>
                             <th>User</th>
-                            <th>Post</th>
+                            <th>Post ID</th>
                             <th>Created At</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -313,14 +312,15 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($chatMessage->chatRoom && $chatMessage->chatRoom->post)
+                                    <a href="{{ route('admin.posts.show', $chatMessage->chatRoom->post_id) }}" class="text-decoration-none">{{ '#' . $chatMessage->chatRoom->post_id }}</a>
+                                    {{-- @if ($chatMessage->chatRoom && $chatMessage->chatRoom->post)
                                         <a href="{{ $chatMessage->chatRoom->post->getCategoryRoute() }}"
                                             class="text-decoration-none">
                                             {{ $chatMessage->chatRoom->post->title ?? 'Post #' . $chatMessage->chatRoom->post_id }}
                                         </a>
                                     @else
                                         <span class="text-muted">[Deleted Post]</span>
-                                    @endif
+                                    @endif --}}
                                 </td>
                                 <td>{{ $chatMessage->created_at->format('Y-m-d') }}</td>
                                 <td>
@@ -362,9 +362,28 @@
 
                 <!-- Pagination -->
                 <div class="d-flex justify-content-center my-pagination">
-                    {{ $chatMessages->links() }}
+                    {{ $chatMessages->onEachSide(1)->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>
     </div>
 @endsection
+<script>
+    // ページ読み込み時、URLのハッシュを見て該当タブを開く
+    document.addEventListener('DOMContentLoaded', function () {
+        const hash = window.location.hash;
+        if (hash) {
+            const tabTrigger = document.querySelector(`button[data-bs-target="${hash}"]`);
+            if (tabTrigger) {
+                new bootstrap.Tab(tabTrigger).show();
+            }
+        }
+    });
+
+    // タブが切り替えられるたびにURLを更新
+    document.querySelectorAll('button[data-bs-toggle="tab"]').forEach(btn => {
+        btn.addEventListener('shown.bs.tab', e => {
+            history.replaceState(null, null, e.target.dataset.bsTarget);
+        });
+    });
+</script>

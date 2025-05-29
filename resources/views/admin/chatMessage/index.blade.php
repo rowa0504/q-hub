@@ -18,7 +18,7 @@
                     <th>#ID</th>
                     <th>Message</th>
                     <th>User</th>
-                    <th>Post</th>
+                    <th>Post ID</th>
                     <th>Created At</th>
                     <th>Status</th>
                     <th>Action</th>
@@ -39,13 +39,14 @@
                             @endif
                         </td>
                         <td>
-                            @if ($chatMessage->chatRoom && $chatMessage->chatRoom->post)
+                            <a href="{{ route('admin.posts.show', $chatMessage->chatRoom->post_id) }}" class="text-decoration-none">{{ '#' . $chatMessage->chatRoom->post_id }}</a>
+                            {{-- @if ($chatMessage->chatRoom && $chatMessage->chatRoom->post)
                                 <a href="{{ $chatMessage->chatRoom->post->getCategoryRoute() }}" class="text-decoration-none">
                                     {{ $chatMessage->chatRoom->post->title ?? 'Post #' . $chatMessage->chatRoom->post_id }}
                                 </a>
                             @else
                                 <span class="text-muted">[Deleted Post]</span>
-                            @endif
+                            @endif --}}
                         </td>
                         <td>{{ $chatMessage->created_at->format('Y-m-d') }}</td>
                         <td>

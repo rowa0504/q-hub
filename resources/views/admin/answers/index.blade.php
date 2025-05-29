@@ -18,7 +18,7 @@
                     <th>#ID</th>
                     <th>Answer</th>
                     <th>User</th>
-                    <th>Post</th>
+                    <th>Post ID</th>
                     <th>Created At</th>
                     <th>Status</th>
                     <th>Action</th>
@@ -39,13 +39,14 @@
                             @endif
                         </td>
                         <td>
-                            @if ($answer->post)
+                            <a href="{{ route('admin.posts.show', $answer->post->id) }}" class="text-decoration-none">{{ '#' . $answer->post->id }}</a>
+                            {{-- @if ($answer->post)
                                 <a href="{{ $answer->post->getCategoryRoute() }}" class="text-decoration-none">
                                     {{ $answer->post->title ?? 'Post #' . $answer->post_id }}
                                 </a>
                             @else
                                 <span class="text-muted">[Deleted Post]</span>
-                            @endif
+                            @endif --}}
                         </td>
                         <td>{{ $answer->created_at->format('Y-m-d') }}</td>
                         <td>
