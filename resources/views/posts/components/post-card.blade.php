@@ -205,54 +205,34 @@
                         {{-- 参加者数と参加ボタン --}}
                         <div class="d-flex align-items-center gap-3 my-2">
                             {{-- 参加ボタン --}}
-                            @if ($post->participations->count() >= $post->max)
-                                @if ($post->isParticipanted())
-                                    <form action="{{ route('participation.delete', $post->id) }}" method="post"
-                                        class="d-flex align-items-center">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm shadow-none p-0">
-                                            <i class="fa-solid fa-hand text-primary fa-lg"></i>
-                                        </button>
-                                    </form>
-                                @else
-                                    <button class="btn btn-sm shadow-none p-0" disabled>
-                                        <i class="fa-solid fa-hand text-danger fa-lg"></i>
-                                    </button>
-                                @endif
-                            @else
-                                @if ($post->isParticipanted())
-                                    <form action="{{ route('participation.delete', $post->id) }}" method="post"
-                                        class="d-flex align-items-center">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm shadow-none p-0">
-                                            <i class="fa-solid fa-hand text-primary fa-lg"></i>
-                                        </button>
-                                    </form>
-                                @else
-                                    <form action="{{ route('participation.store', $post->id) }}" method="post"
-                                        class="d-flex align-items-center">
-                                        @csrf
-                                        <button class="btn btn-sm shadow-none p-0">
-                                            <i class="fa-regular fa-hand fa-lg"></i>
-                                        </button>
-                                    </form>
-                                @endif
-                            @endif
+                            @php
+                                $isParticipated = $post->isParticipated();
+                            @endphp
 
-                            {{-- 現在の参加者数 --}}
-                            <div class="d-flex align-items-center">
-                                <button class="btn btn-link text-decoration-none p-0 m-0" data-bs-toggle="modal"
-                                    data-bs-target="#participant-user-{{ $post->id }}">
-                                    <i class="fa-solid fa-users text-muted me-1"></i>
-                                    <span class="fw-bold fs-5 text-dark">{{ $post->participations->count() }}</span>
+                            <div x-data="participantComponent({{ $post->id }}, {{ $post->participations->count() }}, {{ $isParticipated ? 'true' : 'false' }})" class="d-flex align-items-center gap-2">
+                                <button type="button" class="btn d-flex align-items-center text-muted"
+                                    @click="toggleParticipation">
+                                    <i
+                                        :class="participated ? 'fa-solid fa-hand text-info me-1' :
+                                            'fa-solid fa-hand text-secondary me-1'"></i>
+                                    <span x-text="participantsCount" class="text-dark"></span>
                                 </button>
-                                <span class="mx-2 text-muted">/</span>
-                                <span class="text-muted small">Max: {{ $post->max ?? 'TBD' }}</span>
+
+
+                                {{-- 現在の参加者数 --}}
+                                <div class="d-flex align-items-center">
+                                    <button class="btn btn-link text-decoration-none p-0 m-0" data-bs-toggle="modal"
+                                        data-bs-target="#participant-user-{{ $post->id }}">
+                                        <i class="fa-solid fa-users text-muted me-1"></i>
+                                        <span x-text="participantsCount" class="text-muted small"></span>
+                                    </button>
+                                    <span class="mx-2 text-muted small">/</span>
+                                    <span class="text-muted small">Max: {{ $post->max ?? 'TBD' }}</span>
+                                </div>
+                                {{-- 参加者モーダル --}}
+                                @include('posts.components.modals.participation-modal')
                             </div>
                         </div>
-                        @include('posts.components.modals.participation-modal')
                     </div>
                 @endif
             @break
@@ -443,6 +423,40 @@
             }
         </script>
 
+
+        {{-- 参加者・非同期処理 --}}
+        <script>
+            function participantComponent(postId, initialParticipantsCount, isParticipatedInitially) {
+                return {
+                    participated: isParticipatedInitially === true || isParticipatedInitially === 'true',
+                    participantsCount: initialParticipantsCount,
+
+                    toggleParticipation() {
+                        fetch(`/posts/${postId}/participation-toggle`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                        'content')
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'participated') {
+                                    this.participated = true;
+                                    this.participantsCount = data.participants_count;
+                                } else if (data.status === 'unparticipated') {
+                                    this.participated = false;
+                                    this.participantsCount = data.participants_count;
+                                } else {
+                                    console.error("Unknown response", data);
+                                }
+                            })
+                            .catch(() => alert("接続エラー"));
+                    }
+                }
+            }
+        </script>
     </div>
 </div>
 
