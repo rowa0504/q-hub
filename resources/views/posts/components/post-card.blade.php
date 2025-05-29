@@ -209,15 +209,21 @@
                                 $isParticipated = $post->isParticipated();
                             @endphp
 
-                            <div x-data="participantComponent({{ $post->id }}, {{ $post->participations->count() }}, {{ $isParticipated ? 'true' : 'false' }})" class="d-flex align-items-center gap-2">
-                                <button type="button" class="btn d-flex align-items-center text-muted"
-                                    @click="toggleParticipation">
-                                    <i
-                                        :class="participated ? 'fa-solid fa-hand text-info me-1' :
-                                            'fa-solid fa-hand text-secondary me-1'"></i>
-                                    <span x-text="participantsCount" class="text-dark"></span>
-                                </button>
+                            <div x-data="participantComponent({{ $post->id }}, {{ $post->participations->count() }}, {{ $isParticipated ? 'true' : 'false' }}, {{ $post->max ?? 'null' }})" class="d-flex align-items-center gap-2">
+                                <button type="button" class="btn d-flex align-items-center"
+                                    :class="{
+                                        'text-muted': !participated && !isFull,
+                                        'text-info': participated,
+                                        'text-danger': !participated && isFull
+                                    }"
+                                    :disabled="isFull && !participated" @click="toggleParticipation">
 
+                                    <i
+                                        :class="participated ? 'fa-solid fa-hand me-1' : isFull ? 'fa-solid fa-ban me-1' :
+                                            'fa-solid fa-hand text-secondary me-1'"></i>
+
+                                    <span x-text="isFull && !participated ? 'Full' : participantsCount" class="fw-bold"></span>
+                                </button>
 
                                 {{-- 現在の参加者数 --}}
                                 <div class="d-flex align-items-center">
@@ -426,35 +432,39 @@
 
         {{-- 参加者・非同期処理 --}}
         <script>
-            function participantComponent(postId, initialParticipantsCount, isParticipatedInitially) {
+            function participantComponent(postId, initialCount, initialParticipated, maxParticipants) {
                 return {
-                    participated: isParticipatedInitially === true || isParticipatedInitially === 'true',
-                    participantsCount: initialParticipantsCount,
+                    postId,
+                    participantsCount: initialCount,
+                    participated: initialParticipated,
+                    maxParticipants: maxParticipants,
+
+                    get isFull() {
+                        return this.maxParticipants !== null && this.participantsCount >= this.maxParticipants;
+                    },
 
                     toggleParticipation() {
-                        fetch(`/posts/${postId}/participation-toggle`, {
+                        if (this.isFull && !this.participated) {
+                            // すでに満員で、かつ自分が未参加なら無視
+                            alert('このイベントは満員です。');
+                            return;
+                        }
+
+                        fetch(`/posts/${this.postId}/participation-toggle`, {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
                                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
-                                        'content')
-                                }
+                                        'content'),
+                                },
                             })
-                            .then(response => response.json())
+                            .then(res => res.json())
                             .then(data => {
-                                if (data.status === 'participated') {
-                                    this.participated = true;
-                                    this.participantsCount = data.participants_count;
-                                } else if (data.status === 'unparticipated') {
-                                    this.participated = false;
-                                    this.participantsCount = data.participants_count;
-                                } else {
-                                    console.error("Unknown response", data);
-                                }
-                            })
-                            .catch(() => alert("接続エラー"));
-                    }
-                }
+                                this.participantsCount = data.participants_count;
+                                this.participated = data.status === 'participated';
+                            });
+                    },
+                };
             }
         </script>
     </div>
