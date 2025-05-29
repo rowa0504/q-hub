@@ -17,7 +17,10 @@ class EventCalendarController extends Controller
         // イベントデータを取得（適宜変更）
         $events = $this->post
             ->where('category_id', 1)
-            ->whereDate('startdatetime', '>=', now()->toDateString())
+            ->where(function ($query) {
+                $query->whereDate('startdatetime', '>=', now()->toDateString())
+                    ->orWhereDate('enddatetime', '>=', now()->toDateString());
+            })
             ->get();
 
         // FullCalendarが期待する形式に変換して返す
@@ -27,6 +30,7 @@ class EventCalendarController extends Controller
                 'title' => $event->description,
                 'start' => $event->startdatetime,
                 'end'   => $event->enddatetime ? $event->enddatetime : null,
+                'allDay' => true
             ];
         });
 

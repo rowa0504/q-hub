@@ -1,10 +1,10 @@
 <!-- admin/reports/modal/comments.blade.php -->
 <div class="modal fade" id="commentDetailModal-{{ $report->id }}" tabindex="-1"
     aria-labelledby="commentDetailModalLabel-{{ $report->id }}" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog modal-l modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content rounded-4">
             <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="commentDetailModalLabel-{{ $report->id }}">Reported Comment Preview</h5>
+                <h5 class="modal-title" id="commentDetailModalLabel-{{ $report->id }}">Reported Comment Detail</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -26,14 +26,14 @@
                         $relatedPost = $report->reportable->post;
                     @endphp
                     <div class="mb-3">
-                        <strong>Related Post:</strong><br>
-                        <a href="{{ route('admin.posts.show', $comment->post->id) }}" class="text-decoration-none">{{ '#' . $comment->post->id }}</a>
+                        <strong>Related Post:</strong>
+                        <a href="{{ route('admin.posts.show', $report->reportable->post->id) }}" class="text-decoration-none">{{ '#' . $report->reportable->post->id }}</a>
                         {{-- <a href="{{ $relatedPost->getCategoryRoute() }}" class="text-decoration-none" target="_blank">
                             <i class="fa-solid fa-link me-1"></i>{{ $relatedPost->title }}
                         </a> --}}
-                        <p class="mt-1 mb-0 text-muted">
+                        {{-- <p class="mt-1 mb-0 text-muted">
                             {{ Str::limit($relatedPost->description, 150) }}
-                        </p>
+                        </p> --}}
                     </div>
                 @endif
             </div>
