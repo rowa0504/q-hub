@@ -1,7 +1,7 @@
 <!-- admin/reports/modal/chat.blade.php -->
 <div class="modal fade" id="chatDetailModal-{{ $report->id }}" tabindex="-1"
     aria-labelledby="chatDetailModalLabel-{{ $report->id }}" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog modal-l modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content rounded-4">
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title" id="chatDetailModalLabel-{{ $report->id }}">Reported Chat Message Preview</h5>
@@ -30,19 +30,21 @@
                 @if ($post)
                     {{-- Related Post（文字自体にリンク） --}}
                     <div class="mb-3">
-                        <a href="{{ $post->getCategoryRoute() }}" class="text-decoration-none fw-bold" target="_blank">
+                        <strong>Related Post:</strong>
+                        <a href="{{ route('admin.posts.show', $report->reportable->chatRoom->post_id) }}" class="text-decoration-none">{{ '#' . $report->reportable->chatRoom->post_id }}</a>
+                        {{-- <a href="{{ $post->getCategoryRoute() }}" class="text-decoration-none fw-bold" target="_blank">
                             <i class="fa-solid fa-file-lines me-1"></i>
                             Related Post
-                        </a>
+                        </a> --}}
                     </div>
 
                     {{-- 投稿説明文 --}}
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <strong>Description:</strong>
                         <div class="border p-2 rounded bg-white">
                             {{ $post->description ?? 'No description provided.' }}
                         </div>
-                    </div>
+                    </div> --}}
 
                     {{-- チャットルーム名 --}}
                     <div class="mb-3">

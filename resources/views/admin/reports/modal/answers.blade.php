@@ -1,10 +1,10 @@
 <!-- admin/reports/modal/answers.blade.php -->
 <div class="modal fade" id="answerDetailModal-{{ $report->id }}" tabindex="-1"
     aria-labelledby="answerDetailModalLabel-{{ $report->id }}" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog modal-l modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content rounded-4">
             <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="answerDetailModalLabel-{{ $report->id }}">Reported Answer Preview</h5>
+                <h5 class="modal-title" id="answerDetailModalLabel-{{ $report->id }}">Reported Answer Detail</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -24,10 +24,11 @@
                 @if ($report->reportable->post && method_exists($report->reportable->post, 'getCategoryRoute'))
                     <div class="mb-3">
                         <strong>Related Post:</strong>
-                        <a href="{{ $report->reportable->post->getCategoryRoute() }}"
+                        <a href="{{ route('admin.posts.show', $report->reportable->post->id) }}" class="text-decoration-none">{{ '#' . $report->reportable->post->id }}</a>
+                        {{-- <a href="{{ $report->reportable->post->getCategoryRoute() }}"
                             class="text-decoration-none" target="_blank">
                             {{ $report->reportable->post->title }}
-                        </a>
+                        </a> --}}
                     </div>
                 @endif
             </div>
