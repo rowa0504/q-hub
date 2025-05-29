@@ -21,16 +21,16 @@
                 <div class="position-relative d-inline-block" id="avatarContainer">
                     @if ($user->avatar)
                         <img src="{{ $user->avatar }}" alt="avatar"
-                            class="rounded-circle bg-light d-flex justify-content-center align-items-center"
-                            width="120" height="120" id="avatarPreview">
+                            class="rounded-circle bg-light d-flex justify-content-center align-items-center" width="120"
+                            height="120" id="avatarPreview">
                     @else
                         <i class="fa-solid fa-circle-user fa-9x text-secondary" id="avatarPreview"
-                           style="width: 120px; height: 120px;"></i>
+                            style="width: 120px; height: 120px;"></i>
                     @endif
 
                     <label for="avatarInput"
-                        class="position-absolute top-0 start-100 translate-middle p-1 bg-light rounded-circle border shadow"
-                        style="cursor: pointer;">
+                        class="position-absolute top-0 start-100 translate-middle bg-light rounded-circle border shadow d-flex justify-content-center align-items-center"
+                        style="cursor: pointer; width: 32px; height: 32px;">
                         <i class="fas fa-pen"></i>
                     </label>
                     <input type="file" name="avatar" id="avatarInput" class="d-none" accept="image/*">
@@ -39,12 +39,12 @@
 
             <!-- JS：<i>を<img>に差し替える処理を含む -->
             <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    document.getElementById('avatarInput').addEventListener('change', function (event) {
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.getElementById('avatarInput').addEventListener('change', function(event) {
                         const file = event.target.files[0];
                         if (file) {
                             const reader = new FileReader();
-                            reader.onload = function (e) {
+                            reader.onload = function(e) {
                                 let preview = document.getElementById('avatarPreview');
 
                                 // <i>タグだった場合は <img> に置き換え

@@ -43,12 +43,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/{id}/delete', [PostController::class, 'delete'])->name('delete');
     });
 
-    // Like route
-    Route::group(['prefix' => 'like', 'as' => 'like.'], function () {
-        Route::post('/{id}/store', [LikeController::class, 'store'])->name('store');
-        Route::delete('/{id}/delete', [LikeController::class, 'delete'])->name('delete');
-    });
-
     // like route
     Route::post('/posts/{post_id}/like-toggle', [LikeController::class, 'likeToggle'])->name('posts.likeToggle');
 
@@ -85,10 +79,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/search', [EventController::class, 'search'])->name('search');
     });
 
-    Route::group(['prefix' => 'participation', 'as' => 'participation.'], function () {
-        Route::post('/{id}/store', [ParticipationController::class, 'store'])->name('store');
-        Route::delete('/{id}/delete', [ParticipationController::class, 'delete'])->name('delete');
-    });
+    // Participation route
+    Route::post('/posts/{post_id}/participation-toggle', [ParticipationController::class, 'participationToggle'])
+        ->name('posts.participationToggle');
+    // routes/web.php
+    Route::get('/posts/{post}/participants', [ParticipationController::class, 'getParticipants']);
+
+
 
     // Food route
     Route::group(['prefix' => 'food', 'as' => 'food.'], function () {

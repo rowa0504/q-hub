@@ -12,35 +12,43 @@ class Post extends Model
 {
     use SoftDeletes;
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
-    public function category(){
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
-    public function transCategory(){
+    public function transCategory()
+    {
         return $this->belongsTo(TransCategory::class);
     }
 
-    public function comments(){
+    public function comments()
+    {
         return $this->hasMany(Comment::class);
     }
 
-    public function answers(){
+    public function answers()
+    {
         return $this->hasMany(Answer::class);
     }
 
-    public function likes(){
+    public function likes()
+    {
         return $this->hasMany(Like::class);
     }
 
-    public function isLiked(){
+    public function isLiked()
+    {
         return $this->likes()->where('user_id', Auth::user()->id)->exists();
     }
 
-    public function getCategoryRoute(){
+    public function getCategoryRoute()
+    {
         switch ($this->category_id) {
             case 1:
                 return route('event.index', ['id' => $this->id]);
@@ -64,18 +72,20 @@ class Post extends Model
         'enddatetime' => 'datetime',
     ];
 
-    public function participations(){
+    public function participations()
+    {
         return $this->hasMany(Participation::class);
     }
 
-    public function isParticipanted(){
-        // check if the user id exists on the likes table and returns boolean
-        // value true or false
-        return $this->participations()->where('user_id',Auth::user()->id)->exists();
+    public function isParticipated()
+    {
+        return $this->participations()->where('user_id', Auth::user()->id)->exists();
     }
 
+
     // 投稿に紐づくチャットルーム
-    public function chatRoom(){
+    public function chatRoom()
+    {
         return $this->hasOne(ChatRoom::class);
     }
 
@@ -83,11 +93,13 @@ class Post extends Model
     //     return $this->hasMany(\App\Models\Report::class);
     // }
 
-    public function reports(){
+    public function reports()
+    {
         return $this->morphMany(Report::class, 'reportable');
     }
 
-    public function images(){
+    public function images()
+    {
         return $this->hasMany(PostImage::class);
     }
 }

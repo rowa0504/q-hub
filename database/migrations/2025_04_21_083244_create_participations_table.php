@@ -12,6 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('participations', function (Blueprint $table) {
+            $table->id();
+
             $table->unsignedBigInteger('user_id');//the id of the user who participated in the event
             $table->unsignedBigInteger('post_id');//the id of the event being participated
 
