@@ -19,14 +19,16 @@ class AdminController extends Controller
     private $answer;
     private $chatMessage;
     private $report;
+    private $reportReason;
 
-    public function __construct(User $user, Post $post, Comment $comment, Answer $answer, ChatMessage $chatMessage, Report $report){
+    public function __construct(User $user, Post $post, Comment $comment, Answer $answer, ChatMessage $chatMessage, Report $report, ReportReason $reportReason){
         $this->user = $user;
         $this->post = $post;
         $this->comment = $comment;
         $this->answer = $answer;
         $this->chatMessage = $chatMessage;
         $this->report = $report;
+        $this->reportReason = $reportReason;
     }
 
     public function dashboard()
@@ -80,16 +82,24 @@ class AdminController extends Controller
         return view('admin.posts.index', compact('all_posts'));
     }
 
+    public function show($id){
+        $post = $this->post->withTrashed()->findOrFail($id);
+        $all_user = $this->user->all();
+        $all_report_reasons = $this->reportReason->all();
+
+        return view('admin.posts.show', compact('post', 'all_user', 'all_report_reasons'));
+    }
+
     public function deactivatePost($id){
         $this->post->destroy($id);
 
-        return redirect()->back();
+        return redirect()->back()->withFragment('posts');
     }
 
     public function activatePost($id){
         $this->post->onlyTrashed()->findOrFail($id)->restore();
 
-        return redirect()->back();
+        return redirect()->back()->withFragment('posts');
     }
 
 
@@ -102,13 +112,13 @@ class AdminController extends Controller
     public function deactivateComment($id){
         $this->comment->destroy($id);
 
-        return redirect()->back();
+        return redirect()->back()->withFragment('comments');
     }
 
     public function activateComment($id){
         $this->comment->onlyTrashed()->findOrFail($id)->restore();
 
-        return redirect()->back();
+        return redirect()->back()->withFragment('comments');
     }
 
 
@@ -121,13 +131,13 @@ class AdminController extends Controller
     public function deactivateAnswer($id){
         $this->answer->destroy($id);
 
-        return redirect()->back();
+        return redirect()->back()->withFragment('answers');
     }
 
     public function activateAnswer($id){
         $this->answer->onlyTrashed()->findOrFail($id)->restore();
 
-        return redirect()->back();
+        return redirect()->back()->withFragment('answers');
     }
 
 
@@ -138,7 +148,7 @@ class AdminController extends Controller
             'chatRoom.post' => fn($q) => $q->withTrashed(), // チャットルームに紐づく投稿を取得（削除含む）
         ])
         ->withTrashed() // コメント自体がソフトデリートされていても含める
-        ->latest()
+        ->oldest()
         ->paginate(20);
 
         return view('admin.chatMessage.index', compact('all_chatMessages'));
@@ -147,13 +157,13 @@ class AdminController extends Controller
     public function deactivateChatMessage($id){
         $this->chatMessage->destroy($id);
 
-        return redirect()->back();
+        return redirect()->back()->withFragment('chat');
     }
 
     public function activateChatMessage($id){
         $this->chatMessage->onlyTrashed()->findOrFail($id)->restore();
 
-        return redirect()->back();
+        return redirect()->back()->withFragment('chat');
     }
 
 

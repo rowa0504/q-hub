@@ -154,6 +154,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // 投稿の状態変更
         Route::get('/posts', [AdminController::class, 'posts'])->name('posts');
+        Route::get('/posts/{id}/show', [AdminController::class, 'show'])->name('posts.show');
         Route::delete('/posts/{id}/deactivate', [AdminController::class, 'deactivatePost'])->name('posts.deactivate');
         Route::patch('/posts/{id}/activate', [AdminController::class, 'activatePost'])->name('posts.activate');
 

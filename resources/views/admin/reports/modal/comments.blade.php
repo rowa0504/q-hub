@@ -27,9 +27,10 @@
                     @endphp
                     <div class="mb-3">
                         <strong>Related Post:</strong><br>
-                        <a href="{{ $relatedPost->getCategoryRoute() }}" class="text-decoration-none" target="_blank">
+                        <a href="{{ route('admin.posts.show', $comment->post->id) }}" class="text-decoration-none">{{ '#' . $comment->post->id }}</a>
+                        {{-- <a href="{{ $relatedPost->getCategoryRoute() }}" class="text-decoration-none" target="_blank">
                             <i class="fa-solid fa-link me-1"></i>{{ $relatedPost->title }}
-                        </a>
+                        </a> --}}
                         <p class="mt-1 mb-0 text-muted">
                             {{ Str::limit($relatedPost->description, 150) }}
                         </p>

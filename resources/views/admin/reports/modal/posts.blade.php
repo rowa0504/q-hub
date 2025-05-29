@@ -24,10 +24,10 @@
                     <div>
                         <!-- モーダル下部の footer 内 -->
                         @if ($report->reportable instanceof App\Models\Post)
-                            <div class="modal-footer bg-white d-flex justify-content-between">
-                                <div>
+                            {{-- <div class="modal-footer bg-white d-flex justify-content-between"> --}}
+                                {{-- <div>
                                     <small class="text-muted">Post ID: {{ $report->reportable->id }}</small>
-                                </div>
+                                </div> --}}
                                 <div>
                                     @if ($report->reportable->deleted_at)
                                         <form action="{{ route('admin.posts.activate', $report->reportable->id) }}" method="POST" class="d-inline">
@@ -47,7 +47,7 @@
                                         </form>
                                     @endif
                                 </div>
-                            </div>
+                            {{-- </div> --}}
                         @endif
 
                     </div>

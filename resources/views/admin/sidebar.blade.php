@@ -30,13 +30,13 @@
             <li class="nav-item">
                 <a class="nav-link text-white {{ request()->is('admin/answers') ? 'fw-bold' : '' }}"
                     href="{{ route('admin.answers') }}">
-                    <i class="fa-solid fa-circle-question me-2"></i> Answers
+                    <i class="fa-solid fa-reply me-2"></i> Answers
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white {{ request()->is('admin/chatMessages') ? 'fw-bold' : '' }}"
                     href="{{ route('admin.chatMessages') }}">
-                    <i class="fa-brands fa-rocketchat me-2"></i> ChatMessage
+                    <i class="fa-regular fa-comments me-2"></i> ChatMessage
                 </a>
             </li>
             <li class="nav-item">
