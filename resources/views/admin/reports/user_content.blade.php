@@ -6,6 +6,29 @@
     <div class="container">
         <h4 class="mb-4">
             <i class="fa-solid fa-user-shield me-2"></i>Content by {{ $user->name ?? 'Deleted User' }}
+            @if ($user->role_id !== \App\Models\User::ADMIN_ROLE_ID)
+                @if ($user->trashed())
+                    {{-- Activate --}}
+                    <form action="{{ route('admin.users.activate', $user->id) }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn btn-success btn-sm">
+                            <i class="fa-solid fa-user-check"></i> Activate
+                        </button>
+                    </form>
+                @else
+                    {{-- Deactivate --}}
+                    <form action="{{ route('admin.users.deactivate', $user->id) }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="fa-solid fa-user-slash"></i> Deactivate
+                        </button>
+                    </form>
+                @endif
+            @else
+                <span class="text-muted small">Admin actions disabled</span>
+            @endif
         </h4>
 
         <div class="mb-4">
