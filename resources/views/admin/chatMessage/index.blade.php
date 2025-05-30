@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Admin: ChatMessage')
+@section('title', 'Admin: ChatMessages')
 
 @section('content')
 <div class="container">
 
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center bg-dark text-white p-3 rounded-top">
-        <h4 class="mb-0"><i class="fa-regular fa-comments"></i> ChatMessage Management</h4>
+        <h4 class="mb-0"><i class="fa-regular fa-comments"></i> Chat Message Management</h4>
     </div>
 
     <!-- ChatMessage Table -->

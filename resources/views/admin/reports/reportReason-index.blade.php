@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title','Admin: Categories')
+@section('title','Admin: Report Reason')
 
 @section('content')
     <div class="container d-flex justify-content-center"> {{-- 追加した中央寄せの外枠 --}}

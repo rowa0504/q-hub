@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Reported User Content')
+@section('title', 'Admin: Reported User')
 
 @section('content')
     <div class="container">
