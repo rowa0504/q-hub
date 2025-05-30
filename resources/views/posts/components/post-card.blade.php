@@ -282,8 +282,7 @@
                     isFull: {{ $isFull ? 'true' : 'false' }},
                     joined: {{ $isJoined ? 'true' : 'false' }},
                     max: {{ $max }},
-                    count: {{ $currentParticipants }}
-                }" class="my-2">
+                    count: {{ $currentParticipants }}}" class="my-2">
 
                     {{-- 参加者数表示 --}}
                     <h5 class="mb-1 text-muted d-flex align-items-center">
