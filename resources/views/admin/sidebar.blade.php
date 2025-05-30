@@ -36,7 +36,7 @@
             <li class="nav-item">
                 <a class="nav-link text-white {{ request()->is('admin/chatMessages') ? 'fw-bold' : '' }}"
                     href="{{ route('admin.chatMessages') }}">
-                    <i class="fa-regular fa-comments me-2"></i> ChatMessage
+                    <i class="fa-regular fa-comments me-2"></i> Chat Messages
                 </a>
             </li>
             <li class="nav-item">
