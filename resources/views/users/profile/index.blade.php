@@ -9,6 +9,7 @@
 
             <!-- 投稿リスト：左側（col-md-9） -->
             <div class="col-12 col-md-9">
+                @include('posts.components.modals.calendar-modal')
                 {{-- 投稿リスト本体 --}}
                 @forelse($all_posts as $post)
                     @include('posts.components.post-card', ['post' => $post])
