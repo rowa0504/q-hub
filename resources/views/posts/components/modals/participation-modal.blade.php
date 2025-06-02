@@ -57,14 +57,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         const userHtml = `
                             <div class="row align-items-center mb-3 participant">
                                 <div class="col-auto">
-                                    <a href="/profile/${user.id}">
+                                    <a href="/profile/${user.id}/index">
                                         ${user.avatar
                                             ? `<img src="${user.avatar}" alt="${user.name}" class="rounded-circle avatar-md">`
                                             : `<i class="fa-solid fa-circle-user text-secondary icon-md"></i>`}
                                     </a>
                                 </div>
                                 <div class="col ps-0 text-truncate">
-                                    <a href="/profile/${user.id}" class="text-decoration-none text-dark fw-bold">${user.name}</a>
+                                    <a href="/profile/${user.id}/index" class="text-decoration-none text-dark fw-bold">${user.name}</a>
                                 </div>
                             </div>
                         `;
