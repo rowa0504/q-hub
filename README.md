@@ -3,15 +3,16 @@ QHub is a web-based bulletin board application designed specifically for student
 It allows users to share class updates, ask questions, make announcements, and interact with each other in a structured and user-friendly environment.
 
 🛠️ Technologies Used
--Laravel 10
--PHP 8.2
--MySQL
--Tailwind CSS
--Bootstrap
--Alpine.js
--WorkOS (Authentication)
--Google Maps API (Location features)
--Git / GitHub
+- Laravel 12
+- MySQL  
+- PHP 8.2  
+- Tailwind CSS
+- Bootstrap
+- alphine.js
+- api (calender, comment, like, attend)
+- WorkOs (Auth)
+- Google api (map)
+- Git / GitHub
 
 ✨ Features
 📝 Post Management: Create, edit, and delete posts
