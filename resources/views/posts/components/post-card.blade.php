@@ -169,11 +169,11 @@
                             <div class="mt-2 fw-bold">
                                 <p class="mb-1 text-muted small">
                                     Start Date:
-                                    {{ $post->startdatetime ? \Carbon\Carbon::parse($post->startdatetime)->format('M d, Y H:i') : 'TBD' }}
+                                    {{ $post->startdatetime ? \Carbon\Carbon::parse($post->startdatetime)->format('M d, Y') : 'TBD' }}
                                 </p>
                                 <p class="mb-1 text-muted small">
                                     End Date:
-                                    {{ $post->enddatetime ? \Carbon\Carbon::parse($post->enddatetime)->format('M d, Y H:i') : 'TBD' }}
+                                    {{ $post->enddatetime ? \Carbon\Carbon::parse($post->enddatetime)->format('M d, Y') : 'TBD' }}
                                 </p>
 
                                 {{-- 参加者数と参加ボタン --}}
