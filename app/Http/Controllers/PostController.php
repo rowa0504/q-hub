@@ -45,7 +45,7 @@ class PostController extends Controller
             $modalId = 'post-form-' . $categoryId;
         } elseif ($categoryId == 2 || $categoryId == 4) { // food,travel
             $extraRules = [
-                'location'  => 'required|string|max:50',
+                'location'  => 'required|string',
                 'latitude'  => 'required|numeric',
                 'longitude' => 'required|numeric',
             ];
