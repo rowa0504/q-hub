@@ -169,11 +169,11 @@
                             <div class="mt-2 fw-bold">
                                 <p class="mb-1 text-muted small">
                                     Start Date:
-                                    {{ $post->startdatetime ? \Carbon\Carbon::parse($post->startdatetime)->format('M d, Y H:i') : 'TBD' }}
+                                    {{ $post->startdatetime ? \Carbon\Carbon::parse($post->startdatetime)->format('M d, Y') : 'TBD' }}
                                 </p>
                                 <p class="mb-1 text-muted small">
                                     End Date:
-                                    {{ $post->enddatetime ? \Carbon\Carbon::parse($post->enddatetime)->format('M d, Y H:i') : 'TBD' }}
+                                    {{ $post->enddatetime ? \Carbon\Carbon::parse($post->enddatetime)->format('M d, Y') : 'TBD' }}
                                 </p>
 
                                 {{-- 参加者数と参加ボタン --}}
@@ -222,7 +222,7 @@
                                         :class="participated ? 'fa-solid fa-hand me-1' : isFull ? 'fa-solid fa-ban me-1' :
                                             'fa-solid fa-hand text-secondary me-1'"></i>
 
-                                    <span x-text="isFull && !participated ? 'Full' : participantsCount" class="fw-bold"></span>
+                                    {{-- <span x-text="isFull && !participated ? 'Full' : participantsCount" class="fw-bold"></span> --}}
                                 </button>
 
                                 {{-- 現在の参加者数 --}}
@@ -267,22 +267,32 @@
                 @endif
                 {{-- チャット開始リンク --}}
                 @php
-                    $currentParticipants = $post->chatRoom
-                        ? $post->chatRoom->users->where('role_id', '!=', 1)->count()
-                        : 0;
-                    $max = $post->max ?? 0;
-                    $isJoined = $post->chatRoom && $post->chatRoom->users->contains(Auth::id());
-                @endphp
+                    $users = $post->chatRoom ? $post->chatRoom->users : collect();
 
-                @php
+                    // 投稿者と管理者以外のユーザーだけカウント
+                    $currentParticipants = $users
+                        ->filter(fn($user) => $user->role_id !== 1 && $user->id !== $post->user_id)
+                        ->count();
+
+                    $max = $post->max ?? 0;
+
+                    $user = Auth::user();
+                    $isAdmin = $user->role_id === 1;
+                    $isAuthor = $user->id === $post->user_id;
+                    $isJoined = $users->contains('id', $user->id);
+
+                    // 満員判定（ただし管理者・投稿者は制限対象外）
                     $isFull = $max > 0 && $currentParticipants >= $max;
                 @endphp
 
                 <div x-data="{
                     isFull: {{ $isFull ? 'true' : 'false' }},
                     joined: {{ $isJoined ? 'true' : 'false' }},
+                    isAdmin: {{ $isAdmin ? 'true' : 'false' }},
+                    isAuthor: {{ $isAuthor ? 'true' : 'false' }},
                     max: {{ $max }},
-                    count: {{ $currentParticipants }}}" class="my-2">
+                    count: {{ $currentParticipants }}
+                }" class="my-2">
 
                     {{-- 参加者数表示 --}}
                     <h5 class="mb-1 text-muted d-flex align-items-center">
@@ -290,7 +300,8 @@
                             :class="isFull ? 'fa-solid fa-circle-exclamation text-danger me-1' :
                                 'fa-solid fa-users text-muted me-1'"></i>
                         <span x-text="`Participants (${count} / ${max})`"></span>
-                        <template x-if="isFull && !joined">
+
+                        <template x-if="isFull && !joined && !isAdmin && !isAuthor">
                             <span class="ms-2 text-danger">
                                 <i class="fa-solid fa-ban me-1"></i>
                                 <span class="badge bg-danger">Full</span>
@@ -300,13 +311,15 @@
 
                     {{-- ボタン部分 --}}
                     <div>
-                        <template x-if="isFull && !joined">
+                        {{-- 参加不可：満員かつ未参加、管理者でも投稿者でもない --}}
+                        <template x-if="isFull && !joined && !isAdmin && !isAuthor">
                             <button class="btn btn-sm btn-secondary d-flex align-items-center" disabled>
                                 <i class="fa-solid fa-ban me-1"></i> Join Chat (Full)
                             </button>
                         </template>
 
-                        <template x-if="!isFull || joined">
+                        {{-- 参加可能：上限未満 or 参加済み or 管理者 or 投稿者 --}}
+                        <template x-if="!isFull || joined || isAdmin || isAuthor">
                             <a href="{{ route('chatRoom.start', $post->id) }}" class="btn btn-sm"
                                 :class="joined ? 'btn-success' : 'btn-outline-info'">
                                 <i class="fa-regular fa-comments me-1"></i>
@@ -315,6 +328,7 @@
                         </template>
                     </div>
                 </div>
+
 
 
                 <p class="mb-1 text-muted small">
