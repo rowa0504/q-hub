@@ -23,61 +23,45 @@ class ChatRoomController extends Controller
         $this->reportReason        = $reportReason;
     }
 
-    public function start($post_id){
-        //上限を定義するために対象のpostデータを取得
-        // $post = $this->post->findOrFail($post_id);
+    public function start($post_id)
+{
+    // 対象のポストを取得
+    $post = $this->post->findOrFail($post_id);
 
-        // // 全てチャットルームがあれば取得、なければ新規作成
-        // $chat_room = $this->chatRoom->firstOrCreate(
-        //     ['post_id'    => $post_id],
-        //     ['created_at' => now(), 'updated_at' => now()]
-        // );
+    // チャットルームを取得 or 作成
+    $chat_room = $this->chatRoom->firstOrCreate(
+        ['post_id' => $post_id],
+        ['created_at' => now(), 'updated_at' => now()]
+    );
 
-        // // 既に参加していなければ参加（user_id + chat_room_id が未登録なら）
-        // if (!$chat_room->users()->where('users.id', Auth::id())->exists()) {
-        //     // 現在の参加人数を確認
-        //     $currentCount = $chat_room->users()->count();
+    $user = Auth::user();
 
-        //     // 上限に達しているか確認
-        //     if ($currentCount >= $post->max) {
-        //         return redirect()->back()->with('error', 'This chat room is full.');
-        //     }
+    // すでに参加済みでない場合のみ参加処理へ
+    if (!$chat_room->users()->where('users.id', $user->id)->exists()) {
 
-        //     $chat_room->users()->attach(Auth::id(), ['joined_at' => now()]);
-        // }
+        // 管理者でも投稿者でもない場合にのみ上限を確認
+        $isAdmin = $user->role_id === 1;
+        $isAuthor = $user->id === $post->user_id;
 
-        // // チャットルームにリダイレクト
-        // return redirect()->route('chatRoom.show', $chat_room->id);
+        if (!$isAdmin && !$isAuthor) {
+            // 管理者・投稿者を除外した人数を取得
+            $currentCount = $chat_room->users()
+                ->where('role_id', '!=', 1)
+                ->where('users.id', '!=', $post->user_id)
+                ->count();
 
-        $post = $this->post->findOrFail($post_id);
-
-        $chat_room = $this->chatRoom->firstOrCreate(
-            ['post_id' => $post_id],
-            ['created_at' => now(), 'updated_at' => now()]
-        );
-
-        $user = Auth::user();
-
-        // すでに参加済みか確認
-        if (!$chat_room->users()->where('users.id', $user->id)->exists()) {
-
-            // 管理者でなければ人数上限を確認
-            if ($user->role_id !== 1) {
-                $currentCount = $chat_room->users()
-                    ->where('role_id', '!=', 1) // 管理者を除外してカウント
-                    ->count();
-
-                if ($currentCount >= $post->max) {
-                    return redirect()->back()->with('error', 'This chat room is full.');
-                }
+            if ($post->max !== null && $currentCount >= $post->max) {
+                return redirect()->back()->with('error', 'This chat room is full.');
             }
-
-            // 参加処理（管理者も含めてattach）
-            $chat_room->users()->attach($user->id, ['joined_at' => now()]);
         }
 
-        return redirect()->route('chatRoom.show', $chat_room->id);
+        // チャットルームに参加
+        $chat_room->users()->attach($user->id, ['joined_at' => now()]);
     }
+
+    return redirect()->route('chatRoom.show', $chat_room->id);
+}
+
 
     public function show($chat_room_id){
         //対象のchatroomをデータを取得

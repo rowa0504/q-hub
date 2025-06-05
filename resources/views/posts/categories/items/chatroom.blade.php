@@ -10,10 +10,10 @@
     <div class="mb-4">
         <h5>
             <i class="fa-solid fa-users me-2"></i>
-            Participants ({{ $chatdate->users->where('role_id', '!=', 1)->count() }} / {{ $chatdate->post->max }})
+            Participants ({{ $chatdate->users->reject(fn($user) => $user->role_id == 1 || $user->id == $chatdate->post->user_id)->count() }} / {{ $chatdate->post->max }})
         </h5>
         <ul class="ps-3">
-            @foreach ($chatdate->users->reject(fn($user) => $user->role_id == 1) as $user)
+            @foreach ($chatdate->users->reject(fn($user) => $user->role_id == 1 || $user->id == $chatdate->post->user_id) as $user)
                 <li>{{ $user->name }}</li>
             @endforeach
         </ul>
@@ -95,7 +95,7 @@
         <div class="modal-dialog">
             <div class="modal-content p-3">
                 <div class="modal-header border-0">
-                    <h5 class="modal-title text-danger" id="reportModalLabel">Report this post?</h5>
+                    <h5 class="modal-title text-danger" id="reportModalLabel">Report this chat message?</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
