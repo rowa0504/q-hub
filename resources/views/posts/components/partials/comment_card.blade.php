@@ -2,9 +2,9 @@
     {{-- ユーザーアバター --}}
     <a href="{{ route('profile.index', $comment->user->id ?? '#') }}" class="text-decoration-none">
         @if ($comment->user && $comment->user->avatar)
-            <img src="{{ $comment->user->avatar }}" alt="{{ $comment->user->name }}" class="rounded-circle avatar-md">
+            <img src="{{ $comment->user->avatar }}" alt="{{ $comment->user->name }}" class="rounded-circle avatar-sm">
         @else
-            <i class="fa-solid fa-circle-user text-secondary avatar-md"></i>
+            <i class="fa-solid fa-circle-user text-secondary avatar-sm"></i>
         @endif
     </a>
     <div class="flex-grow-1">
