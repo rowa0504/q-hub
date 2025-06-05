@@ -1,6 +1,12 @@
 <div class="d-flex justify-content-between align-items-start border-bottom py-2 w-100">
-    <img src="{{ $comment->user->avatar }}" class="rounded-circle me-2" width="40" height="40"
-        onerror="this.src='{{ asset('images/user_icon.png') }}';">
+    {{-- ユーザーアバター --}}
+    <a href="{{ route('profile.index', $post->user->id ?? '#') }}" class="text-decoration-none">
+        @if ($post->user && $post->user->avatar)
+            <img src="{{ $post->user->avatar }}" alt="{{ $post->user->name }}" class="rounded-circle avatar-md">
+        @else
+            <i class="fa-solid fa-circle-user text-secondary avatar-md"></i>
+        @endif
+    </a>
     <div class="flex-grow-1">
         <div class="d-flex justify-content-between">
             <strong>{{ $comment->user->name }}</strong>
