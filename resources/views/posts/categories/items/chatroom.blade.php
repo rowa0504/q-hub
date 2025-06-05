@@ -43,7 +43,7 @@
                 @endif
 
                 {{-- Message Bubble --}}
-                <div class="p-2 {{ $isMe ? 'bg-info text-white' : 'bg-white' }} border rounded position-relative" style="max-width: 75%;">
+                <div class="p-2 border rounded {{ $isMe ? 'bg-info text-white text-end' : 'bg-white' }} message-bubble">
                     <div class="d-flex justify-content-between mb-1">
                         <strong>{{ $message->user->name }}</strong>
                         <small class="text-muted">{{ $message->created_at->format('H:i') }}</small>
@@ -54,7 +54,7 @@
                     @if (!$isMe)
                         <button class="btn btn-sm btn-link position-absolute bottom-0 end-0 me-2 mb-1 p-0 text-danger"
                                 data-bs-toggle="modal" data-bs-target="#reportChatModal-{{ $message->id }}" data-message-id="{{ $message->id }}">
-                            <i class="fa-solid fa-flag"></i>
+                            <i class="fa-solid fa-flag ms-1"></i>
                         </button>
                     @endif
                 </div>
