@@ -1,10 +1,10 @@
 <div class="d-flex justify-content-between align-items-start border-bottom py-2 w-100">
     {{-- ユーザーアバター --}}
-    <a href="{{ route('profile.index', $post->user->id ?? '#') }}" class="text-decoration-none">
-        @if ($post->user && $post->user->avatar)
-            <img src="{{ $post->user->avatar }}" alt="{{ $post->user->name }}" class="rounded-circle avatar-md">
+    <a href="{{ route('profile.index', $comment->user->id ?? '#') }}" class="text-decoration-none">
+        @if ($comment->user && $comment->user->avatar)
+            <img src="{{ $comment->user->avatar }}" alt="{{ $comment->user->name }}" class="rounded-circle avatar-sm me-1">
         @else
-            <i class="fa-solid fa-circle-user text-secondary avatar-md"></i>
+            <i class="fa-solid fa-circle-user text-secondary fa-2x me-1"></i>
         @endif
     </a>
     <div class="flex-grow-1">
