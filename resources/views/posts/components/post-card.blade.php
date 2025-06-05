@@ -222,7 +222,7 @@
                                         :class="participated ? 'fa-solid fa-hand me-1' : isFull ? 'fa-solid fa-ban me-1' :
                                             'fa-solid fa-hand text-secondary me-1'"></i>
 
-                                    <span x-text="isFull && !participated ? 'Full' : participantsCount" class="fw-bold"></span>
+                                    {{-- <span x-text="isFull && !participated ? 'Full' : participantsCount" class="fw-bold"></span> --}}
                                 </button>
 
                                 {{-- 現在の参加者数 --}}
